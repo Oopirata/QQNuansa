@@ -19,9 +19,8 @@
                 <span class="text-orange-500">People</span>
             </h2>
             <div class="mt-8">
-                <img src="https://placehold.co/150x150" alt="Nuansa Consultant Logo" class="w-36 h-36">
+                <img alt="logo" class="mb-4" height="150" src="{{ asset('images/QQ.png') }}" width="200"/>
             </div>
-            <p class="text-black text-lg mt-4">Nuansa Consultant</p>
         </div>
         <div class="w-2/3 p-16">
             <h2 class="text-2xl font-bold mb-6 text-center">Sign-in</h2>
@@ -33,12 +32,14 @@
                     <input class="shadow appearance-none border-b w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password">
                 </div>
                 <div class="flex items-center justify-center">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                        Login
-                    </button>
+                    <a href="/companyprofile">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                            Login
+                        </button>
+                    </a>
                 </div>
                 <p class="text-center text-gray-500 text-xs mt-4">
-                    Don't have an account? <a class="text-blue-500 hover:text-blue-800" href="#">Signup Here</a>
+                    Don't have an account? <a class="text-blue-500 hover:text-blue-800" href="\registrasi">Signup Here</a>
                 </p>
             </form>
         </div>
