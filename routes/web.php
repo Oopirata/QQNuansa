@@ -26,5 +26,6 @@ Route::get('/statuscv', [StatusCVController::class, "statuscv_page"]);
 Route::get('/posisicv', [PosisiCVController::class, "posisicv_page"]);
 Route::get('/positions', [PosisiCVController::class, 'index'])->name('positions.index');
 Route::post('/positions/apply', [PosisiCVController::class, 'apply'])->name('positions.apply');
+Route::post('/cv/upload', [UploadCVController::class, 'upload'])->name('cv.upload');
 
 
