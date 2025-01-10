@@ -20,7 +20,7 @@
         <div class="flex items-center -mr-16">
             <img alt="Company Logo" class="h-14 w-14"  src="{{ asset('images/QQ.png') }}"/>
         </div>
-        <nav class="space-x-10 -ml-80 mr-96 ml-">
+        <nav class="space-x-10 -ml-60 mr-80">
             <a class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]" href="/companyprofile">
                 Tentang Kami
             </a>
@@ -34,6 +34,11 @@
                 Pelatihan
             </a>
         </nav>
+        <div class=" -mr-72" >
+            <a class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]" href="/uploadcv">
+                We are hiring!!
+            </a>
+        </div>
         <div class="flex items-center space-x-2">
             <a href="/">
                 <button class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3">
