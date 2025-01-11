@@ -69,58 +69,64 @@ const toggleSubMenu = () => {
 <template>
   <Head :title="candidate.position" />
   <div class="flex h-screen">
-    <!-- Sidebar -->
-    <div class="w-64 bg-blue-100 p-4">
-      <div class="flex items-center mb-8">
-        <img src="/api/placeholder/40/40" alt="Nuansa Consultant Logo" class="w-10 h-10 mr-2" />
-        <span class="text-lg font-semibold">Nuansa Consultant</span>
-      </div>
-      <nav>
-        <ul>
-          <li class="mb-4">
-            <Link href="/dashboard" class="flex items-center text-gray-700">
-              <i class="fas fa-tachometer-alt mr-2"></i>
-              Dashboard
-            </Link>
-          </li>
-          <li class="mb-4">
-            <button 
-              @click="toggleSubMenu"
-              class="flex items-center w-full text-gray-700"
-            >
-              <i class="fas fa-users mr-2"></i>
-              Candidates
-              <i class="fas fa-chevron-down ml-auto"></i>
-            </button>
-            <ul v-if="isSubMenuOpen" class="ml-6 mt-2">
-              <li v-for="status in ['New', 'Screened', 'Interview', 'Rejected']" 
-                  :key="status" 
-                  class="mb-2">
-                <Link 
-                  :href="'/candidates/' + status.toLowerCase()"
-                  :class="{'text-purple-600': status === candidate.status, 'text-gray-700': status !== candidate.status}"
-                >
-                  {{ status }}
-                </Link>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <Link href="/email" class="flex items-center text-gray-700">
-              <i class="fas fa-envelope mr-2"></i>
-              E-mail
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <div class="absolute bottom-4 left-4 flex items-center">
-        <img src="/api/placeholder/40/40" alt="User Avatar" class="w-10 h-10 rounded-full mr-2" />
-        <span>John Doe</span>
-      </div>
-    </div>
+    <!-- Sidebar Section -->
+    <aside class="fixed inset-y-0 left-0 w-64 bg-blue-100">
+        <div class="h-full p-6 flex flex-col justify-between">
+            <div>
+                <!-- Company Logo and Name -->
+                <div class="flex items-center mb-8">
+                    <img
+                        src="/images/QQ crop.png"
+                        alt="Company Logo"
+                        class="w-20 h-16 mr-2"
+                    />
+                    <img
+                        src="/images/Nuansa crop.png"
+                        alt="Company Logo"
+                        class="w-24 h-8 mr-2 ml-3"
+                    />
+                </div>
+
+                <!-- Navigation Menu -->
+                <nav>
+                    <Link
+                        href="/dashboard"
+                        class="flex items-center mb-4 text-purple-600"
+                    >
+                        <i class="fas fa-tachometer-alt mr-2"></i>
+                        <span>Dashboard</span>
+                    </Link>
+                    <Link
+                        href="/candidates"
+                        class="flex items-center mb-4 text-gray-700"
+                    >
+                        <i class="fas fa-users mr-2"></i>
+                        <span>Candidates</span>
+                    </Link>
+                    <Link
+                        href="/email"
+                        class="flex items-center text-gray-700"
+                    >
+                        <i class="fas fa-envelope mr-2"></i>
+                        <span>E-mail</span>
+                    </Link>
+                </nav>
+            </div>
+
+            <!-- User Profile Section -->
+            <div class="flex items-center">
+                <img
+                    src="/images/profile.png"
+                    alt="User Avatar"
+                    class="w-10 h-10 rounded-full mr-2"
+                />
+                <span>Admin</span>
+            </div>
+        </div>
+    </aside>
 
     <!-- Main Content -->
-    <div class="flex-1 p-8">
+    <div class="flex-1 p-8 ml-64">
       <div class="flex justify-between items-center mb-8">
         <div>
           <h1 class="text-2xl font-semibold">{{ candidate.position }}</h1>
