@@ -41,8 +41,8 @@ Route::get('/adminEmail', function () {
 Route::get('/adminNewJob', function () {
     return Inertia::render('AdminNewJob');
 });
-Route::get('/adminCandidates', function () {
-    return Inertia::render('AdminCandidates');
+Route::get('/adminNewCandidates', function () {
+    return Inertia::render('AdminNewCandidates');
 });
 Route::get('/newCandidateDetails', function () {
     return Inertia::render('CandidatesDetail');
