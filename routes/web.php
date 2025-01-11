@@ -1,31 +1,42 @@
 <?php
 
-use App\Http\Controllers\RegistrasiController;
-use App\Http\Controllers\CompanyProfileController;
-use App\Http\Controllers\LegalitasController;
-use App\Http\Controllers\MissionsController;
-use App\Http\Controllers\PosisiCVController;
-use App\Http\Controllers\ServicesController;
-use App\Http\Controllers\StatusCVController;
-use App\Http\Controllers\UploadCVController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
-    return view('loginpage');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
-Route::get('/registrasi',[RegistrasiController::class,"registrasi_page"]);
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-Route::get('/companyprofile', [CompanyProfileController::class, "companyprofile_page"]);
-Route::get('/legalitas', [LegalitasController::class, "legalitas_page"]);
-Route::get('/missions', [MissionsController::class, "missions_page"]);
-Route::get('/services', [ServicesController::class, "services_page"]);
-Route::get('/uploadcv', [UploadCVController::class, "uploadcv_page"]);
-Route::get('/statuscv', [StatusCVController::class, "statuscv_page"]);
-Route::get('/posisicv', [PosisiCVController::class, "posisicv_page"]);
-Route::get('/positions', [PosisiCVController::class, 'index'])->name('positions.index');
-Route::post('/positions/apply', [PosisiCVController::class, 'apply'])->name('positions.apply');
-Route::post('/cv/upload', [UploadCVController::class, 'upload'])->name('cv.upload');
+Route::get('/companyprofile', function () {
+    return Inertia::render('CompanyProfile');
+});
 
+Route::get('/companyprofilee', function () {
+    return view('/companyprofile/companyprofile');});
 
+Route::get('/adminDashboard', function () {
+    return Inertia::render('AdminDashboard');
+});
+
+Route::get('/adminDashboardSchedule', function () {
+    return Inertia::render('AdminDashboardSchedule');
+});
+
+require __DIR__.'/auth.php';
