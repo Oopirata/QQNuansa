@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('CompanyProfileAuth');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -29,6 +29,9 @@ Route::middleware('auth')->group(function () {
 // ADMIN ROUTES
 Route::get('/companyprofile', function () {
     return Inertia::render('CompanyProfile');
+});
+Route::get('/companyprofilee', function () {
+    return Inertia::render('CompanyProfileAuth');
 });
 Route::get('/adminDashboard', function () {
     return Inertia::render('AdminDashboard');
