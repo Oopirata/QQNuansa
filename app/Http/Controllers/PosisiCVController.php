@@ -15,9 +15,10 @@ class PosisiCVController extends Controller
         return view('positions.index');
     }
 
-    public function apply(Request $request)
-    {
-        // Handle position submission
-        return redirect()->back()->with('success', 'Aplikasi untuk posisi ' . $request->position . ' telah diterima');
-    }
+    // public function apply(Request $request)
+    // {
+    //     // Handle position submission
+    //     return redirect()->back()->with('success', 'Aplikasi untuk posisi ' . $request->position . ' telah diterima');
+    // }
+    
 }

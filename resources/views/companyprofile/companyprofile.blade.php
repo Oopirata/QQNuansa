@@ -35,7 +35,7 @@
             </a>
         </nav>
         <div class=" -mr-72" >
-            <a class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]" href="/uploadcv">
+            <a class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]" href="/posisicv">
                 We are hiring!!
             </a>
         </div>
