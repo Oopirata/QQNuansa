@@ -67,11 +67,13 @@ import { Head, Link } from "@inertiajs/vue3";
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-3xl font-bold">Dashboard</h1>
                     <div class="flex space-x-4">
-                        <button
-                            class="bg-gray-700 text-white px-4 py-2 rounded"
-                        >
-                            Visit Website
-                        </button>
+                        <a href="/companyprofile">
+                            <button
+                                class="bg-gray-700 text-white px-4 py-2 rounded"
+                            >
+                                Visit Website
+                            </button>
+                        </a>
                         <button
                             class="bg-purple-600 text-white px-4 py-2 rounded"
                         >
@@ -153,7 +155,7 @@ import { Head, Link } from "@inertiajs/vue3";
                                     {{ day }}<br />
                                     <template v-if="day === 'Friday'">
                                         <span
-                                            class="bg-blue-500 text-white rounded-full px-2 py-1"
+                                            class="bg-blue-500 text-white rounded-full px-2 py-1 mt-4"
                                             >27</span
                                         >
                                     </template>
