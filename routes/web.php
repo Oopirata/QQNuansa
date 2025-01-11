@@ -24,19 +24,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+// ADMIN ROUTES
 Route::get('/companyprofile', function () {
     return Inertia::render('CompanyProfile');
 });
-
-Route::get('/companyprofilee', function () {
-    return view('/companyprofile/companyprofile');});
-
 Route::get('/adminDashboard', function () {
     return Inertia::render('AdminDashboard');
 });
-
 Route::get('/adminDashboardSchedule', function () {
     return Inertia::render('AdminDashboardSchedule');
+});
+Route::get('/adminEmail', function () {
+    return Inertia::render('AdminEmail');
+});
+Route::get('/adminNewJob', function () {
+    return Inertia::render('AdminNewJob');
+});
+Route::get('/adminCandidates', function () {
+    return Inertia::render('AdminCandidates');
+});
+Route::get('/newCandidateDetails', function () {
+    return Inertia::render('CandidatesDetail');
 });
 
 require __DIR__.'/auth.php';

@@ -127,6 +127,6 @@ import { Head, Link } from '@inertiajs/vue3'
 <style scoped>
 /* Apply font to entire component */
 :deep(*) {
-  font-family: 'Inter', sans-serif;
+    font-family: 'Kaisei Opti', sans-serif;
 }
 </style>
