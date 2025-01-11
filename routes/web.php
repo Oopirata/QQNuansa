@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/legalitasAuth', function () {
+        return Inertia::render('LegalitasAuth');
+    });
 });
 
 
@@ -32,6 +35,9 @@ Route::get('/companyprofile', function () {
 });
 Route::get('/companyprofilee', function () {
     return Inertia::render('CompanyProfileAuth');
+});
+Route::get('/legalitas', function () {
+    return Inertia::render('Legalitas');
 });
 Route::get('/adminDashboard', function () {
     return Inertia::render('AdminDashboard');
