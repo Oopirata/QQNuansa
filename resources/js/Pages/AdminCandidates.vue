@@ -110,13 +110,17 @@ const toggleSubMenu = () => {
         </div>
       </div>
 
-      <div class="flex">
+      <div class="flex  ">
         <!-- Filters -->
-        <div class="w-1/4 pr-4">
+        <div class="w-1/4 pr-4 bg-white rounded-lg shadow p-4 mr-20">
+          <div class="">
           <h3 class="text-xl font-semibold mb-4">Filters</h3>
+          </div>
           
           <!-- Job Title Filters -->
+          
           <div class="mb-6">
+            <div class="w-3/4 bg-white rounded-lg shadow p-4 -mr-20">
             <h4 class="font-semibold mb-2">Job Title</h4>
             <div class="flex items-center mb-2">
               <span v-for="job in filters.jobTitles" 
@@ -129,9 +133,11 @@ const toggleSubMenu = () => {
               <i class="fas fa-plus"></i>
             </button>
           </div>
+          </div>
+        
 
           <!-- Degree Filters -->
-          <div class="mb-6">
+          <div class="mb-6 w-3/4 bg-white rounded-lg shadow p-4 -mr-20">
             <h4 class="font-semibold mb-2">Degree</h4>
             <div class="flex items-center mb-2">
               <span v-for="degree in filters.degrees" 
@@ -147,7 +153,7 @@ const toggleSubMenu = () => {
         </div>
 
         <!-- Candidates List -->
-        <div class="w-3/4 bg-white rounded-lg shadow p-4">
+        <div class="w-3/4 bg-white rounded-lg shadow p-4 ">
           <table class="w-full">
             <thead>
               <tr class="text-left border-b">
