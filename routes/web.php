@@ -25,9 +25,18 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/companyprofile', function () {
-    return Inertia::render('CompanyProfile');});
+    return Inertia::render('CompanyProfile');
+});
 
 Route::get('/companyprofilee', function () {
     return view('/companyprofile/companyprofile');});
+
+Route::get('/adminDashboard', function () {
+    return Inertia::render('AdminDashboard');
+});
+
+Route::get('/adminDashboardSchedule', function () {
+    return Inertia::render('AdminDashboardSchedule');
+});
 
 require __DIR__.'/auth.php';
