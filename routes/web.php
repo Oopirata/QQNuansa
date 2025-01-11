@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CandidateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,11 +42,16 @@ Route::get('/adminEmail', function () {
 Route::get('/adminNewJob', function () {
     return Inertia::render('AdminNewJob');
 });
-Route::get('/adminNewCandidates', function () {
-    return Inertia::render('AdminNewCandidates');
-});
+// Route::get('/adminNewCandidates', function () {
+//     return Inertia::render('AdminNewCandidates');
+// });
 Route::get('/newCandidateDetails', function () {
     return Inertia::render('CandidatesDetail');
 });
+
+Route::get('/adminNewCandidates', function () {
+    return Inertia::render('AdminNewCandidates');
+})->name('adminNewCandidates');
+
 
 require __DIR__.'/auth.php';

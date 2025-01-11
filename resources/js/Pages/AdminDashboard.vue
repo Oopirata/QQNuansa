@@ -1,5 +1,21 @@
 <script setup>
+import { ref } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
+
+// Add state for submenu
+const isSubMenuOpen = ref(false);
+
+// Add toggle function
+const toggleSubMenu = () => {
+    isSubMenuOpen.value = !isSubMenuOpen.value;
+};
+
+const candidateItems = [
+    { name: "New", path: "/adminNewCandidates" },
+    { name: "Screened", path: "/candidates/screened" },
+    { name: "Interview", path: "/candidates/interview" },
+    { name: "Rejected", path: "/candidates/rejected" },
+];
 </script>
 
 <template>
@@ -7,63 +23,89 @@ import { Head, Link } from "@inertiajs/vue3";
     <div class="bg-white">
         <div class="flex min-h-screen">
             <!-- Sidebar Section -->
-            <aside class="fixed inset-y-0 left-0 w-64 bg-blue-100">
-                <div class="h-full p-6 flex flex-col justify-between">
-                    <div>
-                        <!-- Company Logo and Name -->
-                        <div class="flex items-center mb-8">
-                            <img
-                                src="/images/QQ crop.png"
-                                alt="Company Logo"
-                                class="w-20 h-16 mr-2"
-                            />
-                            <img
-                                src="/images/Nuansa crop.png"
-                                alt="Company Logo"
-                                class="w-24 h-8 mr-2 ml-3"
-                            />
-                        </div>
+            <div class="bg-blue-100 w-64 p-4 flex flex-col">
+                <div class="flex items-center mb-8">
+                    <img
+                        src="/images/QQ crop.png"
+                        alt="Company Logo"
+                        class="w-20 h-16 mr-2"
+                    />
+                    <img
+                        src="/images/Nuansa crop.png"
+                        alt="Company Logo"
+                        class="w-24 h-8 mr-2 ml-3"
+                    />
+                </div>
 
-                        <!-- Navigation Menu -->
-                        <nav>
+                <nav class="flex-1">
+                    <ul>
+                        <li class="mb-4">
                             <Link
-                                href="/dashboard"
-                                class="flex items-center mb-4 text-purple-600"
+                                href="/adminDashboard"
+                                class="flex items-center text-purple-600 hover:text-gray-900"
                             >
                                 <i class="fas fa-tachometer-alt mr-2"></i>
-                                <span>Dashboard</span>
+                                Dashboard
                             </Link>
-                            <Link
-                                href="/candidates"
-                                class="flex items-center mb-4 text-gray-700"
+                        </li>
+                        <li class="mb-4">
+                            <button
+                                @click="toggleSubMenu"
+                                class="flex items-center w-full text-gray-600 hover:text-gray-900"
                             >
                                 <i class="fas fa-users mr-2"></i>
-                                <span>Candidates</span>
-                            </Link>
+                                Candidates
+                                <i
+                                    :class="[
+                                        'fas ml-auto',
+                                        isSubMenuOpen
+                                            ? 'fa-chevron-down'
+                                            : 'fa-chevron-right',
+                                    ]"
+                                ></i>
+                            </button>
+                            <ul v-if="isSubMenuOpen" class="ml-6 mt-2">
+                                <li
+                                    v-for="item in candidateItems"
+                                    :key="item.name"
+                                    class="mb-2"
+                                >
+                                    <Link
+                                        :href="item.path"
+                                        :class="{
+                                            'text-gray-600 hover:text-gray-900':
+                                                item.name !== 'New',
+                                        }"
+                                    >
+                                        {{ item.name }}
+                                    </Link>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="mb-4">
                             <Link
-                                href="/adminEmail"
-                                class="flex items-center text-gray-700"
+                                href="/email"
+                                class="flex items-center text-gray-600 hover:text-gray-900"
                             >
                                 <i class="fas fa-envelope mr-2"></i>
-                                <span>E-mail</span>
+                                E-mail
                             </Link>
-                        </nav>
-                    </div>
-
-                    <!-- User Profile Section -->
-                    <div class="flex items-center">
-                        <img
-                            src="/images/profile.png"
-                            alt="User Avatar"
-                            class="w-10 h-10 rounded-full mr-2"
-                        />
-                        <span>Admin</span>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="mt-auto flex items-center">
+                    <img
+                        src="/images/profile.png"
+                        alt="User Avatar"
+                        class="w-10 h-10 rounded-full mr-2"
+                    />
+                    <div>
+                        <p class="text-gray-600">John Doe</p>
                     </div>
                 </div>
-            </aside>
+            </div>
 
-            <!-- Main Content Section -->
-            <div class="flex-1 ml-64 p-6">
+            <div class="flex-1 p-6">
                 <!-- Header with Actions -->
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-3xl font-bold">Dashboard</h1>
