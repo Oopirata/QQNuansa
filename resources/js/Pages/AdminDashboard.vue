@@ -41,7 +41,7 @@ import { Head, Link } from "@inertiajs/vue3";
                                 <span>Candidates</span>
                             </Link>
                             <Link
-                                href="/email"
+                                href="/adminEmail"
                                 class="flex items-center text-gray-700"
                             >
                                 <i class="fas fa-envelope mr-2"></i>
