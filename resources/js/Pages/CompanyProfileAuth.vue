@@ -1,10 +1,22 @@
+# CompanyProfile.vue
 <script setup>
-import { Head } from '@inertiajs/vue3';
-import { Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import { ref } from 'vue';
 
+const showingNavigationDropdown = ref(false);
 
-// Jika kita perlu menggunakan asset dari Laravel, kita bisa membuat computed property
-const asset = (path) => `/assets/${path}`;
+const logout = () => {
+    router.post(route('logout'));
+};
+
+defineProps({
+    auth: {
+        type: Object,
+        required: true,
+    },
+});
 </script>
 
 <template>
@@ -50,18 +62,47 @@ const asset = (path) => `/assets/${path}`;
                     We are hiring!!
                 </Link>
             </div>
+
+            <!-- Auth Buttons -->
             <div class="flex items-center space-x-2">
-                <Link href="/login">
-                    <button class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3">
-                        Log In
-                    </button>
-                </Link>
-                <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
+                <template v-if="$page.props.auth.user">
+                    <Dropdown align="right" width="48">
+                        <template #trigger>
+                            <span class="inline-flex rounded-md">
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                >
+                                    {{ $page.props.auth.user.name }}
+                                    <i class="fas fa-user-circle text-blue-900 text-3xl ml-2"></i>
+                                </button>
+                            </span>
+                        </template>
+
+                        <template #content>
+                            <DropdownLink :href="route('profile.edit')">
+                                Profile
+                            </DropdownLink>
+                            <DropdownLink :href="route('logout')" method="post" as="button">
+                                Log Out
+                            </DropdownLink>
+                        </template>
+                    </Dropdown>
+                </template>
+                <template v-else>
+                    <Link href="/login">
+                        <button class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3">
+                            Log In
+                        </button>
+                    </Link>
+                    <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
+                </template>
             </div>
         </header>
 
-        <!-- Navigation Menu -->
+        <!-- Rest of your existing template code remains the same -->
         <main class="p-8 -mt-8">
+            <!-- Navigation Menu -->
             <div class="bg-yellow-100 p-4 flex justify-center space-x-16 w-2/5 mx-auto">
                 <Link 
                     class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]" 
@@ -123,7 +164,6 @@ const asset = (path) => `/assets/${path}`;
 </template>
 
 <style scoped>
-/* Menerapkan font ke seluruh komponen */
 :deep(*) {
     font-family: 'Kaisei Opti', sans-serif;
 }
