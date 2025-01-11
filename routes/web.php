@@ -56,5 +56,21 @@ Route::get('/adminNewCandidates', function () {
     return Inertia::render('AdminNewCandidates');
 })->name('adminNewCandidates');
 
+Route::get('/adminScreenedCandidates', function () {
+    return Inertia::render('AdminScreenedCandidates');
+})->name('adminScreenedCandidates');
+
+Route::get('/adminInterviewCandidates', function () {
+    return Inertia::render('AdminInterviewCandidates');
+})->name('adminInterviewCandidates');
+
+Route::get('/adminRejectedCandidates', function () {
+    return Inertia::render('AdminRejectedCandidates');
+})->name('adminRejectedCandidates');
+
+Route::get('/adminEmail', function () {
+    return Inertia::render('AdminEmail');
+})->name('adminEmail');
+
 
 require __DIR__.'/auth.php';
