@@ -32,13 +32,54 @@ import { Head, Link } from "@inertiajs/vue3";
                             <i class="fas fa-tachometer-alt mr-2"></i>
                             <span>Dashboard</span>
                         </Link>
-                        <Link
-                            href="/candidates"
-                            class="flex items-center mb-4 text-gray-700"
-                        >
-                            <i class="fas fa-users mr-2"></i>
-                            <span>Candidates</span>
-                        </Link>
+                        <div class="mb-4">
+                            <button
+                                @click="toggleSubMenu"
+                                class="flex items-center w-full text-gray-700"
+                            >
+                                <i class="fas fa-users mr-2"></i>
+                                Candidates
+                                <i
+                                    :class="[
+                                        'fas ml-auto',
+                                        isSubMenuOpen
+                                            ? 'fa-chevron-down'
+                                            : 'fa-chevron-right',
+                                    ]"
+                                ></i>
+                            </button>
+                            <ul v-if="isSubMenuOpen" class="ml-6 mt-2">
+                                <li
+                                    v-for="item in [
+                                        {
+                                            name: 'New',
+                                            route: 'AdminNewCandidates',
+                                        },
+                                        {
+                                            name: 'Screened',
+                                            route: 'candidates.screened',
+                                        },
+                                        {
+                                            name: 'Interview',
+                                            route: 'candidates.interview',
+                                        },
+                                        {
+                                            name: 'Rejected',
+                                            route: 'candidates.rejected',
+                                        },
+                                    ]"
+                                    :key="item.name"
+                                    class="mb-2"
+                                >
+                                    <Link
+                                        :href="route(item.route)"
+                                        class="text-gray-600 hover:text-gray-900"
+                                    >
+                                        {{ item.name }}
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
                         <Link
                             href="/email"
                             class="flex items-center text-gray-700"
