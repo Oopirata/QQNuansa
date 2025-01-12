@@ -45,7 +45,7 @@ const asset = (path) => `/assets/${path}`;
             <div class="-mr-72">
                 <Link 
                     class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]" 
-                    href="/uploadcv"
+                    href="Auth/Login"
                 >
                     We are hiring!!
                 </Link>

@@ -106,7 +106,7 @@ defineProps({
             <div class="bg-yellow-100 p-4 flex justify-center space-x-16 w-2/5 mx-auto">
                 <Link 
                     class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]" 
-                    href="/companyprofile"
+                    href="/companyProfileAuth"
                 >
                     Company Profile
                 </Link>
@@ -118,13 +118,13 @@ defineProps({
                 </Link>
                 <Link 
                     class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]" 
-                    href="/missions"
+                    href="/missionsAuth"
                 >
                     Missions
                 </Link>
                 <Link 
                     class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]" 
-                    href="/services"
+                    href="/servicesAuth"
                 >
                     Services
                 </Link>
