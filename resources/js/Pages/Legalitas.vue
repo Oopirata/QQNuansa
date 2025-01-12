@@ -45,7 +45,7 @@ const asset = (path) => `/assets/${path}`;
             <div class="-mr-72">
                 <Link 
                     class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]" 
-                    href="Auth/Login"
+                    href="/uploadcv"
                 >
                     We are hiring!!
                 </Link>
@@ -92,32 +92,7 @@ const asset = (path) => `/assets/${path}`;
 
         <!-- Content Section -->
         <section class="mt-4 ml-40 mr-40">
-            <h1 class="text-center text-2xl font-bold">
-                COMPANY PROFILE
-            </h1>
-            <p class="mt-4">
-                PT. Ara Nuansa Katumbiri (ANK) adalah perusahaan konsultan yang berfokus pada pengembangan manajemen sumber daya manusia. Berdiri sejak tahun 2003, perusahaan ini sebelumnya dikenal dengan nama QQNuansa Consultant dan berkantor pusat di Pekalongan, Jawa Tengah. Meskipun demikian, area kerja dan distribusi layanan PT. Ara Nuansa Katumbiri mencakup seluruh wilayah Indonesia, dengan konsentrasi utama di wilayah Jawa Tengah.
-            </p>
-            <p class="mt-4">
-                Perusahaan ini menawarkan tiga layanan utama yang menjadi inti kompetensi dan kegiatan bisnisnya:
-            </p>
-            <ol class="list-decimal list-inside mt-4">
-                <li class="mt-2">
-                    <strong>Consulting</strong>
-                    <br/>
-                    Layanan ini menyediakan jasa konsultan manajemen sumber daya manusia untuk organisasi. Fokus utama adalah membantu organisasi dalam meningkatkan efektivitas pengelolaan SDM melalui pendekatan profesional dan strategis, termasuk penyusunan strategi organisasi, pengembangan sistem SDM, dan solusi manajemen yang relevan.
-                </li>
-                <li class="mt-2">
-                    <strong>Learning Center</strong>
-                    <br/>
-                    Melalui layanan ini, PT. Ara Nuansa Katumbiri menyelenggarakan berbagai program pelatihan dan pengembangan SDM. Kegiatan yang ditawarkan meliputi:
-                </li>
-                <li class="mt-2">
-                    <strong>Recruitment and Assessment</strong>
-                    <br/>
-                    Layanan ini bertujuan membantu organisasi dalam mencari, memilih, dan merekomendasikan individu-individu dengan bakat terbaik untuk dikembangkan lebih lanjut. Proses ini mencakup rekrutmen dan penilaian calon karyawan secara menyeluruh, baik untuk kebutuhan industri maupun pendidikan, guna memastikan organisasi mendapatkan SDM yang berkualitas.Dengan berfokus pada pengelolaan sumber daya manusia, PT. Ara Nuansa Katumbiri berperan sebagai mitra strategis bagi organisasi dalam menciptakan tenaga kerja yang produktif dan kompetitif.
-                </li>
-            </ol>
+            <img alt="Legalitas" class=" w-3/4 align-middle justify-center ml-32 "  src="/images/Legalitas.png"/>
         </section>
     </div>
 </template>
