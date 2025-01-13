@@ -160,7 +160,7 @@ const toggleSubMenu = () => {
                         class="border rounded p-2 pl-8"
                     />
                     <i
-                        class="fas fa-search absolute left-2 top-2 text-gray-500"
+                        class="fas fa-search absolute left-2 top-3 text-gray-500"
                     ></i>
                 </div>
             </div>
