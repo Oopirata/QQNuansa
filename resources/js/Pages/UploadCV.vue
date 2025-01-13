@@ -1,7 +1,14 @@
-# UploadCV.vue
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
 import { ref } from 'vue';
+
+const showingNavigationDropdown = ref(false);
+
+const logout = () => {
+    router.post(route('logout'));
+};
 
 const fileName = ref('');
 
@@ -73,12 +80,38 @@ const submit = () => {
                 </Link>
             </nav>
             <div class="flex items-center space-x-2">
-                <Link href="/login">
-                    <button class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3">
-                        Log In
-                    </button>
-                </Link>
-                <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
+                <template v-if="$page.props.auth.user">
+                    <Dropdown align="right" width="48">
+                        <template #trigger>
+                            <span class="inline-flex rounded-md">
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                >
+                                    {{ $page.props.auth.user.name }}
+                                    <i class="fas fa-user-circle text-blue-900 text-3xl ml-2"></i>
+                                </button>
+                            </span>
+                        </template>
+
+                        <template #content>
+                            <DropdownLink :href="route('profile.edit')">
+                                Profile
+                            </DropdownLink>
+                            <DropdownLink :href="route('logout')" method="post" as="button">
+                                Log Out
+                            </DropdownLink>
+                        </template>
+                    </Dropdown>
+                </template>
+                <template v-else>
+                    <Link href="/login">
+                        <button class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3">
+                            Log In
+                        </button>
+                    </Link>
+                    <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
+                </template>
             </div>
         </header>
 

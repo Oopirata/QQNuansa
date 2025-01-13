@@ -16,36 +16,21 @@ Route::get('/', function () {
     return Inertia::render('CompanyProfile');
 });
 
-Route::get('/companyProfileAuth', function () {
-    return Inertia::render('CompanyProfileAuth');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/statuscv', function () {
+//     return Inertia::render('StatusCV');
+// })->middleware(['auth', 'verified']);
+
+Route::get('/companyProfile', function () {
+    return Inertia::render('CompanyProfile');
+})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/legalitasAuth', function () {
-        return Inertia::render('Auth/LegalitasAuth');
-    });
-    Route::get('/missionsAuth', function () {
-        return Inertia::render('Auth/MissionsAuth');
-    });
-    Route::get('/servicesAuth', function () {
-        return Inertia::render('Auth/ServicesAuth');
-    });
-    Route::get('/hiring', function () {
-        return Inertia::render('Auth/PosisiCVAuth');
-    });
-    Route::get('/statuscv', function () {
-        return Inertia::render('Auth/StatusCVAuth');
-    });
-    Route::get('/uploadcv', function () {
-        return Inertia::render('Auth/UploadCVAuth');
-    });
 });
 
-
-// ADMIN ROUTES
+//PUBLIC
 Route::get('/companyprofile', function () {
     return Inertia::render('CompanyProfile');
 });
@@ -58,12 +43,17 @@ Route::get('/missions', function () {
 Route::get('/services', function () {
     return Inertia::render('Services');
 });
-Route::get('/hiringn', function () {
+Route::get('/hiring', function () {
     return Inertia::render('PosisiCV');
 });
-Route::get('uploadcvn', function () {
+Route::get('/uploadcv', function () {
     return Inertia::render('UploadCV');
 });
+Route::get('/statuscv', function () {
+    return Inertia::render('StatusCV');
+})->middleware(['auth', 'verified']);
+
+// ADMIN ROUTES
 Route::get('/adminDashboard', function () {
     return Inertia::render('AdminDashboard');
 });

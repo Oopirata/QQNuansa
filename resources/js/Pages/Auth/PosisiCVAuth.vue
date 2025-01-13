@@ -1,8 +1,14 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
-
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
 const showDropdown = ref(false);
+const showingNavigationDropdown = ref(false);
+
+const logout = () => {
+    router.post(route('logout'));
+};
 
 // Available positions
 const positions = [
