@@ -12,6 +12,10 @@ const logout = () => {
 
 // Define props for user data
 defineProps({
+    auth: {
+        type: Object,
+        required: true,
+    },
     userData: {
         type: Object,
         default: () => ({

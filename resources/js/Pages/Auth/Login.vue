@@ -1,9 +1,9 @@
-# Login.vue
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import { ref } from 'vue';
 
 defineProps({
     canResetPassword: {
@@ -20,6 +20,8 @@ const form = useForm({
     remember: false,
 });
 
+const showPassword = ref(false); // Untuk mengontrol visibilitas password
+
 const submit = () => {
     form.post(route('login'), {
         onFinish: () => form.reset('password'),
@@ -34,7 +36,7 @@ const submit = () => {
             <!-- Left side with logo and heading -->
             <div class="w-1/3 bg-blue-200 p-8 flex flex-col justify-center items-center">
                 <h2 class="text-4xl font-bold text-white mb-4 text-left">
-                    Developing Your <br>
+                    Developing Your <br />
                     <span class="text-orange-500">People</span>
                 </h2>
                 <div class="mt-8">
@@ -65,16 +67,26 @@ const submit = () => {
                         <InputError class="mt-2" :message="form.errors.email" />
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mb-6 relative">
+                        <!-- Input password dengan tipe dinamis -->
                         <TextInput
                             id="password"
-                            type="password"
+                            :type="showPassword ? 'text' : 'password'"
                             v-model="form.password"
                             class="shadow appearance-none border-b w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="Password"
                             required
                             autocomplete="current-password"
                         />
+                        <!-- Tombol untuk toggle password visibility -->
+                        <button
+                            type="button"
+                            @click="showPassword = !showPassword"
+                            class="absolute top-0 right-0 mt-2 mr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                        >
+                            <i v-if="showPassword" class="fas fa-eye-slash"></i>
+                            <i v-else class="fas fa-eye"></i>
+                        </button>
                         <InputError class="mt-2" :message="form.errors.password" />
                     </div>
 
