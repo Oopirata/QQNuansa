@@ -115,11 +115,13 @@ import { Head, Link } from "@inertiajs/vue3";
                                 Visit Website
                             </button>
                         </a>
-                        <button
-                            class="bg-purple-600 text-white px-4 py-2 rounded"
-                        >
-                            + New job
-                        </button>
+                        <a href="/adminNewJob">
+                            <button
+                                class="bg-purple-600 text-white px-4 py-2 rounded"
+                            >
+                                + New job
+                            </button>
+                        </a>
                     </div>
                 </div>
                 <div>

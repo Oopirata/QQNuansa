@@ -5,6 +5,7 @@ use App\Http\Controllers\CandidateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
@@ -90,5 +91,17 @@ Route::get('/adminEmail', function () {
     return Inertia::render('AdminEmail');
 })->name('adminEmail');
 
+Route::get('/adminDetailNewCandidates', function(){
+    return Inertia::render('AdminDetailNewCandidates');
+});
 
+Route::get('/adminDetailScreenedCandidates', function(){
+    return Inertia::render('AdminDetailScreenedCandidates');
+});
+Route::get('/adminDetailInterviewCandidates', function(){
+    return Inertia::render('AdminDetailInterviewCandidates');
+});
+Route::get('/adminDetailRejectedCandidates', function(){
+    return Inertia::render('AdminDetailRejectedCandidates');
+});
 require __DIR__.'/auth.php';

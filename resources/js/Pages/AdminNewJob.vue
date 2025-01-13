@@ -30,7 +30,7 @@ const submitJob = () => {
     });
 };
 
-const isSubMenuOpen = ref(true);
+const isSubMenuOpen = ref(false);
 
 const candidateItems = [
     { name: "New", path: "/adminNewCandidates" },
@@ -66,7 +66,7 @@ const toggleSubMenu = () => {
                     <li class="mb-4">
                         <Link
                             href="/adminDashboard"
-                            class="flex items-center text-gray-600 hover:text-gray-900"
+                            class="flex items-center text-purple-600 hover:text-gray-900"
                         >
                             <i class="fas fa-tachometer-alt mr-2"></i>
                             Dashboard
@@ -96,11 +96,7 @@ const toggleSubMenu = () => {
                             >
                                 <Link
                                     :href="item.path"
-                                    :class="{
-                                        'text-purple-600': item.name === 'New', // Menjadi ungu jika item bernama New
-                                        'text-gray-600 hover:text-gray-900':
-                                            item.name !== 'New', // Tetap abu-abu untuk yang lain
-                                    }"
+                                    class="text-gray-600 hover:text-gray-900"
                                 >
                                     {{ item.name }}
                                 </Link>

@@ -24,4 +24,5 @@ class CandidateController extends Controller
         return Inertia::render('resources/js/Pages/AdminRejectedCandidates');
     }
 
+
 }
