@@ -51,7 +51,7 @@ defineProps({
             <nav class="space-x-10 -ml-60 mr-80">
                 <Link 
                     class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]" 
-                    href="/companyProfile"
+                    href="/"
                 >
                     Tentang Kami
                 </Link>

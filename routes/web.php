@@ -20,7 +20,7 @@ Route::get('/', function () {
 //     return Inertia::render('StatusCV');
 // })->middleware(['auth', 'verified']);
 
-Route::get('/companyProfile', function () {
+Route::get('/', function () {
     return Inertia::render('CompanyProfile');
 })->name('dashboard');
 
@@ -31,9 +31,6 @@ Route::middleware('auth')->group(function () {
 });
 
 //PUBLIC
-Route::get('/companyprofile', function () {
-    return Inertia::render('CompanyProfile');
-});
 Route::get('/legalitas', function () {
     return Inertia::render('Legalitas');
 });

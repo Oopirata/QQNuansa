@@ -98,7 +98,7 @@ const asset = (path) => `/assets/${path}`;
             <div class="bg-yellow-100 p-4 flex justify-center space-x-16 w-2/5 mx-auto">
                 <Link 
                     class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]" 
-                    href="/companyProfile"
+                    href="/"
                 >
                     Company Profile
                 </Link>

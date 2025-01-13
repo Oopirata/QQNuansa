@@ -26,7 +26,7 @@ const asset = (path) => `/assets/${path}`;
             <nav class="space-x-10 -ml-60 mr-80">
                 <Link 
                     class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]" 
-                    href="/companyProfile"
+                    href="/"
                 >
                     Tentang Kami
                 </Link>
@@ -98,7 +98,7 @@ const asset = (path) => `/assets/${path}`;
             <div class="bg-yellow-100 p-4 flex justify-center space-x-16 w-2/5 mx-auto">
                 <Link 
                     class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]" 
-                    href="/companyProfile"
+                    href="/"
                 >
                     Company Profile
                 </Link>
