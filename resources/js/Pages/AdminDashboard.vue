@@ -12,9 +12,9 @@ const toggleSubMenu = () => {
 
 const candidateItems = [
     { name: "New", path: "/adminNewCandidates" },
-    { name: "Screened", path: "/candidates/screened" },
-    { name: "Interview", path: "/candidates/interview" },
-    { name: "Rejected", path: "/candidates/rejected" },
+    { name: "Screened", path: "/adminScreenedCandidates" },
+    { name: "Interview", path: "/adminInterviewCandidates" },
+    { name: "Rejected", path: "/adminRejectedCandidates" },
 ];
 </script>
 
@@ -72,10 +72,7 @@ const candidateItems = [
                                 >
                                     <Link
                                         :href="item.path"
-                                        :class="{
-                                            'text-gray-600 hover:text-gray-900':
-                                                item.name !== 'New',
-                                        }"
+                                        class="text-gray-600 hover:text-gray-900"
                                     >
                                         {{ item.name }}
                                     </Link>
@@ -84,7 +81,7 @@ const candidateItems = [
                         </li>
                         <li class="mb-4">
                             <Link
-                                href="/email"
+                                href="/adminEmail"
                                 class="flex items-center text-gray-600 hover:text-gray-900"
                             >
                                 <i class="fas fa-envelope mr-2"></i>
@@ -117,12 +114,13 @@ const candidateItems = [
                                 Visit Website
                             </button>
                         </a>
-
-                        <button
-                            class="bg-purple-600 text-white px-4 py-2 rounded"
-                        >
-                            + New job
-                        </button>
+                        <a href="/adminNewJob">
+                            <button
+                                class="bg-purple-600 text-white px-4 py-2 rounded"
+                            >
+                                + New job
+                            </button>
+                        </a>
                     </div>
                 </div>
 

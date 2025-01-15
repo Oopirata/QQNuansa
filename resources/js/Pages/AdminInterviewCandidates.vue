@@ -111,9 +111,10 @@ const toggleSubMenu = () => {
                                 <Link
                                     :href="item.path"
                                     :class="{
-                                        'text-purple-600': item.name === 'New', // Menjadi ungu jika item bernama New
+                                        'text-purple-600':
+                                            item.name === 'Interview', // Menjadi ungu jika item bernama New
                                         'text-gray-600 hover:text-gray-900':
-                                            item.name !== 'New', // Tetap abu-abu untuk yang lain
+                                            item.name !== 'Interview', // Tetap abu-abu untuk yang lain
                                     }"
                                 >
                                     {{ item.name }}
@@ -148,7 +149,7 @@ const toggleSubMenu = () => {
         <div class="flex-1 p-6">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-semibold">
-                    New Candidates
+                    Candidates for Interview
                     <span class="text-gray-500">{{ candidates.length }}</span>
                 </h2>
                 <div class="relative">
