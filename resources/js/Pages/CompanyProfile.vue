@@ -3,7 +3,15 @@ import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { ref } from "vue";
+import { computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
 
+const page = usePage();
+const currentRoute = computed(() => page.url);
+
+const isActive = (href) => {
+    return currentRoute.value === href;
+};
 
 const showingNavigationDropdown = ref(false);
 
@@ -13,6 +21,13 @@ const logout = () => {
 
 // Jika kita perlu menggunakan asset dari Laravel, kita bisa membuat computed property
 const asset = (path) => `/assets/${path}`;
+
+const menuItems = [
+    { text: "Tentang Kami", href: "/" },
+    { text: "Legalitas", href: "/legalitas" },
+    { text: "Misi", href: "/missions" },
+    { text: "Layanan", href: "/services" },
+];
 </script>
 
 <template>
@@ -108,33 +123,18 @@ const asset = (path) => `/assets/${path}`;
 
         <!-- Navigation Menu -->
         <main class="p-8 -mt-8">
-            <div
-                class="bg-yellow-100 p-4 flex justify-center space-x-16 w-2/5 mx-auto"
-            >
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/"
-                >
-                    Company Profile
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/legalitas"
-                >
-                    Legalitas
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/missions"
-                >
-                    Missions
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/services"
-                >
-                    Services
-                </Link>
+            <div class="bg-yellow-100 p-4 flex justify-center w-2/5 mx-auto">
+                <div class="flex justify-between w-full px-4">
+                    <Link
+                        v-for="(item, index) in menuItems"
+                        :key="index"
+                        :href="item.href"
+                        class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#CDC052]"
+                        :class="{ 'nav-link-active': isActive(item.href) }"
+                    >
+                        {{ item.text }}
+                    </Link>
+                </div>
             </div>
         </main>
 
@@ -196,5 +196,38 @@ const asset = (path) => `/assets/${path}`;
 /* Menerapkan font ke seluruh komponen */
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    position: relative;
+    z-index: 1;
+    min-width: fit-content;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fefce8;
+    border-radius: 0.375rem;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+    z-index: -1;
+}
+
+.nav-link:hover::before,
+.nav-link-active::before {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.nav-link-active {
+    color: #cdc052;
 }
 </style>
