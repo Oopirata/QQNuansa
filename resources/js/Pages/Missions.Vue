@@ -3,6 +3,15 @@ import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { ref } from "vue";
+import { computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
+
+const page = usePage();
+const currentRoute = computed(() => page.url);
+
+const isActive = (href) => {
+    return currentRoute.value === href;
+};
 
 const showingNavigationDropdown = ref(false);
 
@@ -12,133 +21,122 @@ const logout = () => {
 
 // Jika kita perlu menggunakan asset dari Laravel, kita bisa membuat computed property
 const asset = (path) => `/assets/${path}`;
+
+const menuItems = [
+    { text: "Tentang Kami", href: "/" },
+    { text: "Legalitas", href: "/legalitas" },
+    { text: "Misi", href: "/missions" },
+    { text: "Layanan", href: "/services" },
+];
 </script>
 
 <template>
     <Head title="Company Profile" />
 
     <div class="bg-white">
-        <!-- Header Section -->
-        <header class="bg-blue-200 p-4 flex justify-between items-center">
-            <div class="flex items-center -mr-16">
+        <!-- Header Section bg-blue-200-->
+        <header
+            class="p-4 flex justify-between items-center mt-2 container mx-auto"
+        >
+            <!-- Logo Section -->
+            <div class="flex items-center">
                 <img
                     alt="Company Logo"
-                    class="h-14 w-14"
-                    src="/images/QQ.png"
+                    class="h-14 w-20"
+                    src="/images/QQ crop.png"
+                />
+                <img
+                    alt="Company Logo"
+                    class="ml-2 h-14 w-36"
+                    src="/images/Nuansa crop.png"
                 />
             </div>
-            <nav class="space-x-10 -ml-60 mr-80">
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="/"
+
+            <!-- Navigation Menu Section -->
+            <nav class="flex-grow px-20">
+                <div
+                    class="pb-2 border-b-4 border-[#CDC052] w-fit mx-auto rounded-lg"
                 >
-                    Tentang Kami
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Psiko Test
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Konsultasi
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Pelatihan
-                </Link>
+                    <div class="flex space-x-8 px-4">
+                        <Link
+                            v-for="(item, index) in menuItems"
+                            :key="index"
+                            :href="item.href"
+                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#CDC052]"
+                            :class="{ 'nav-link-active': isActive(item.href) }"
+                        >
+                            {{ item.text }}
+                        </Link>
+                    </div>
+                </div>
             </nav>
-            <div class="-mr-72">
+
+            <!-- Right Section -->
+            <div class="flex items-center space-x-6">
+                <!-- Hiring Link -->
                 <Link
                     class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
                     href="/hiring"
                 >
                     We are hiring!!
                 </Link>
-            </div>
-            <div class="flex items-center space-x-2">
-                <template v-if="$page.props.auth.user">
-                    <Dropdown align="right" width="48">
-                        <template #trigger>
-                            <span class="inline-flex rounded-md">
-                                <button
-                                    type="button"
-                                    class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                >
-                                    {{ $page.props.auth.user.name }}
-                                    <i
-                                        class="fas fa-user-circle text-blue-900 text-3xl ml-2"
-                                    ></i>
-                                </button>
-                            </span>
-                        </template>
 
-                        <template #content>
-                            <DropdownLink :href="route('profile.edit')">
-                                Profile
-                            </DropdownLink>
-                            <DropdownLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
+                <!-- Auth Section -->
+                <div class="flex items-center">
+                    <template v-if="$page.props.auth.user">
+                        <Dropdown align="right" width="48">
+                            <template #trigger>
+                                <span class="inline-flex rounded-md">
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                    >
+                                        {{ $page.props.auth.user.name }}
+                                        <i
+                                            class="fas fa-user-circle text-blue-900 text-3xl ml-2"
+                                        ></i>
+                                    </button>
+                                </span>
+                            </template>
+
+                            <template #content>
+                                <DropdownLink :href="route('profile.edit')">
+                                    Profile
+                                </DropdownLink>
+                                <DropdownLink
+                                    :href="route('logout')"
+                                    method="post"
+                                    as="button"
+                                >
+                                    Log Out
+                                </DropdownLink>
+                            </template>
+                        </Dropdown>
+                    </template>
+                    <template v-else>
+                        <Link href="/login">
+                            <button
+                                class="bg-green-200 text-green-800 px-4 py-2 rounded"
                             >
-                                Log Out
-                            </DropdownLink>
-                        </template>
-                    </Dropdown>
-                </template>
-                <template v-else>
-                    <Link href="/login">
-                        <button
-                            class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3"
-                        >
-                            Log In
-                        </button>
-                    </Link>
-                    <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
-                </template>
+                                Log In
+                            </button>
+                        </Link>
+                        <i
+                            class="fas fa-user-circle text-blue-900 text-3xl ml-4"
+                        ></i>
+                    </template>
+                </div>
             </div>
         </header>
 
-        <!-- Navigation Menu -->
-        <main class="p-8 -mt-8">
-            <div
-                class="bg-yellow-100 p-4 flex justify-center space-x-16 w-2/5 mx-auto"
-            >
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/"
-                >
-                    Company Profile
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/legalitas"
-                >
-                    Legalitas
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/missions"
-                >
-                    Missions
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/services"
-                >
-                    Services
-                </Link>
-            </div>
-        </main>
+        <!-- Navigation Menu bg-yellow-100 -->
 
         <!-- Content Section -->
-        <section class="mt-8 ml-40 mr-40">
+        <section class="ml-52 mr-40">
+            <h1 class="text-center text-2xl font-bold -ml-4 mb-5 mt-5">
+                MISI KAMI
+            </h1>
+
             <div
                 style="
                     display: flex;
@@ -148,20 +146,20 @@ const asset = (path) => `/assets/${path}`;
             >
                 <img
                     alt="Missions Icon"
-                    class="h-36 w-36 -mt-10 mb-5 -ml-10"
-                    src="/images/missions.jpeg"
+                    class="h-auto w-auto mt-5 mb-5 -ml-10 rounded-lg"
+                    src="/images/seminar.JPG"
                 />
             </div>
-
-            <h1 class="text-center text-2xl font-bold -ml-4">OUR MISSION</h1>
-            <div
-                style="
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                "
-            ></div>
-            <p class="text-2xl font-bold ml-5 mt-5">
+            <p class="text-2xl mt-5 mr-64 -ml-5 mb-10">
+                Pengembangan potensi individu dan pengelolaan sumber daya
+                manusia kini menjadi kebutuhan penting, baik secara personal
+                maupun organisasi.Layanan ini mendukung peningkatan kualitas
+                diri secara holistik dan membantu organisasi menciptakan
+                lingkungan kerja yang produktif, dengan pendekatan psikologi
+                yang terintegrasi teknologi modern.Berikut merupakan Misi kami
+                yang diantaranya adalah:
+            </p>
+            <p class="text-2xl font-bold -ml-2 mt-5">
                 1. Meningkatkan Potensi Individu Secara Optimal & Positif
             </p>
             <div style="padding: 20px; text-align: left; font-size: 1rem">
@@ -232,7 +230,7 @@ const asset = (path) => `/assets/${path}`;
                     align-items: center;
                 "
             ></div>
-            <p class="text-2xl font-bold ml-5 mt-5 -mb-4">
+            <p class="text-2xl font-bold -ml-2 mt-5 -mb-4">
                 2. Menyediakan Jasa Aplikasi Psikologi dan Konsultan SDM
             </p>
             <div style="padding: 20px; text-align: left; font-size: 1rem">
@@ -272,5 +270,37 @@ const asset = (path) => `/assets/${path}`;
 /* Menerapkan font ke seluruh komponen */
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
+}
+.nav-link {
+    padding: 0.5rem 1rem;
+    position: relative;
+    z-index: 1;
+    min-width: fit-content;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fefce8;
+    border-radius: 0.375rem;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+    z-index: -1;
+}
+
+.nav-link:hover::before,
+.nav-link-active::before {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.nav-link-active {
+    color: #cdc052;
 }
 </style>
