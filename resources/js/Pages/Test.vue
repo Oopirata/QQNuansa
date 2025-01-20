@@ -2,16 +2,13 @@
 <script setup>
 import { ref } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
+import DataTable from 'datatables.net-vue3';
+import DataTablesCore from 'datatables.net';
+ 
+DataTable.use(DataTablesCore);
 
 // Search functionality
 const searchQuery = ref("");
-
-const props = defineProps({
-    candidates: {
-        type: Array,
-        required: true
-    }
-});
 
 // Filters data
 const filters = {
@@ -25,30 +22,71 @@ const filters = {
     ]),
 };
 
-// Candidates data
-// const candidates = ref([
-//     {
-//         id: 1,
-//         name: "Muhammad Mirza Faiz Rabbani",
-//         location: "Semarang",
-//         jobTitle: "HRD",
-//     },
-//     {
-//         id: 2,
-//         name: "Bintang Syafrian Rizal",
-//         location: "Pekalongan",
-//         jobTitle: "Psychologist Assistant",
-//     },
-//     { id: 3, name: "Hanif Herofa", location: "Jakarta", jobTitle: "HRD" },
-//     { id: 4, name: "Raka Maulana Yusuf", location: "Rembang", jobTitle: "HRD" },
-//     {
-//         id: 5,
-//         name: "Awang Pratama Putra Mulya",
-//         location: "Pekalongan",
-//         jobTitle: "HRD",
-//     },
-//     { id: 6, name: "Dul Samsi", location: "Pekalongan", jobTitle: "HRD" },
-// ]);
+// Candidates data structure yang lebih representatif
+const candidates = ref([
+    {
+        id: 1,
+        name: "John Smith",
+        email: "john.smith@email.com",
+        jobTitle: "Psychologist Assistant",
+        degree: "Bachelor",
+        status: "New",
+        appliedDate: "2025-01-15"
+    },
+    {
+        id: 2,
+        name: "Sarah Johnson",
+        email: "sarah.j@email.com",
+        jobTitle: "HRD",
+        degree: "Master",
+        status: "New",
+        appliedDate: "2025-01-16"
+    }
+]);
+
+// Data untuk DataTable
+const tableData = computed(() => {
+    return candidates.value.map(candidate => [
+        candidate.name,
+        candidate.email,
+        candidate.jobTitle,
+        candidate.degree,
+        candidate.appliedDate,
+        // Tambahkan kolom action jika diperlukan
+        <button class="bg-blue-500 text-white px-2 py-1 rounded">View</button>
+    ]);
+});
+
+// DataTable options
+const tableOptions = {
+    responsive: true,
+    searching: true,
+    ordering: true,
+    pageLength: 10,
+    columns: [
+        { title: "Name" },
+        { title: "Email" },
+        { title: "Job Title" },
+        { title: "Degree" },
+        { title: "Applied Date" },
+        { 
+            title: "Actions",
+            orderable: false,
+            searchable: false
+        }
+    ],
+    language: {
+        search: "Search in table:",
+        lengthMenu: "Show _MENU_ entries per page",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        paginate: {
+            first: "First",
+            last: "Last",
+            next: "Next",
+            previous: "Previous"
+        }
+    }
+};
 
 // Navigation state
 const isSubMenuOpen = ref(true);
@@ -59,6 +97,7 @@ const candidateItems = [
     { name: "Interview", path: "/adminInterviewCandidates" },
     { name: "Rejected", path: "/adminRejectedCandidates" },
 ];
+
 const toggleSubMenu = () => {
     isSubMenuOpen.value = !isSubMenuOpen.value;
 };
@@ -150,7 +189,7 @@ const toggleSubMenu = () => {
                 </div>
             </div>
         </div>
-
+                
         <!-- Main Content -->
         <div class="flex-1 p-6">
             <div class="flex justify-between items-center mb-6">
@@ -160,15 +199,14 @@ const toggleSubMenu = () => {
                 </h2>
                 <div class="relative">
                     <input
-                        type="text"
+                        v-model="searchQuery"
                         autocomplete="off"
+                        type="text"
                         placeholder="Search"
-                        id="search"
                         class="border rounded p-2 pl-8"
+                        id="search"
                     />
-                    <i
-                        class="fas fa-search absolute left-2 top-3 text-gray-500"
-                    ></i>
+                    <i class="fas fa-search absolute left-2 top-3 text-gray-500"></i>
                 </div>
             </div>
 
@@ -220,114 +258,14 @@ const toggleSubMenu = () => {
                         </button>
                     </div>
                 </div>
-
-                <!-- Candidates List -->
+                <!-- Candidates List with improved DataTable -->
                 <div class="w-3/4 bg-white rounded-lg shadow p-4">
-                    <table
-                        class="min-w-full divide-y divide-gray-300"
+                    <DataTable 
+                        :data="tableData" 
+                        :options="tableOptions"
+                        class="display w-full"
                     >
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                >
-                                    ID
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                >
-                                    Name
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                >
-                                    Degree
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                >
-                                    Job Title
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                >
-                                    Applied At
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white">
-                            <tr v-for="candidate in candidates" :key="candidate.id">
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                    {{ candidate.id }}
-                                </td>
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                    {{ candidate.user.name }}  <!-- Mengambil nama dari relasi user -->
-                                </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ candidate.degree }}
-                                </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ candidate.job_vacancy?.title || 'No Job Title' }} <!-- Mengambil job title dari relasi jobVacancy -->
-                                </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ new Date(candidate.created_at).toLocaleDateString() }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="max-w-7xl mx-auto py-6">
-                        <div class="max-w-none mx-auto">
-                            <div class="bg-white overflow-hidden shadow sm:rounded-lg">
-                                <div
-                                    class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
-                                >
-                                    <div class="flex-1 flex justify-between sm:hidden" />
-                                    <div
-                                        class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
-                                    >
-                                        <div>
-                                            <p class="text-sm text-gray-700">
-                                                Showing
-                                                <!-- space -->
-                                                <span class="font-medium">1</span>
-                                                <!-- space -->
-                                                to
-                                                <!-- space -->
-                                                <span class="font-medium">10</span>
-                                                <!-- space -->
-                                                of
-                                                <!-- space -->
-                                                <span class="font-medium"> 100 </span>
-                                                <!-- space -->
-                                                results
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <nav
-                                                class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                                                aria-label="Pagination"
-                                            >
-                                                <button
-                                                    class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                                                    :class="{
-                                                        'z-10 bg-indigo-50 border-indigo-500 text-indigo-600': true,
-                                                        'bg-white border-gray-300 text-gray-500 hover:bg-gray-50': false,
-                                                    }"
-                                                >
-                                                    <span>1</span>
-                                                </button>
-                                            </nav>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </DataTable>
                 </div>
             </div>
         </div>

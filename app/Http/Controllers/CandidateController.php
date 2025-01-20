@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -9,7 +10,15 @@ class CandidateController extends Controller
 {
     public function newCandidates()
     {
-        return Inertia::render('resources/js/Pages/AdminNewCandidates');
+        $newCandidates = Applicant::with(['user', 'jobVacancy'])  // Load relasi user
+            ->where('status', 0)  // Status new
+            ->get();
+
+        // dd($newCandidates); 
+            
+        return Inertia::render('AdminNewCandidates', [
+            'candidates' => $newCandidates
+        ]);
     }
     public function screenedCandidates()
     {

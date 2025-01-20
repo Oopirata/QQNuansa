@@ -71,9 +71,7 @@ Route::get('/newCandidateDetails', function () {
     return Inertia::render('CandidatesDetail');
 });
 
-Route::get('/adminNewCandidates', function () {
-    return Inertia::render('AdminNewCandidates');
-})->name('adminNewCandidates');
+Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
 
 Route::get('/adminScreenedCandidates', function () {
     return Inertia::render('AdminScreenedCandidates');
