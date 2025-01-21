@@ -41,6 +41,42 @@ Route::get('/missions', function () {
 Route::get('/services', function () {
     return Inertia::render('Services');
 });
+
+//ROUTE BUAT TAGS DI SERVICES
+Route::get('/serviceassesment', function(){
+    return Inertia::render('ServicesAssesment');
+})->name('serviceassesment');
+Route::get('/servicepsikotest', function(){
+    return Inertia::render('ServicesPsikotest');
+})->name('servicepsikotest');
+Route::get('/servicekonseling', function(){
+    return Inertia::render('ServicesKonseling');
+})->name('/serviceskonseling');
+Route::get('/servicecoaching', function(){
+    return Inertia::render('ServicesCoaching');
+})->name('/servicecoaching');
+Route::get('/servicesoutbond', function(){
+    return Inertia::render('ServicesOutbond');
+})->name('/servicesoutbond');
+Route::get('/servicesseminar', function(){
+    return Inertia::render('ServicesSeminar');
+})->name('/servicesseminar');
+Route::get('/servicestraining', function(){
+    return Inertia::render('ServicesTraining');
+})->name('/servicestraining');
+Route::get('/serviceshypnotheraphy', function(){
+    return Inertia::render('ServicesHypnotheraphy');
+})->name('/serviceshypnotheraphy');
+Route::get('/servicesSTIFIN', function(){
+    return Inertia::render('ServicesSTIFIN');
+})->name('/servicesSTIFIN');
+
+
+
+
+
+
+
 Route::get('/hiring', function () {
     return Inertia::render('PosisiCV');
 });

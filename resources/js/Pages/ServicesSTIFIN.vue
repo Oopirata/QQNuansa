@@ -30,26 +30,25 @@ const menuItems = [
 ];
 
 const topRowTags = [
-    { text: "Assessment", href: "/serviceassesment" }, // Update href untuk Assessment
-    { text: "Psikotes", href: "/servicepsikotest" },
-    { text: "Konseling", href: "/servicekonseling" },
-    { text: "Coaching", href: "/servicecoaching" },
-    { text: "Outbond", href: "/servicesoutbond" },
+    "Assesment",
+    "Psikotes",
+    "Konseling",
+    "Coaching",
+    "Outbond",
 ];
 
 const bottomRowTags = [
-    { text: "Seminar", href: "/servicesseminar" },
-    { text: "Training", href: "/servicestraining" },
-    { text: "Hypnotheraphy", href: "/serviceshypnotheraphy" },
-    { text: "Finger Test STIFIN", href: "/servicesSTIFIN" },
+    "Seminar",
+    "Training",
+    "Hypnotheraphy",
+    "Finger Test STIFIN",
 ];
 </script>
 
 <template>
-    <Head title="Services" />
+    <Head title="Services Finger Text STIFIN" />
 
     <div class="bg-white">
-        <!-- Header Section -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
         >
@@ -143,79 +142,6 @@ const bottomRowTags = [
                 </div>
             </div>
         </header>
-
-        <!-- Tags Content Section -->
-        <main class="p-8">
-            <h1 class="text-center text-2xl font-bold -mt-5">Layanan Kami</h1>
-            <div class="max-w-7xl mx-auto mt-8">
-                <!-- Top Row Tags -->
-                <div class="flex flex-wrap gap-3 justify-center mb-4">
-                    <Link
-                        v-for="tag in topRowTags"
-                        :key="tag.text"
-                        :href="tag.href"
-                        class="tag-link"
-                    >
-                        {{ tag.text }}
-                    </Link>
-                </div>
-
-                <!-- Bottom Row Tags -->
-                <div class="flex flex-wrap gap-3 justify-center mb-12">
-                    <Link
-                        v-for="tag in bottomRowTags"
-                        :key="tag.text"
-                        :href="tag.href"
-                        class="tag-link"
-                    >
-                        {{ tag.text }}
-                    </Link>
-                </div>
-
-                <!-- Gallery Grid -->
-                <div class="grid grid-cols-3 gap-4 max-w-6xl mx-auto mt-8">
-                    <!-- Gallery Item 1 -->
-                    <div
-                        class="relative overflow-hidden rounded-lg aspect-square"
-                    >
-                        <img
-                            src="/images/sakjose.jpeg"
-                            alt="Gallery Image 1"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
-                    <!-- Gallery Item 2 -->
-                    <div
-                        class="relative overflow-hidden rounded-lg aspect-square"
-                    >
-                        <img
-                            src="/images/asik.jpg"
-                            alt="Gallery Image 2"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
-                    <!-- Gallery Item 3 -->
-                    <div
-                        class="relative overflow-hidden rounded-lg aspect-auto"
-                    >
-                        <img
-                            src="/images/seminar 2.jpeg"
-                            alt="Gallery Image 3"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
-                </div>
-                <div class="max-w-6xl mx-auto">
-                    <div class="relative overflow-hidden rounded-lg mt-5">
-                        <img
-                            src="/images/seminar.jpg"
-                            alt="asselole"
-                            class="object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
-                </div>
-            </div>
-        </main>
     </div>
 </template>
 
