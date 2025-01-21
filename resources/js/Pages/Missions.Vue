@@ -2,9 +2,38 @@
 import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref } from "vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import { ref, onMounted } from "vue";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+AOS.init({
+    duration: 1000, // Durasi animasi (dalam ms)
+    once: true, // Hanya memicu animasi sekali
+});
+
+const isParagraphVisible = ref(false);
+
+onMounted(() => {
+    // Intersection Observer
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    isParagraphVisible.value = true;
+                }
+            });
+        },
+        { threshold: 0.1 } // Memicu saat 10% elemen terlihat
+    );
+
+    // Targetkan elemen dengan ID tertentu
+    const targetElement = document.getElementById("paragraph-after-image");
+    if (targetElement) {
+        observer.observe(targetElement);
+    }
+});
 
 const page = usePage();
 const currentRoute = computed(() => page.url);
@@ -37,6 +66,7 @@ const menuItems = [
         <!-- Header Section bg-blue-200-->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
+            data-aos="fade-down"
         >
             <!-- Logo Section -->
             <div class="flex items-center">
@@ -133,16 +163,26 @@ const menuItems = [
 
         <!-- Content Section -->
         <section class="ml-52 mr-40">
-            <h1 class="text-center text-2xl font-bold -ml-4 mb-5 mt-5">
+            <h1
+                class="text-center text-2xl font-bold -ml-4 mb-5 mt-5"
+                data-aos="fade-down"
+            >
                 MISI KAMI
             </h1>
-
+            <p
+                class="text-xl mt-10 mr-52 -ml-5 mb-10"
+                :class="{ 'animate-slideInLeft': true }"
+            >
+                PT. Ara Nuansa Katumbiri (ANK) adalah perusahaan yang bergerak
+                di bidang konsultasi pengembangan manajemen sumber daya manusia.
+                Berdiri sejak tahun 2003, perusahaan ini berkomitmen untuk
+                memberikan solusi inovatif dan strategis dalam meningkatkan
+                kualitas pengelolaan sumber daya manusia bagi berbagai
+                organisasi.
+            </p>
             <div
-                style="
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                "
+                class="flex justify-center items-center"
+                :class="{ 'animate-zoomIn': true }"
             >
                 <img
                     alt="Missions Icon"
@@ -150,25 +190,26 @@ const menuItems = [
                     src="/images/seminar.JPG"
                 />
             </div>
-            <p class="text-2xl mt-5 mr-64 -ml-5 mb-10">
-                Pengembangan potensi individu dan pengelolaan sumber daya
-                manusia kini menjadi kebutuhan penting, baik secara personal
-                maupun organisasi.Layanan ini mendukung peningkatan kualitas
-                diri secara holistik dan membantu organisasi menciptakan
-                lingkungan kerja yang produktif, dengan pendekatan psikologi
-                yang terintegrasi teknologi modern.Berikut merupakan Misi kami
-                yang diantaranya adalah:
+            <p class="text-xl mt-5 mr-64 -ml-5 mb-10" data-aos="zoom-in">
+                Seiring dengan meningkatnya kebutuhan akan pengembangan potensi
+                individu dan pengelolaan sumber daya manusia, baik secara
+                personal maupun organisasi, PT. Ara Nuansa Katumbiri hadir untuk
+                mendukung peningkatan kualitas diri secara holistik. Layanan ini
+                dirancang untuk membantu organisasi menciptakan lingkungan kerja
+                yang produktif melalui pendekatan psikologi yang terintegrasi
+                dengan teknologi modern..Berikut merupakan Misi kami yang
+                diantaranya adalah:
             </p>
-            <p class="text-2xl font-bold -ml-2 mt-5">
+            <p class="text-xl font-bold -ml-2 mt-5" data-aos="zoom-in">
                 1. Meningkatkan Potensi Individu Secara Optimal & Positif
             </p>
             <div style="padding: 20px; text-align: left; font-size: 1rem">
-                <p class="-mt-4">
+                <p class="-mt-4" data-aos="zoom-in">
                     Layanan ini bertujuan untuk mengembangkan kemampuan individu
                     dalam berbagai aspek kehidupan. Penjelasannya meliputi:
                 </p>
                 <ul>
-                    <li class="mb-4 mt-2">
+                    <li class="mb-4 mt-2" data-aos="zoom-in">
                         <strong>Kognitif:</strong> Memberikan pelatihan atau
                         program yang meningkatkan kemampuan berpikir kritis,
                         pemecahan masalah, daya ingat, dan kemampuan belajar
@@ -176,28 +217,28 @@ const menuItems = [
                         <em>Contoh:</em> Tes kecerdasan, pelatihan logika, dan
                         seminar manajemen waktu.
                     </li>
-                    <li class="mb-4">
+                    <li class="mb-4" data-aos="zoom-in">
                         <strong>Emosi:</strong> Meningkatkan keterampilan
                         pengelolaan emosi seperti pengendalian stres, manajemen
                         konflik, dan peningkatan ketahanan emosional. <br />
                         <em>Contoh:</em> Konseling psikologi, terapi stres, atau
                         pelatihan mindfulness.
                     </li>
-                    <li class="mb-4">
+                    <li class="mb-4" data-aos="zoom-in">
                         <strong>Sosial:</strong> Mengembangkan keterampilan
                         sosial individu agar lebih percaya diri dalam
                         berinteraksi dengan lingkungan sosial. <br />
                         <em>Contoh:</em> Pelatihan komunikasi, kerjasama tim,
                         dan peningkatan empati sosial.
                     </li>
-                    <li class="mb-4">
+                    <li class="mb-4" data-aos="zoom-in">
                         <strong>Komunikasi:</strong> Membantu individu
                         meningkatkan keterampilan verbal dan non-verbal agar
                         dapat menyampaikan ide secara efektif. <br />
                         <em>Contoh:</em> Public speaking training, pelatihan
                         negosiasi, dan penanganan konflik interpersonal.
                     </li>
-                    <li class="mb-4">
+                    <li class="mb-4" data-aos="zoom-in">
                         <strong>Perilaku:</strong> Mengarahkan individu untuk
                         membentuk kebiasaan yang mendukung pengembangan diri,
                         seperti disiplin, tanggung jawab, dan motivasi diri.
@@ -205,7 +246,7 @@ const menuItems = [
                         <em>Contoh:</em> Coaching perilaku produktif dan program
                         modifikasi kebiasaan.
                     </li>
-                    <li class="mb-4">
+                    <li class="mb-4" data-aos="zoom-in">
                         <strong>Spiritual:</strong> Mendukung individu dalam
                         menemukan makna hidup dan membangun hubungan dengan
                         aspek spiritual, yang dapat membantu meningkatkan
@@ -213,7 +254,7 @@ const menuItems = [
                         <em>Contoh:</em> Workshop pengembangan spiritualitas dan
                         pelatihan meditasi.
                     </li>
-                    <li class="mb-4">
+                    <li class="mb-4" data-aos="zoom-in">
                         <strong>Visual Motorik:</strong> Melatih koordinasi
                         antara penglihatan dan gerakan fisik untuk mendukung
                         keterampilan praktis. <br />
@@ -230,11 +271,11 @@ const menuItems = [
                     align-items: center;
                 "
             ></div>
-            <p class="text-2xl font-bold -ml-2 mt-5 -mb-4">
+            <p class="text-2xl font-bold -ml-2 mt-5 -mb-4" data-aos="zoom-in">
                 2. Menyediakan Jasa Aplikasi Psikologi dan Konsultan SDM
             </p>
             <div style="padding: 20px; text-align: left; font-size: 1rem">
-                <p class="mb-4">
+                <p class="mb-4" data-aos="zoom-in">
                     <strong>Aplikasi Psikologi:</strong> Layanan yang
                     memanfaatkan teknologi untuk memberikan solusi berbasis
                     psikologi. <br />
@@ -242,7 +283,7 @@ const menuItems = [
                     alat asesmen kepribadian, atau platform e-learning berbasis
                     psikologi.
                 </p>
-                <p>
+                <p data-aos="zoom-in">
                     <strong>Konsultan SDM:</strong> Membantu organisasi dan
                     perusahaan dalam mengembangkan sumber daya manusia secara
                     efektif.
@@ -302,5 +343,47 @@ const menuItems = [
 
 .nav-link-active {
     color: #cdc052;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 1s ease-out;
+}
+
+.animate-slideInLeft {
+    animation: slideInLeft 1s ease-out;
+}
+
+.animate-zoomIn {
+    animation: zoomIn 1s ease-out;
 }
 </style>
