@@ -1,8 +1,18 @@
+<!-- Content Section -->
 <script setup>
 import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { ref } from "vue";
+import { computed } from "vue";
+import { usePage } from "@inertiajs/vue3";
+
+const page = usePage();
+const currentRoute = computed(() => page.url);
+
+const isActive = (href) => {
+    return currentRoute.value === href;
+};
 
 const showingNavigationDropdown = ref(false);
 
@@ -10,214 +20,199 @@ const logout = () => {
     router.post(route("logout"));
 };
 
-// Jika kita perlu menggunakan asset dari Laravel, kita bisa membuat computed property
 const asset = (path) => `/assets/${path}`;
+
+const menuItems = [
+    { text: "Tentang Kami", href: "/" },
+    { text: "Legalitas", href: "/legalitas" },
+    { text: "Misi", href: "/missions" },
+    { text: "Layanan", href: "/services" },
+];
+
+const topRowTags = [
+    { text: "Assessment", href: "/serviceassesment" }, // Update href untuk Assessment
+    { text: "Psikotes", href: "/servicepsikotest" },
+    { text: "Konseling", href: "/servicekonseling" },
+    { text: "Coaching", href: "/servicecoaching" },
+    { text: "Outbond", href: "/servicesoutbond" },
+];
+
+const bottomRowTags = [
+    { text: "Seminar", href: "/servicesseminar" },
+    { text: "Training", href: "/servicestraining" },
+    { text: "Hypnotheraphy", href: "/serviceshypnotheraphy" },
+    { text: "Finger Test STIFIN", href: "/servicesSTIFIN" },
+];
 </script>
 
 <template>
-    <Head title="Company Profile" />
+    <Head title="Services" />
 
     <div class="bg-white">
         <!-- Header Section -->
-        <header class="bg-blue-200 p-4 flex justify-between items-center">
-            <div class="flex items-center -mr-16">
+        <header
+            class="p-4 flex justify-between items-center mt-2 container mx-auto"
+        >
+            <!-- Logo Section -->
+            <div class="flex items-center">
                 <img
                     alt="Company Logo"
-                    class="h-14 w-14"
-                    src="/images/QQ.png"
+                    class="h-14 w-20"
+                    src="/images/QQ crop.png"
+                />
+                <img
+                    alt="Company Logo"
+                    class="ml-2 h-14 w-36"
+                    src="/images/Nuansa crop.png"
                 />
             </div>
-            <nav class="space-x-10 -ml-60 mr-80">
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="/"
+
+            <!-- Navigation Menu Section -->
+            <nav class="flex-grow px-20">
+                <div
+                    class="pb-2 border-b-4 border-[#CDC052] w-fit mx-auto rounded-lg"
                 >
-                    Tentang Kami
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Psiko Test
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Konsultasi
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Pelatihan
-                </Link>
+                    <div class="flex space-x-8 px-4">
+                        <Link
+                            v-for="(item, index) in menuItems"
+                            :key="index"
+                            :href="item.href"
+                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#CDC052]"
+                            :class="{ 'nav-link-active': isActive(item.href) }"
+                        >
+                            {{ item.text }}
+                        </Link>
+                    </div>
+                </div>
             </nav>
-            <div class="-mr-72">
+
+            <!-- Right Section -->
+            <div class="flex items-center space-x-6">
+                <!-- Hiring Link -->
                 <Link
                     class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
                     href="/hiring"
                 >
                     We are hiring!!
                 </Link>
-            </div>
-            <div class="flex items-center space-x-2">
-                <template v-if="$page.props.auth.user">
-                    <Dropdown align="right" width="48">
-                        <template #trigger>
-                            <span class="inline-flex rounded-md">
-                                <button
-                                    type="button"
-                                    class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                >
-                                    {{ $page.props.auth.user.name }}
-                                    <i
-                                        class="fas fa-user-circle text-blue-900 text-3xl ml-2"
-                                    ></i>
-                                </button>
-                            </span>
-                        </template>
 
-                        <template #content>
-                            <DropdownLink :href="route('profile.edit')">
-                                Profile
-                            </DropdownLink>
-                            <DropdownLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
+                <!-- Auth Section -->
+                <div class="flex items-center">
+                    <template v-if="$page.props.auth.user">
+                        <Dropdown align="right" width="48">
+                            <template #trigger>
+                                <span class="inline-flex rounded-md">
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                    >
+                                        {{ $page.props.auth.user.name }}
+                                        <i
+                                            class="fas fa-user-circle text-blue-900 text-3xl ml-2"
+                                        ></i>
+                                    </button>
+                                </span>
+                            </template>
+
+                            <template #content>
+                                <DropdownLink :href="route('profile.edit')">
+                                    Profile
+                                </DropdownLink>
+                                <DropdownLink
+                                    :href="route('logout')"
+                                    method="post"
+                                    as="button"
+                                >
+                                    Log Out
+                                </DropdownLink>
+                            </template>
+                        </Dropdown>
+                    </template>
+                    <template v-else>
+                        <Link href="/login">
+                            <button
+                                class="bg-green-200 text-green-800 px-4 py-2 rounded"
                             >
-                                Log Out
-                            </DropdownLink>
-                        </template>
-                    </Dropdown>
-                </template>
-                <template v-else>
-                    <Link href="/login">
-                        <button
-                            class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3"
-                        >
-                            Log In
-                        </button>
-                    </Link>
-                    <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
-                </template>
+                                Log In
+                            </button>
+                        </Link>
+                        <i
+                            class="fas fa-user-circle text-blue-900 text-3xl ml-4"
+                        ></i>
+                    </template>
+                </div>
             </div>
         </header>
 
-        <!-- Navigation Menu -->
-        <main class="p-8 -mt-8">
-            <div
-                class="bg-yellow-100 p-4 flex justify-center space-x-16 w-2/5 mx-auto"
-            >
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/"
-                >
-                    Company Profile
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/legalitas"
-                >
-                    Legalitas
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/missions"
-                >
-                    Missions
-                </Link>
-                <Link
-                    class="text-gray-700 text-center transition-colors duration-200 hover:text-[#CDC052]"
-                    href="/services"
-                >
-                    Services
-                </Link>
-            </div>
-        </main>
-
-        <!-- Content Section -->
+        <!-- Tags Content Section -->
         <main class="p-8">
-            <h1 class="text-center text-2xl font-bold mb-8 -mt-10">
-                OUR SERVICES
-            </h1>
-            <div class="grid grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Recruitment -->
-                <div class="text-center">
-                    <img
-                        alt="Recruitment Icon"
-                        class="mx-auto mb-4"
-                        height="100"
-                        src="images/recruitment.png"
-                        width="100"
-                    />
-                    <h2 class="text-xl font-bold">Recruitment</h2>
-                    <p>
-                        Pencarian kandidat-kandidat terbaik sesuai kualifikasi
-                        yang dibutuhkan perusahaan
-                    </p>
+            <h1 class="text-center text-2xl font-bold -mt-5">Layanan Kami</h1>
+            <div class="max-w-7xl mx-auto mt-8">
+                <!-- Top Row Tags -->
+                <div class="flex flex-wrap gap-3 justify-center mb-4">
+                    <Link
+                        v-for="tag in topRowTags"
+                        :key="tag.text"
+                        :href="tag.href"
+                        class="tag-link"
+                    >
+                        {{ tag.text }}
+                    </Link>
                 </div>
-                <!-- Psiko Test -->
-                <div class="text-center">
-                    <img
-                        alt="Psiko Test Icon"
-                        class="mx-auto mb-4"
-                        height="100"
-                        src="images/psiko test.jpeg"
-                        width="100"
-                    />
-                    <h2 class="text-xl font-bold">Psiko Test</h2>
-                    <p>Menggali potensi yang dimiliki oleh kandidat</p>
-                </div>
-                <!-- Assessment -->
-                <div class="text-center">
-                    <img
-                        alt="Assessment Icon"
-                        class="mx-auto mb-4"
-                        height="100"
-                        src="images/assesment.jpeg"
-                        width="100"
-                    />
-                    <h2 class="text-xl font-bold">Assessment</h2>
-                    <p>
-                        Menggali potensi dan kompetensi yang dimiliki oleh
-                        kandidat
-                    </p>
-                </div>
-            </div>
 
-            <!-- Second row with 2 items centered -->
-            <div class="grid grid-cols-2 gap-8 max-w-4xl mx-auto mt-8">
-                <!-- Assessment Center -->
-                <div class="text-center">
-                    <img
-                        alt="Assessment Center Icon"
-                        class="mx-auto mb-4"
-                        height="100"
-                        src="images/assesment center.jpeg"
-                        width="100"
-                    />
-                    <h2 class="text-xl font-bold">Assessment Center</h2>
-                    <p>
-                        Menggali kompetensi kandidat melalui multi metode dan
-                        multi asesor
-                    </p>
+                <!-- Bottom Row Tags -->
+                <div class="flex flex-wrap gap-3 justify-center mb-12">
+                    <Link
+                        v-for="tag in bottomRowTags"
+                        :key="tag.text"
+                        :href="tag.href"
+                        class="tag-link"
+                    >
+                        {{ tag.text }}
+                    </Link>
                 </div>
-                <!-- Head Hunter -->
-                <div class="text-center">
-                    <img
-                        alt="Head Hunter Icon"
-                        class="mx-auto mb-4"
-                        height="100"
-                        src="images/head hunter.jpeg"
-                        width="100"
-                    />
-                    <h2 class="text-xl font-bold">Head Hunter</h2>
-                    <p>
-                        Menggali kompetensi kandidat melalui multi metode dan
-                        multi asesor
-                    </p>
+
+                <!-- Gallery Grid -->
+                <div class="grid grid-cols-3 gap-4 max-w-6xl mx-auto mt-8">
+                    <!-- Gallery Item 1 -->
+                    <div
+                        class="relative overflow-hidden rounded-lg aspect-square"
+                    >
+                        <img
+                            src="/images/sakjose.jpeg"
+                            alt="Gallery Image 1"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                    </div>
+                    <!-- Gallery Item 2 -->
+                    <div
+                        class="relative overflow-hidden rounded-lg aspect-square"
+                    >
+                        <img
+                            src="/images/asik.jpg"
+                            alt="Gallery Image 2"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                    </div>
+                    <!-- Gallery Item 3 -->
+                    <div
+                        class="relative overflow-hidden rounded-lg aspect-auto"
+                    >
+                        <img
+                            src="/images/seminar 2.jpeg"
+                            alt="Gallery Image 3"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                    </div>
+                </div>
+                <div class="max-w-6xl mx-auto">
+                    <div class="relative overflow-hidden rounded-lg mt-5">
+                        <img
+                            src="/images/seminar.jpg"
+                            alt="asselole"
+                            class="object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                    </div>
                 </div>
             </div>
         </main>
@@ -228,5 +223,62 @@ const asset = (path) => `/assets/${path}`;
 /* Menerapkan font ke seluruh komponen */
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    position: relative;
+    z-index: 1;
+    min-width: fit-content;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fefce8;
+    border-radius: 0.375rem;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
+    z-index: -1;
+}
+
+.nav-link:hover::before,
+.nav-link-active::before {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.nav-link-active {
+    color: #cdc052;
+}
+
+.tag-link {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #f8f8f8;
+    border-radius: 100px;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.tag-link:hover {
+    background-color: #e8e8e8;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .tag-link {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
 }
 </style>
