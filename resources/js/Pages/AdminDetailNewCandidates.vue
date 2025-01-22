@@ -2,6 +2,23 @@
 <script setup>
 import { ref } from "vue";
 import { Head, Link } from "@inertiajs/vue3";
+// import axios from "axios";
+
+// const emailForm = ref({
+//     email: candidate.value.email,
+//     subject: "",
+//     message: "",
+// });
+
+// const sendEmail = async () => {
+//     try {
+//         const response = await axios.post("/api/send-candidate-email", emailForm.value);
+//         alert(response.data.message); // Tampilkan pesan sukses
+//     } catch (error) {
+//         console.error("Error sending email:", error);
+//         alert("Failed to send email.");
+//     }
+// };
 
 // Candidate data
 const candidate = ref({
@@ -247,6 +264,38 @@ const moveToScreened = () => {
                 </div>
 
                 <!-- Emails Section -->
+                <!-- <div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h3 class="text-lg font-semibold mb-4">Send Email</h3>
+    <div class="space-y-4">
+        <div>
+            <label for="subject" class="block text-gray-600">Subject</label>
+            <input
+                v-model="emailForm.subject"
+                id="subject"
+                type="text"
+                placeholder="Email Subject"
+                class="w-full border rounded p-2"
+            />
+        </div>
+        <div>
+            <label for="message" class="block text-gray-600">Message</label>
+            <textarea
+                v-model="emailForm.message"
+                id="message"
+                placeholder="Type your message..."
+                rows="4"
+                class="w-full border rounded p-2"
+            ></textarea>
+        </div>
+        <button
+            @click="sendEmail"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+            Send Email
+        </button>
+    </div>
+</div> -->
+
                 <div class="w-1/2 pl-4">
                     <div class="bg-white rounded-lg shadow p-6">
                         <h3 class="text-lg font-semibold mb-4">Emails</h3>

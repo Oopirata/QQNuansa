@@ -1,10 +1,19 @@
 # CandidatesDashboard.vue
 <script setup>
 import { ref } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 
 // Search functionality
 const searchQuery = ref("");
+
+const props = defineProps({
+    candidates: {
+        type: Array,
+        required: true
+    }
+});
+
+console.log(usePage().props.candidates);
 
 // Filters data
 const filters = {
@@ -19,29 +28,29 @@ const filters = {
 };
 
 // Candidates data
-const candidates = ref([
-    {
-        id: 1,
-        name: "Muhammad Mirza Faiz Rabbani",
-        location: "Semarang",
-        jobTitle: "HRD",
-    },
-    {
-        id: 2,
-        name: "Bintang Syafrian Rizal",
-        location: "Pekalongan",
-        jobTitle: "Psychologist Assistant",
-    },
-    { id: 3, name: "Hanif Herofa", location: "Jakarta", jobTitle: "HRD" },
-    { id: 4, name: "Raka Maulana Yusuf", location: "Rembang", jobTitle: "HRD" },
-    {
-        id: 5,
-        name: "Awang Pratama Putra Mulya",
-        location: "Pekalongan",
-        jobTitle: "HRD",
-    },
-    { id: 6, name: "Dul Samsi", location: "Pekalongan", jobTitle: "HRD" },
-]);
+// const candidates = ref([
+//     {
+//         id: 1,
+//         name: "Muhammad Mirza Faiz Rabbani",
+//         location: "Semarang",
+//         jobTitle: "HRD",
+//     },
+//     {
+//         id: 2,
+//         name: "Bintang Syafrian Rizal",
+//         location: "Pekalongan",
+//         jobTitle: "Psychologist Assistant",
+//     },
+//     { id: 3, name: "Hanif Herofa", location: "Jakarta", jobTitle: "HRD" },
+//     { id: 4, name: "Raka Maulana Yusuf", location: "Rembang", jobTitle: "HRD" },
+//     {
+//         id: 5,
+//         name: "Awang Pratama Putra Mulya",
+//         location: "Pekalongan",
+//         jobTitle: "HRD",
+//     },
+//     { id: 6, name: "Dul Samsi", location: "Pekalongan", jobTitle: "HRD" },
+// ]);
 
 // Navigation state
 const isSubMenuOpen = ref(true);
@@ -153,9 +162,10 @@ const toggleSubMenu = () => {
                 </h2>
                 <div class="relative">
                     <input
-                        v-model="searchQuery"
                         type="text"
+                        autocomplete="off"
                         placeholder="Search"
+                        id="search"
                         class="border rounded p-2 pl-8"
                     />
                     <i
@@ -215,35 +225,111 @@ const toggleSubMenu = () => {
 
                 <!-- Candidates List -->
                 <div class="w-3/4 bg-white rounded-lg shadow p-4">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="text-left border-b">
-                                <th class="py-2">Name</th>
-                                <th class="py-2">Location</th>
-                                <th class="py-2">Job Title</th>
+                    <table
+                        class="min-w-full divide-y divide-gray-300"
+                    >
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                >
+                                    ID
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                >
+                                    Name
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                >
+                                    Degree
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                >
+                                    Job Title
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                >
+                                    Applied At
+                                </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr
-                                v-for="candidate in candidates"
-                                :key="candidate.id"
-                                class="border-b"
-                            >
-                                <td class="py-2">{{ candidate.name }}</td>
-                                <td class="py-2">{{ candidate.location }}</td>
-                                <td
-                                    class="py-2"
-                                    :class="{
-                                        'font-semibold':
-                                            candidate.jobTitle ===
-                                            'Psychologist Assistant',
-                                    }"
-                                >
-                                    {{ candidate.jobTitle }}
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            <tr v-for="candidate in candidates" :key="candidate.id">
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                    {{ candidate.id }}
+                                </td>
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                    {{ candidate.user.name }}  <!-- Mengambil nama dari relasi user -->
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ candidate.degree }}
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ candidate.job_vacancy?.title || 'No Job Title' }} <!-- Mengambil job title dari relasi jobVacancy -->
+                                </td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ new Date(candidate.created_at).toLocaleDateString() }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="max-w-7xl mx-auto py-6">
+                        <div class="max-w-none mx-auto">
+                            <div class="bg-white overflow-hidden shadow sm:rounded-lg">
+                                <div
+                                    class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+                                >
+                                    <div class="flex-1 flex justify-between sm:hidden" />
+                                    <div
+                                        class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+                                    >
+                                        <div>
+                                            <p class="text-sm text-gray-700">
+                                                Showing
+                                                <!-- space -->
+                                                <span class="font-medium">1</span>
+                                                <!-- space -->
+                                                to
+                                                <!-- space -->
+                                                <span class="font-medium">10</span>
+                                                <!-- space -->
+                                                of
+                                                <!-- space -->
+                                                <span class="font-medium"> 100 </span>
+                                                <!-- space -->
+                                                results
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <nav
+                                                class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                                                aria-label="Pagination"
+                                            >
+                                                <button
+                                                    class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                                                    :class="{
+                                                        'z-10 bg-indigo-50 border-indigo-500 text-indigo-600': true,
+                                                        'bg-white border-gray-300 text-gray-500 hover:bg-gray-50': false,
+                                                    }"
+                                                >
+                                                    <span>1</span>
+                                                </button>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

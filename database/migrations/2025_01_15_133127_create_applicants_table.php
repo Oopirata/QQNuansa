@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
+            $table->foreignId('job_vacancy_id')->constrained()->onDelete('cascade');
             $table->string('degree');
             $table->string('expected_salary');
             $table->integer('status')->default(0);
