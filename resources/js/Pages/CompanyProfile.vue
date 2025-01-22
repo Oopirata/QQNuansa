@@ -123,33 +123,33 @@ const menuItems = [
                                 </span>
                             </template>
 
-                        <template #content>
-                            <DropdownLink :href="route('profile.edit')">
-                                Profile
-                            </DropdownLink>
-                            <DropdownLink href="/adminDashboard">
-                                Admin Dashboard
-                            </DropdownLink>
-                            <DropdownLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
+                            <template #content>
+                                <DropdownLink :href="route('profile.edit')">
+                                    Profile
+                                </DropdownLink>
+                                <DropdownLink
+                                    :href="route('logout')"
+                                    method="post"
+                                    as="button"
+                                >
+                                    Log Out
+                                </DropdownLink>
+                            </template>
+                        </Dropdown>
+                    </template>
+                    <template v-else>
+                        <Link href="/login">
+                            <button
+                                class="bg-green-200 text-green-800 px-4 py-2 rounded"
                             >
-                                Log Out
-                            </DropdownLink>
-                        </template>
-                    </Dropdown>
-                </template>
-                <template v-else>
-                    <Link href="/login">
-                        <button
-                            class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3"
-                        >
-                            Log In
-                        </button>
-                    </Link>
-                    <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
-                </template>
+                                Log In
+                            </button>
+                        </Link>
+                        <i
+                            class="fas fa-user-circle text-blue-900 text-3xl ml-4"
+                        ></i>
+                    </template>
+                </div>
             </div>
         </header>
 
