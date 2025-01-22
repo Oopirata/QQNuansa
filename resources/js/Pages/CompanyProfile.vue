@@ -151,6 +151,7 @@ const menuItems = [
                     <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
                 </template>
             </div>
+            </div>
         </header>
 
         <!-- Content Section -->

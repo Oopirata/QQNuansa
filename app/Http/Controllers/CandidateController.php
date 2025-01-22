@@ -12,7 +12,18 @@ class CandidateController extends Controller
     {
         $newCandidates = Applicant::with(['user', 'jobVacancy'])  // Load relasi user
             ->where('status', 0)  // Status new
-            ->paginate(10);  // Pagination 10 data
+            ->paginate(10)// Pagination 10 data
+            ->through(function ($candidate) {
+                return [
+                    'id' => $candidate->id,
+                    'user' => [
+                        'name' => $candidate->user->name
+                    ],
+                    'degree' => $candidate->degree,
+                    'job_vacancy' => $candidate->jobVacancy->name,
+                    'created_at' => $candidate->created_at->diffForHumans()
+                ];
+            });
 
             // dd($newCandidates->items()); 
             
