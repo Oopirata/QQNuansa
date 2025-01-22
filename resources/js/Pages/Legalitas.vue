@@ -2,9 +2,11 @@
 import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const page = usePage();
 const currentRoute = computed(() => page.url);
@@ -19,7 +21,15 @@ const logout = () => {
     router.post(route("logout"));
 };
 
-// Jika kita perlu menggunakan asset dari Laravel, kita bisa membuat computed property
+// Initialize AOS
+onMounted(() => {
+    AOS.init({
+        duration: 1200,
+        once: true,
+        offset: 50,
+    });
+});
+
 const asset = (path) => `/assets/${path}`;
 
 const menuItems = [
@@ -32,52 +42,63 @@ const menuItems = [
 
 <template>
     <Head title="Company Profile" />
+    <header
+        class="p-4 flex justify-between items-center mt-2 container mx-auto"
+        data-aos="fade-down"
+    >
+        <!-- Logo Section -->
+        <div
+            class="flex items-center"
+            data-aos="fade-right"
+            data-aos-delay="200"
+        >
+            <img
+                alt="Company Logo"
+                class="h-14 w-20"
+                src="/images/QQ crop.png"
+            />
+            <img
+                alt="Company Logo"
+                class="ml-2 h-14 w-36"
+                src="/images/Nuansa crop.png"
+            />
+        </div>
 
-    <div class="bg-white">
-        <!-- Header Section -->
-        <header class="bg-blue-200 p-4 flex justify-between items-center">
-            <div class="flex items-center -mr-16">
-                <img
-                    alt="Company Logo"
-                    class="h-14 w-14"
-                    src="/images/QQ.png"
-                />
+        <!-- Navigation Menu Section -->
+        <nav class="flex-grow px-20" data-aos="fade-up" data-aos-delay="400">
+            <div
+                class="pb-2 border-b-4 border-[#CDC052] w-fit mx-auto rounded-lg"
+            >
+                <div class="flex space-x-8 px-4">
+                    <Link
+                        v-for="(item, index) in menuItems"
+                        :key="index"
+                        :href="item.href"
+                        class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#CDC052]"
+                        :class="{ 'nav-link-active': isActive(item.href) }"
+                    >
+                        {{ item.text }}
+                    </Link>
+                </div>
             </div>
-            <nav class="space-x-10 -ml-60 mr-80">
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="/"
-                >
-                    Tentang Kami
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Psiko Test
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Konsultasi
-                </Link>
-                <Link
-                    class="text-blue-900 transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="#"
-                >
-                    Pelatihan
-                </Link>
-            </nav>
-            <div class="-mr-72">
-                <Link
-                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
-                    href="/hiring"
-                >
-                    We are hiring!!
-                </Link>
-            </div>
-            <div class="flex items-center space-x-2">
+        </nav>
+
+        <!-- Right Section -->
+        <div
+            class="flex items-center space-x-6"
+            data-aos="fade-left"
+            data-aos-delay="600"
+        >
+            <!-- Hiring Link -->
+            <Link
+                class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
+                href="/hiring"
+            >
+                We are hiring!!
+            </Link>
+
+            <!-- Auth Section -->
+            <div class="flex items-center">
                 <template v-if="$page.props.auth.user">
                     <Dropdown align="right" width="48">
                         <template #trigger>
@@ -111,39 +132,28 @@ const menuItems = [
                 <template v-else>
                     <Link href="/login">
                         <button
-                            class="bg-green-200 text-green-800 px-4 py-2 rounded mr-3"
+                            class="bg-green-200 text-green-800 px-4 py-2 rounded"
                         >
                             Log In
                         </button>
                     </Link>
-                    <i class="fas fa-user-circle text-blue-900 text-3xl"></i>
+                    <i
+                        class="fas fa-user-circle text-blue-900 text-3xl ml-4"
+                    ></i>
                 </template>
             </div>
-        </header>
-
-        <!-- Navigation Menu -->
-        <main class="p-8 -mt-8">
-            <div class="bg-yellow-100 p-4 flex justify-center w-2/5 mx-auto">
-                <div class="flex justify-between w-full px-4">
-                    <Link
-                        v-for="(item, index) in menuItems"
-                        :key="index"
-                        :href="item.href"
-                        class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#CDC052]"
-                        :class="{ 'nav-link-active': isActive(item.href) }"
-                    >
-                        {{ item.text }}
-                    </Link>
-                </div>
-            </div>
-        </main>
-
+        </div>
+    </header>
+    <div class="bg-white">
         <!-- Content Section -->
         <section class="mt-4 ml-40 mr-40">
             <img
                 alt="Legalitas"
                 class="w-3/4 align-middle justify-center ml-32"
                 src="/images/Legalitas.png"
+                data-aos="fade-up"
+                data-aos-duration="1500"
+                data-aos-delay="800"
             />
         </section>
     </div>
@@ -154,6 +164,7 @@ const menuItems = [
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
 }
+
 .nav-link {
     padding: 0.5rem 1rem;
     position: relative;

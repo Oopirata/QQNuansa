@@ -6,6 +6,13 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import { ref } from "vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+AOS.init({
+    duration: 1000, // Durasi animasi (dalam ms)
+    once: true, // Hanya memicu animasi sekali
+});
 
 const page = usePage();
 const currentRoute = computed(() => page.url);
@@ -14,13 +21,13 @@ const isActive = (href) => {
     return currentRoute.value === href;
 };
 
-const showingNavigationDropdown = ref(false);
+// const showingNavigationDropdown = ref(false);
 
-const logout = () => {
-    router.post(route("logout"));
-};
+// const logout = () => {
+//     router.post(route("logout"));
+// };
 
-const asset = (path) => `/assets/${path}`;
+// const asset = (path) => `/assets/${path}`;
 
 const menuItems = [
     { text: "Tentang Kami", href: "/" },
@@ -52,6 +59,7 @@ const bottomRowTags = [
         <!-- Header Section -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
+            data-aos="fade-down"
         >
             <!-- Logo Section -->
             <div class="flex items-center">
@@ -145,11 +153,14 @@ const bottomRowTags = [
         </header>
 
         <!-- Tags Content Section -->
-        <main class="p-8">
+        <main class="p-8" data-aos="fade-up">
             <h1 class="text-center text-2xl font-bold -mt-5">Layanan Kami</h1>
             <div class="max-w-7xl mx-auto mt-8">
                 <!-- Top Row Tags -->
-                <div class="flex flex-wrap gap-3 justify-center mb-4">
+                <div
+                    class="flex flex-wrap gap-3 justify-center mb-4"
+                    data-aos="fade-right"
+                >
                     <Link
                         v-for="tag in topRowTags"
                         :key="tag.text"
@@ -177,6 +188,7 @@ const bottomRowTags = [
                     <!-- Gallery Item 1 -->
                     <div
                         class="relative overflow-hidden rounded-lg aspect-square"
+                        data-aos="zoom-in"
                     >
                         <img
                             src="/images/sakjose.jpeg"
@@ -187,6 +199,7 @@ const bottomRowTags = [
                     <!-- Gallery Item 2 -->
                     <div
                         class="relative overflow-hidden rounded-lg aspect-square"
+                        data-aos="zoom-in"
                     >
                         <img
                             src="/images/asik.jpg"
@@ -205,6 +218,21 @@ const bottomRowTags = [
                         />
                     </div>
                 </div>
+                <p class="text-xl mt-10 mr-56 mb-10" data-aos="zoom-in">
+                    PT. Ara Nuansa Katumbiri menawarkan tiga layanan utama yang
+                    sesuai dengan keahlian dan bidang jasa yang dikelola.
+                    Layanan pertama adalah CONSULTING, yang berfokus pada jasa
+                    konsultan di bidang manajemen sumber daya manusia, terutama
+                    untuk pengembangan organisasi. Layanan kedua adalah LEARNING
+                    CENTER, yang menyediakan jasa pelatihan dan pengembangan
+                    sumber daya manusia melalui berbagai program, seperti
+                    inhouse training, public training, dan outbound, yang
+                    dirancang untuk memenuhi kebutuhan spesifik organisasi atau
+                    perusahaan. Layanan ketiga adalah RECRUITMENT AND
+                    ASSESSMENT, yang bertujuan untuk mencari, menyeleksi, dan
+                    merekomendasikan talenta terbaik untuk dikembangkan lebih
+                    lanjut, baik dalam dunia industri maupun dunia pendidikan
+                </p>
                 <div class="max-w-6xl mx-auto">
                     <div class="relative overflow-hidden rounded-lg mt-5">
                         <img
