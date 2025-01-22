@@ -1,7 +1,7 @@
 # CandidatesDashboard.vue
 <script setup>
 import { ref } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 
 // Search functionality
 const searchQuery = ref("");
@@ -12,6 +12,8 @@ const props = defineProps({
         required: true
     }
 });
+
+console.log(usePage().props.candidates);
 
 // Filters data
 const filters = {

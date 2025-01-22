@@ -186,5 +186,43 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        $faker = \Faker\Factory::create();
+
+        for ($i = 1; $i <= 30; $i++) {
+            // Buat user baru
+            $userId = DB::table('users')->insertGetId([
+                'name' => $faker->name,
+                'email' => $faker->unique()->safeEmail,
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Assign role sebagai applicant
+            DB::table('user_roles')->insert([
+                'user_id' => $userId,
+                'role_id' => 3, // applicant role
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            // Buat record applicant
+            DB::table('applicants')->insert([
+                'users_id' => $userId,
+                'job_vacancy_id' => rand(1, 2), // Assign job vacancy secara acak
+                'degree' => $faker->randomElement([
+                    'Bachelor of Science',
+                    'Master of Science',
+                    'Bachelor of Arts',
+                    'Master of Business Administration',
+                    'Bachelor of Engineering'
+                ]),
+                'expected_salary' => rand(5000000, 15000000), // Gaji ekspektasi random
+                'status' => 0, // Status baru
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

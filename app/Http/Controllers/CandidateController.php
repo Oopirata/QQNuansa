@@ -12,9 +12,9 @@ class CandidateController extends Controller
     {
         $newCandidates = Applicant::with(['user', 'jobVacancy'])  // Load relasi user
             ->where('status', 0)  // Status new
-            ->get();
+            ->paginate(10);  // Pagination 10 data
 
-        // dd($newCandidates); 
+            // dd($newCandidates->items()); 
             
         return Inertia::render('AdminNewCandidates', [
             'candidates' => $newCandidates
