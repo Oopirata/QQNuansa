@@ -9,8 +9,8 @@ const searchQuery = ref("");
 const props = defineProps({
     candidates: {
         type: Array,
-        required: true
-    }
+        required: true,
+    },
 });
 
 console.log(usePage().props.candidates);
@@ -225,9 +225,7 @@ const toggleSubMenu = () => {
 
                 <!-- Candidates List -->
                 <div class="w-3/4 bg-white rounded-lg shadow p-4">
-                    <table
-                        class="min-w-full divide-y divide-gray-300"
-                    >
+                    <table class="min-w-full divide-y divide-gray-300">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th
@@ -263,65 +261,159 @@ const toggleSubMenu = () => {
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
-                            <tr v-for="candidate in candidates" :key="candidate.id">
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                            <tr
+                                v-for="candidate in candidates.data"
+                                :key="candidate.id"
+                            >
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                >
                                     {{ candidate.id }}
                                 </td>
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                    {{ candidate.user.name }}  <!-- Mengambil nama dari relasi user -->
+                                <td
+                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                >
+                                    {{ candidate.user }}
+                                    <!-- Mengambil nama dari relasi user -->
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
                                     {{ candidate.degree }}
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ candidate.job_vacancy?.title || 'No Job Title' }} <!-- Mengambil job title dari relasi jobVacancy -->
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    {{ candidate.job_vacancy }}
+                                    <!-- Mengambil job title dari relasi jobVacancy -->
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                    {{ new Date(candidate.created_at).toLocaleDateString() }}
+                                <td
+                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                >
+                                    {{
+                                        new Date(
+                                            candidate.created_at
+                                        ).toLocaleDateString()
+                                    }}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="max-w-7xl mx-auto py-6">
                         <div class="max-w-none mx-auto">
-                            <div class="bg-white overflow-hidden shadow sm:rounded-lg">
+                            <div
+                                class="bg-white overflow-hidden shadow sm:rounded-lg"
+                            >
                                 <div
                                     class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
                                 >
-                                    <div class="flex-1 flex justify-between sm:hidden" />
+                                    <div
+                                        class="flex-1 flex justify-between sm:hidden"
+                                    />
                                     <div
                                         class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
                                     >
+                                        <!-- Info Showing Results -->
                                         <div>
                                             <p class="text-sm text-gray-700">
                                                 Showing
-                                                <!-- space -->
-                                                <span class="font-medium">1</span>
-                                                <!-- space -->
+                                                <span class="font-medium">{{
+                                                    candidates.from
+                                                }}</span>
                                                 to
-                                                <!-- space -->
-                                                <span class="font-medium">10</span>
-                                                <!-- space -->
+                                                <span class="font-medium">{{
+                                                    candidates.to
+                                                }}</span>
                                                 of
-                                                <!-- space -->
-                                                <span class="font-medium"> 100 </span>
-                                                <!-- space -->
+                                                <span class="font-medium">{{
+                                                    candidates.total
+                                                }}</span>
                                                 results
                                             </p>
                                         </div>
+
+                                        <!-- Pagination Buttons -->
                                         <div>
                                             <nav
                                                 class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
                                                 aria-label="Pagination"
                                             >
+                                                <!-- Previous Page Button -->
                                                 <button
-                                                    class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                                                    :class="{
-                                                        'z-10 bg-indigo-50 border-indigo-500 text-indigo-600': true,
-                                                        'bg-white border-gray-300 text-gray-500 hover:bg-gray-50': false,
-                                                    }"
+                                                    @click="
+                                                        $inertia.visit(
+                                                            candidates.prev_page_url
+                                                        )
+                                                    "
+                                                    :disabled="
+                                                        !candidates.prev_page_url
+                                                    "
+                                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border text-sm font-medium"
+                                                    :class="[
+                                                        !candidates.prev_page_url
+                                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                            : 'bg-white text-gray-500 hover:bg-gray-50',
+                                                    ]"
                                                 >
-                                                    <span>1</span>
+                                                    <span class="sr-only"
+                                                        >Previous</span
+                                                    >
+                                                    <i
+                                                        class="fas fa-chevron-left w-5 h-5"
+                                                    ></i>
+                                                </button>
+
+                                                <!-- Page Numbers -->
+                                                <template
+                                                    v-for="link in candidates.links.slice(
+                                                        1,
+                                                        -1
+                                                    )"
+                                                    :key="link.label"
+                                                >
+                                                    <button
+                                                        @click="
+                                                            $inertia.visit(
+                                                                link.url
+                                                            )
+                                                        "
+                                                        class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                                                        :class="{
+                                                            'z-10 bg-indigo-50 border-indigo-500 text-indigo-600':
+                                                                link.active,
+                                                            'bg-white border-gray-300 text-gray-500 hover:bg-gray-50':
+                                                                !link.active,
+                                                        }"
+                                                    >
+                                                        <span
+                                                            v-html="link.label"
+                                                        ></span>
+                                                    </button>
+                                                </template>
+
+                                                <!-- Next Page Button -->
+                                                <button
+                                                    @click="
+                                                        $inertia.visit(
+                                                            candidates.next_page_url
+                                                        )
+                                                    "
+                                                    :disabled="
+                                                        !candidates.next_page_url
+                                                    "
+                                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border text-sm font-medium"
+                                                    :class="[
+                                                        !candidates.next_page_url
+                                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                            : 'bg-white text-gray-500 hover:bg-gray-50',
+                                                    ]"
+                                                >
+                                                    <span class="sr-only"
+                                                        >Next</span
+                                                    >
+                                                    <i
+                                                        class="fas fa-chevron-right w-5 h-5"
+                                                    ></i>
                                                 </button>
                                             </nav>
                                         </div>

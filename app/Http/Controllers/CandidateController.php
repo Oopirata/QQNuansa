@@ -10,25 +10,32 @@ class CandidateController extends Controller
 {
     public function newCandidates()
     {
-        $newCandidates = Applicant::with(['user', 'jobVacancy'])  // Load relasi user
-            ->where('status', 0)  // Status new
-            ->paginate(10)// Pagination 10 data
-            ->through(function ($candidate) {
+        $newCandidates = Applicant::with(['user', 'jobVacancy'])
+            ->where('status', 0)
+            ->paginate(10);
+
+        // Transform the data manually
+        $transformedCandidates = new \Illuminate\Pagination\LengthAwarePaginator(
+            collect($newCandidates->items())->map(function ($candidate) {
                 return [
                     'id' => $candidate->id,
-                    'user' => [
-                        'name' => $candidate->user->name
-                    ],
+                    'user' => $candidate->user->name,
                     'degree' => $candidate->degree,
-                    'job_vacancy' => $candidate->jobVacancy->name,
-                    'created_at' => $candidate->created_at->diffForHumans()
+                    'job_vacancy' => $candidate->jobVacancy->title,
+                    'created_at' => $candidate->created_at
                 ];
-            });
-
-            // dd($newCandidates->items()); 
-            
+            }),
+            $newCandidates->total(),
+            $newCandidates->perPage(),
+            $newCandidates->currentPage(),
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+        // dd($transformedCandidates->items());
         return Inertia::render('AdminNewCandidates', [
-            'candidates' => $newCandidates
+            'candidates' => $transformedCandidates
         ]);
     }
     public function screenedCandidates()
