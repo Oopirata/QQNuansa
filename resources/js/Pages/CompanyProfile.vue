@@ -2,7 +2,7 @@
 import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { computed } from "vue";
 import ServiceCards from "./ServiceCards.vue";
 import { usePage } from "@inertiajs/vue3";
@@ -11,27 +11,31 @@ import "aos/dist/aos.css";
 
 const page = usePage();
 const currentRoute = computed(() => page.url);
+const dropdownOpen = ref(false);
+const dropdownRef = ref(null);
 
 const isActive = (href) => {
     return currentRoute.value === href;
 };
 
-const showingNavigationDropdown = ref(false);
-
-const logout = () => {
-    router.post(route("logout"));
+const closeDropdown = (e) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
+        dropdownOpen.value = false;
+    }
 };
 
-// Initialize AOS
 onMounted(() => {
     AOS.init({
         duration: 1000,
         once: true,
         offset: 50,
     });
+    document.addEventListener("click", closeDropdown);
 });
 
-const asset = (path) => `/assets/${path}`;
+onBeforeUnmount(() => {
+    document.removeEventListener("click", closeDropdown);
+});
 
 const menuItems = [
     { text: "Tentang Kami", href: "/" },
@@ -45,12 +49,10 @@ const menuItems = [
     <Head title="Company Profile" />
 
     <div class="bg-white">
-        <!-- Header Section -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
             data-aos="fade-down"
         >
-            <!-- Logo Section -->
             <div
                 class="flex items-center"
                 data-aos="fade-right"
@@ -68,7 +70,6 @@ const menuItems = [
                 />
             </div>
 
-            <!-- Navigation Menu Section -->
             <nav
                 class="flex-grow px-20"
                 data-aos="fade-up"
@@ -91,13 +92,11 @@ const menuItems = [
                 </div>
             </nav>
 
-            <!-- Right Section -->
             <div
                 class="flex items-center space-x-6"
                 data-aos="fade-left"
                 data-aos-delay="600"
             >
-                <!-- Hiring Link -->
                 <Link
                     class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
                     href="/hiring"
@@ -105,37 +104,37 @@ const menuItems = [
                     We are hiring!!
                 </Link>
 
-                <!-- Auth Section -->
-                <div class="flex items-center">
+                <div class="flex items-center relative" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
-                        <Dropdown align="right" width="48">
-                            <template #trigger>
-                                <span class="inline-flex rounded-md">
-                                    <button
-                                        type="button"
-                                        class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                    >
-                                        {{ $page.props.auth.user.name }}
-                                        <i
-                                            class="fas fa-user-circle text-blue-900 text-3xl ml-2"
-                                        ></i>
-                                    </button>
-                                </span>
-                            </template>
+                        <button
+                            @click="dropdownOpen = !dropdownOpen"
+                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                        >
+                            {{ $page.props.auth.user.name }}
+                            <i
+                                class="fas fa-user-circle text-blue-900 text-3xl ml-2"
+                            ></i>
+                        </button>
 
-                            <template #content>
-                                <DropdownLink :href="route('profile.edit')">
-                                    Profile
-                                </DropdownLink>
-                                <DropdownLink
-                                    :href="route('logout')"
-                                    method="post"
-                                    as="button"
-                                >
-                                    Log Out
-                                </DropdownLink>
-                            </template>
-                        </Dropdown>
+                        <div
+                            v-show="dropdownOpen"
+                            class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 z-50"
+                            style="top: 100%"
+                        >
+                            <Link
+                                :href="route('profile.edit')"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Profile
+                            </Link>
+                            <Link
+                                :href="route('logout')"
+                                method="post"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Log Out
+                            </Link>
+                        </div>
                     </template>
                     <template v-else>
                         <Link href="/login">
@@ -153,16 +152,15 @@ const menuItems = [
             </div>
         </header>
 
-        <!-- Content Section -->
         <section class="ml-40 mr-40">
             <h1
-                class="text-center text-2xl font-bold"
+                class="text-center text-2xl font- mt-5 font-bold"
                 data-aos="fade-up"
                 data-aos-delay="800"
             >
                 COMPANY PROFILE
             </h1>
-            <p class="mt-4" data-aos="fade-up" data-aos-delay="1000">
+            <p class="mt-10" data-aos="fade-up" data-aos-delay="1000">
                 PT. Ara Nuansa Katumbiri (ANK) adalah perusahaan konsultan yang
                 berfokus pada pengembangan manajemen sumber daya manusia.
                 Berdiri sejak tahun 2003, perusahaan ini sebelumnya dikenal
@@ -182,7 +180,6 @@ const menuItems = [
 </template>
 
 <style scoped>
-/* Menerapkan font ke seluruh komponen */
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
 }

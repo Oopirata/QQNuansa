@@ -3,19 +3,35 @@
 import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-AOS.init({
-    duration: 1000, // Durasi animasi (dalam ms)
-    once: true, // Hanya memicu animasi sekali
+onMounted(() => {
+    AOS.init({
+        duration: 1200,
+        once: true,
+        offset: 50,
+    });
+    document.addEventListener("click", closeDropdown);
 });
 
 const page = usePage();
 const currentRoute = computed(() => page.url);
+const dropdownOpen = ref(false);
+const dropdownRef = ref(null);
+
+const closeDropdown = (e) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
+        dropdownOpen.value = false;
+    }
+};
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", closeDropdown);
+});
 
 const isActive = (href) => {
     return currentRoute.value === href;
@@ -105,36 +121,37 @@ const bottomRowTags = [
                 </Link>
 
                 <!-- Auth Section -->
-                <div class="flex items-center">
+                <div class="flex items-center relative" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
-                        <Dropdown align="right" width="48">
-                            <template #trigger>
-                                <span class="inline-flex rounded-md">
-                                    <button
-                                        type="button"
-                                        class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                    >
-                                        {{ $page.props.auth.user.name }}
-                                        <i
-                                            class="fas fa-user-circle text-blue-900 text-3xl ml-2"
-                                        ></i>
-                                    </button>
-                                </span>
-                            </template>
+                        <button
+                            @click="dropdownOpen = !dropdownOpen"
+                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                        >
+                            {{ $page.props.auth.user.name }}
+                            <i
+                                class="fas fa-user-circle text-blue-900 text-3xl ml-2"
+                            ></i>
+                        </button>
 
-                            <template #content>
-                                <DropdownLink :href="route('profile.edit')">
-                                    Profile
-                                </DropdownLink>
-                                <DropdownLink
-                                    :href="route('logout')"
-                                    method="post"
-                                    as="button"
-                                >
-                                    Log Out
-                                </DropdownLink>
-                            </template>
-                        </Dropdown>
+                        <div
+                            v-show="dropdownOpen"
+                            class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 z-50"
+                            style="top: 100%"
+                        >
+                            <Link
+                                :href="route('profile.edit')"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Profile
+                            </Link>
+                            <Link
+                                :href="route('logout')"
+                                method="post"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Log Out
+                            </Link>
+                        </div>
                     </template>
                     <template v-else>
                         <Link href="/login">
