@@ -2,8 +2,7 @@
 import { Head, Link, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref, onMounted } from "vue";
-import { computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import ServiceCards from "./ServiceCards.vue";
 import { usePage } from "@inertiajs/vue3";
 import AOS from "aos";
@@ -127,6 +126,9 @@ const menuItems = [
                                 <DropdownLink :href="route('profile.edit')">
                                     Profile
                                 </DropdownLink>
+                                <DropdownLink href="/adminDashboard">
+                                    Admin Dashboard
+                                </DropdownLink>
                                 <DropdownLink
                                     :href="route('logout')"
                                     method="post"
@@ -150,7 +152,6 @@ const menuItems = [
                         ></i>
                     </template>
                 </div>
-            </div>
             </div>
         </header>
 

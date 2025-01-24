@@ -129,9 +129,9 @@ const toggleSubMenu = () => {
         <!-- Main Content -->
         <div class="w-4/5 p-8">
             <div class="flex justify-between items-center mb-8">
-                <button class="text-xl">
+                <a href="/adminDashboard" class="text-xl">
                     <i class="fas fa-arrow-left"></i>
-                </button>
+                </a>
                 <h2 class="text-xl font-bold">New job</h2>
                 <button
                     @click="submitJob"

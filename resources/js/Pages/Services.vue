@@ -126,6 +126,9 @@ const bottomRowTags = [
                                 <DropdownLink :href="route('profile.edit')">
                                     Profile
                                 </DropdownLink>
+                                <DropdownLink href="/adminDashboard">
+                                    Admin Dashboard
+                                </DropdownLink>
                                 <DropdownLink
                                     :href="route('logout')"
                                     method="post"
