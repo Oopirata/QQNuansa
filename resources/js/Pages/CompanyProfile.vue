@@ -170,10 +170,7 @@ const menuItems = [
                 wilayah Indonesia, dengan konsentrasi utama di wilayah Jawa
                 Tengah.
             </p>
-            <p class="mt-4" data-aos="fade-up" data-aos-delay="1200">
-                Perusahaan kami menawarkan tiga layanan utama yang menjadi inti
-                kompetensi dan kegiatan bisnisnya:
-            </p>
+
             <ServiceCards />
         </section>
     </div>
