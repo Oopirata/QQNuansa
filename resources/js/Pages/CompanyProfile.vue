@@ -10,6 +10,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 const page = usePage();
+console.log(page.props.auth.user);
 const currentRoute = computed(() => page.url);
 const dropdownOpen = ref(false);
 const dropdownRef = ref(null);
@@ -126,6 +127,11 @@ const menuItems = [
                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
                                 Profile
+                            </Link>
+                            <Link v-if="$page.props.auth.user.roles.some(role => role.role_name === 'admin')" 
+                                :href="route('admin.dashboard')" 
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                Admin Dashboard
                             </Link>
                             <Link
                                 :href="route('logout')"

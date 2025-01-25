@@ -90,7 +90,7 @@ Route::get('/statuscv', function () {
 // ADMIN ROUTES
 Route::get('/adminDashboard', function () {
     return Inertia::render('AdminDashboard');
-});
+})->name('admin.dashboard');
 Route::get('/adminDashboardSchedule', function () {
     return Inertia::render('AdminDashboardSchedule');
 });

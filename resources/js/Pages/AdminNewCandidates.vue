@@ -27,31 +27,6 @@ const filters = {
     ]),
 };
 
-// Candidates data
-// const candidates = ref([
-//     {
-//         id: 1,
-//         name: "Muhammad Mirza Faiz Rabbani",
-//         location: "Semarang",
-//         jobTitle: "HRD",
-//     },
-//     {
-//         id: 2,
-//         name: "Bintang Syafrian Rizal",
-//         location: "Pekalongan",
-//         jobTitle: "Psychologist Assistant",
-//     },
-//     { id: 3, name: "Hanif Herofa", location: "Jakarta", jobTitle: "HRD" },
-//     { id: 4, name: "Raka Maulana Yusuf", location: "Rembang", jobTitle: "HRD" },
-//     {
-//         id: 5,
-//         name: "Awang Pratama Putra Mulya",
-//         location: "Pekalongan",
-//         jobTitle: "HRD",
-//     },
-//     { id: 6, name: "Dul Samsi", location: "Pekalongan", jobTitle: "HRD" },
-// ]);
-
 // Navigation state
 const isSubMenuOpen = ref(true);
 
