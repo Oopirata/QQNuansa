@@ -105,7 +105,7 @@ const menuItems = [
                     We are hiring!!
                 </Link>
 
-                <div class="flex items-center relative" ref="dropdownRef">
+                <div class="flex items-center relative z-50" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
                         <button
                             @click="dropdownOpen = !dropdownOpen"
@@ -164,7 +164,7 @@ const menuItems = [
             </div>
         </header>
 
-        <section class="ml-40 mr-40">
+        <section class="ml-40 mr-40 -z-10">
             <h1
                 class="text-center text-2xl font- mt-5 font-bold"
                 data-aos="fade-up"
