@@ -14,14 +14,14 @@ Route::get('/', function () {
     //     'laravelVersion' => Application::VERSION,
     //     'phpVersion' => PHP_VERSION,
     // ]);
-    return Inertia::render('CompanyProfile');
+    return Inertia::render('LandingPage');
 });
 
 // Route::get('/statuscv', function () {
 //     return Inertia::render('StatusCV');
 // })->middleware(['auth', 'verified']);
 
-Route::get('/', function () {
+Route::get('/companyprofile', function () {
     return Inertia::render('CompanyProfile');
 })->name('dashboard');
 
@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
 });
 
 //PUBLIC
+
+// Route::get('/landingpage', function(){
+//     return Inertia::render('LandingPage');
+// });
 Route::get('/legalitas', function () {
     return Inertia::render('Legalitas');
 });
