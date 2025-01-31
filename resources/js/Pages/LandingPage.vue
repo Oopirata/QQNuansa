@@ -91,6 +91,7 @@ const menuItems = [
                             data-aos-delay="300"
                             data-aos-duration="1000"
                         />
+
                         <h1
                             class="text-4xl font-bold"
                             data-aos="fade-left"
