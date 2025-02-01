@@ -1,7 +1,7 @@
 # CandidateDetail.vue
 <script setup>
 import { ref } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage, router } from "@inertiajs/vue3";
 // import axios from "axios";
 
 // const emailForm = ref({
@@ -31,6 +31,15 @@ const candidate = ref({
     portfolio: "dribbble.com/johndoe",
     status: "New",
 });
+
+const props = defineProps({
+    candidates: {
+        type: Object,
+        required: true,
+    },
+});
+
+console.log(usePage().props.candidates);
 
 const isSubMenuOpen = ref(true);
 
@@ -86,9 +95,8 @@ const disqualifyCandidate = () => {
     console.log("Disqualify candidate");
 };
 
-const moveToScreened = () => {
-    // Implementation for moving to screened
-    console.log("Move to screened");
+const moveToScreened = (user_id) => {
+    router.visit(route("adminDetailNewCandidates", id));
 };
 </script>
 
@@ -189,9 +197,9 @@ const moveToScreened = () => {
                     </button>
                     <div>
                         <h1 class="text-2xl font-semibold">
-                            {{ candidate.jobTitle }}
+                            {{ candidates.job_vacancy }}
                         </h1>
-                        <p class="text-gray-600">{{ candidate.status }}</p>
+                        <p class="text-gray-600">New</p>
                     </div>
                 </div>
                 <div class="flex items-center">
@@ -216,7 +224,7 @@ const moveToScreened = () => {
                             ></div>
                             <div>
                                 <h2 class="text-xl font-semibold">
-                                    {{ candidate.name }}
+                                    {{ candidates.user }}
                                 </h2>
                                 <p class="text-gray-600">
                                     <i class="fas fa-map-marker-alt mr-2"></i>
@@ -229,7 +237,7 @@ const moveToScreened = () => {
                                 <i
                                     class="fas fa-envelope mr-2 text-gray-400"
                                 ></i>
-                                <span>{{ candidate.email }}</span>
+                                <span>{{ candidates.email }}</span>
                             </div>
                             <div class="flex items-center">
                                 <i class="fas fa-phone mr-2 text-gray-400"></i>

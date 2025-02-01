@@ -107,9 +107,9 @@ Route::get('/adminNewJob', function () {
 // Route::get('/adminNewCandidates', function () {
 //     return Inertia::render('AdminNewCandidates');
 // });
-Route::get('/newCandidateDetails', function () {
-    return Inertia::render('CandidatesDetail');
-});
+// Route::get('/newCandidateDetails', function () {
+//     return Inertia::render('CandidatesDetail');
+// });
 
 Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
 
@@ -129,13 +129,11 @@ Route::get('/adminEmail', function () {
     return Inertia::render('AdminEmail');
 })->name('adminEmail');
 
-Route::get('/adminDetailNewCandidates', function(){
-    return Inertia::render('AdminDetailNewCandidates');
-});
+Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
 
-Route::get('/adminDetailScreenedCandidates', function(){
-    return Inertia::render('AdminDetailScreenedCandidates');
-});
+Route::post('/moveToScreened/{user_id}', [CandidateController::class, 'moveToScreened'])->name('moveToScreened');
+
+// Route::get('/adminDetailScreenedCandidates', [])
 Route::get('/adminDetailInterviewCandidates', function(){
     return Inertia::render('AdminDetailInterviewCandidates');
 });

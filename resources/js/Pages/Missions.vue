@@ -138,7 +138,7 @@ const menuItems = [
                             <Link v-if="$page.props.auth.user.roles.some(role => role.role_name === 'admin')" 
                                 :href="route('admin.dashboard')" 
                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                Admin Dashboard
+                                Admin Dashboad
                             </Link>
                             <Link
                                 :href="route('logout')"
