@@ -77,29 +77,51 @@ class CandidateController extends Controller
         ->where('status', 0)
         ->paginate(10);
 
-    // Transform the data manually
-    $transformedCandidates = new \Illuminate\Pagination\LengthAwarePaginator(
-        collect($newCandidates->items())->map(function ($candidate) {
-            return [
-                'id' => $candidate->id,
-                'user' => $candidate->user->name,
-                'degree' => $candidate->degree,
-                'job_vacancy' => $candidate->jobVacancy->title,
-                'created_at' => $candidate->created_at
-            ];
-        }),
-        $newCandidates->total(),
-        $newCandidates->perPage(),
-        $newCandidates->currentPage(),
-        [
-            'path' => request()->url(),
-            'query' => request()->query(),
-        ]
-    );
-    // dd($transformedCandidates->items());
-    return Inertia::render('AdminNewCandidates', [
-        'candidates' => $transformedCandidates
-    ]);
+        // Transform the data manually
+        $transformedCandidates = new \Illuminate\Pagination\LengthAwarePaginator(
+            collect($newCandidates->items())->map(function ($candidate) {
+                return [
+                    'id' => $candidate->id,
+                    'user' => $candidate->user->name,
+                    'degree' => $candidate->degree,
+                    'job_vacancy' => $candidate->jobVacancy->title,
+                    'created_at' => $candidate->created_at
+                ];
+            }),
+            $newCandidates->total(),
+            $newCandidates->perPage(),
+            $newCandidates->currentPage(),
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+        // dd($transformedCandidates->items());
+        return Inertia::render('AdminNewCandidates', [
+            'candidates' => $transformedCandidates
+        ]);
+    }
+
+    public function screenCandidateDetail($user_id) {
+        $newCandidate = Applicant::with(['user', 'jobVacancy'])
+        ->where('id', $user_id)
+        ->first();
+
+        $candidate = [
+            'id' => $newCandidate->id,
+            'user_id' => $newCandidate->user->id,
+            'user' => $newCandidate->user->name,
+            'email' => $newCandidate->user->email,
+            'degree' => $newCandidate->degree,
+            'job_vacancy' => $newCandidate->jobVacancy->title,
+            'status' => $newCandidate->status,
+            'created_at' => $newCandidate->created_at
+        ];
+        // dd($newCandidate);
+
+        return Inertia::render('AdminDetailNewCandidates', [
+            'candidates' => $candidate
+        ]);
     }
     public function interviewCandidates()
     {
