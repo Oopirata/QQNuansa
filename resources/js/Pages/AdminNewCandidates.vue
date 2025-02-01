@@ -1,7 +1,7 @@
 # CandidatesDashboard.vue
 <script setup>
 import { ref } from "vue";
-import { Head, Link, usePage } from "@inertiajs/vue3";
+import { Head, Link, usePage, router } from "@inertiajs/vue3";
 
 // Search functionality
 const searchQuery = ref("");
@@ -38,6 +38,10 @@ const candidateItems = [
 ];
 const toggleSubMenu = () => {
     isSubMenuOpen.value = !isSubMenuOpen.value;
+};
+
+const goToDetail = (id) => {
+    router.visit(route("adminDetailNewCandidates", id)); // Arahkan ke route detail kandidat
 };
 </script>
 
@@ -203,73 +207,34 @@ const toggleSubMenu = () => {
                     <table class="min-w-full divide-y divide-gray-300">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                >
-                                    ID
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                >
-                                    Name
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                >
-                                    Degree
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                >
-                                    Job Title
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                >
-                                    Applied At
-                                </th>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">ID</th>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</th>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Degree</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Job Title</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Applied At</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                             <tr
                                 v-for="candidate in candidates.data"
                                 :key="candidate.id"
+                                @click="goToDetail(candidate.id)"
+                                class="cursor-pointer hover:bg-gray-100 transition"
                             >
-                                <td
-                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                >
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                     {{ candidate.id }}
                                 </td>
-                                <td
-                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                >
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                     {{ candidate.user }}
-                                    <!-- Mengambil nama dari relasi user -->
                                 </td>
-                                <td
-                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-                                >
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ candidate.degree }}
                                 </td>
-                                <td
-                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-                                >
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     {{ candidate.job_vacancy }}
-                                    <!-- Mengambil job title dari relasi jobVacancy -->
                                 </td>
-                                <td
-                                    class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-                                >
-                                    {{
-                                        new Date(
-                                            candidate.created_at
-                                        ).toLocaleDateString()
-                                    }}
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    {{ new Date(candidate.created_at).toLocaleDateString() }}
                                 </td>
                             </tr>
                         </tbody>
