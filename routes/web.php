@@ -91,53 +91,53 @@ Route::get('/statuscv', function () {
     return Inertia::render('StatusCV');
 })->middleware(['auth', 'verified']);
 
-// ADMIN ROUTES
-Route::get('/adminDashboard', function () {
-    return Inertia::render('AdminDashboard');
-})->name('admin.dashboard');
-Route::get('/adminDashboardSchedule', function () {
-    return Inertia::render('AdminDashboardSchedule');
+Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(function () {
+    // ADMIN ROUTES
+    Route::get('/adminDashboard', function () {
+        return Inertia::render('AdminDashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/adminDashboardSchedule', function () {
+        return Inertia::render('AdminDashboardSchedule');
+    });
+
+    Route::get('/adminEmail', function () {
+        return Inertia::render('AdminEmail');
+    });
+
+    Route::get('/adminNewJob', function () {
+        return Inertia::render('AdminNewJob');
+    });
+
+    Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
+
+    Route::get('/adminScreenedCandidates', function () {
+        return Inertia::render('AdminScreenedCandidates');
+    })->name('adminScreenedCandidates');
+
+    Route::get('/adminInterviewCandidates', function () {
+        return Inertia::render('AdminInterviewCandidates');
+    })->name('adminInterviewCandidates');
+
+    Route::get('/adminRejectedCandidates', function () {
+        return Inertia::render('AdminRejectedCandidates');
+    })->name('adminRejectedCandidates');
+
+    Route::get('/adminEmail', function () {
+        return Inertia::render('AdminEmail');
+    })->name('adminEmail');
+
+    Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
+
+    Route::post('/moveToScreened/{user_id}', [CandidateController::class, 'moveToScreened'])->name('moveToScreened');
+
+    Route::get('/adminDetailInterviewCandidates', function () {
+        return Inertia::render('AdminDetailInterviewCandidates');
+    });
+
+    Route::get('/adminDetailRejectedCandidates', function () {
+        return Inertia::render('AdminDetailRejectedCandidates');
+    });
 });
-Route::get('/adminEmail', function () {
-    return Inertia::render('AdminEmail');
-});
-Route::get('/adminNewJob', function () {
-    return Inertia::render('AdminNewJob');
-});
-// Route::get('/adminNewCandidates', function () {
-//     return Inertia::render('AdminNewCandidates');
-// });
-// Route::get('/newCandidateDetails', function () {
-//     return Inertia::render('CandidatesDetail');
-// });
 
-Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
-
-Route::get('/adminScreenedCandidates', function () {
-    return Inertia::render('AdminScreenedCandidates');
-})->name('adminScreenedCandidates');
-
-Route::get('/adminInterviewCandidates', function () {
-    return Inertia::render('AdminInterviewCandidates');
-})->name('adminInterviewCandidates');
-
-Route::get('/adminRejectedCandidates', function () {
-    return Inertia::render('AdminRejectedCandidates');
-})->name('adminRejectedCandidates');
-
-Route::get('/adminEmail', function () {
-    return Inertia::render('AdminEmail');
-})->name('adminEmail');
-
-Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
-
-Route::post('/moveToScreened/{user_id}', [CandidateController::class, 'moveToScreened'])->name('moveToScreened');
-
-// Route::get('/adminDetailScreenedCandidates', [])
-Route::get('/adminDetailInterviewCandidates', function(){
-    return Inertia::render('AdminDetailInterviewCandidates');
-});
-Route::get('/adminDetailRejectedCandidates', function(){
-    return Inertia::render('AdminDetailRejectedCandidates');
-});
 require __DIR__.'/auth.php';
