@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\OauthController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use SebastianBergmann\CodeUnit\FunctionUnit;
+
+//GGOOOGLE LOGIN
+Route::get('oauth/google', [\App\Http\Controllers\OauthController::class, 'redirectToProvider'])->name('oauth.google');  
+Route::get('oauth/google/callback', [\App\Http\Controllers\OauthController::class, 'handleProviderCallback'])->name('oauth.google.callback');
 
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
@@ -31,62 +35,69 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//PUBLIC
+// PUBLIC ROUTES
 
 // Route::get('/landingpage', function(){
 //     return Inertia::render('LandingPage');
 // });
+
 Route::get('/legalitas', function () {
     return Inertia::render('Legalitas');
 });
+
 Route::get('/missions', function () {
     return Inertia::render('Missions');
 });
+
 Route::get('/services', function () {
     return Inertia::render('Services');
 });
 
-//ROUTE BUAT TAGS DI SERVICES
-Route::get('/serviceassesment', function(){
+// ROUTES FOR TAGS IN SERVICES
+Route::get('/serviceassesment', function () {
     return Inertia::render('ServicesAssesment');
 })->name('serviceassesment');
-Route::get('/servicepsikotest', function(){
+
+Route::get('/servicepsikotest', function () {
     return Inertia::render('ServicesPsikotest');
 })->name('servicepsikotest');
-Route::get('/servicekonseling', function(){
+
+Route::get('/servicekonseling', function () {
     return Inertia::render('ServicesKonseling');
 })->name('/serviceskonseling');
-Route::get('/servicecoaching', function(){
+
+Route::get('/servicecoaching', function () {
     return Inertia::render('ServicesCoaching');
 })->name('/servicecoaching');
-Route::get('/servicesoutbond', function(){
+
+Route::get('/servicesoutbond', function () {
     return Inertia::render('ServicesOutbond');
 })->name('/servicesoutbond');
-Route::get('/servicesseminar', function(){
+
+Route::get('/servicesseminar', function () {
     return Inertia::render('ServicesSeminar');
 })->name('/servicesseminar');
-Route::get('/servicestraining', function(){
+
+Route::get('/servicestraining', function () {
     return Inertia::render('ServicesTraining');
 })->name('/servicestraining');
-Route::get('/serviceshypnotheraphy', function(){
+
+Route::get('/serviceshypnotheraphy', function () {
     return Inertia::render('ServicesHypnotheraphy');
 })->name('/serviceshypnotheraphy');
-Route::get('/servicesSTIFIN', function(){
+
+Route::get('/servicesSTIFIN', function () {
     return Inertia::render('ServicesSTIFIN');
 })->name('/servicesSTIFIN');
-
-
-
-
-
-
 
 Route::get('/hiring', function () {
     return Inertia::render('PosisiCV');
 });
+
 Route::get('/uploadcv', function () {
     return Inertia::render('UploadCV');
 });
+
 Route::get('/statuscv', function () {
     return Inertia::render('StatusCV');
 })->middleware(['auth', 'verified']);
