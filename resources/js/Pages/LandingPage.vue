@@ -84,7 +84,7 @@ const menuItems = [
                     <!-- Logo and Text -->
                     <div class="flex items-center justify-center gap-8 mb-16">
                         <img
-                            src="/images/QQ.png"
+                            src="/images/QQ White.png"
                             alt="Developing Your People"
                             class="w-64 h-64 object-contain"
                             data-aos="fade-right"
