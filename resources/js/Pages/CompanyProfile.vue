@@ -39,7 +39,7 @@ onBeforeUnmount(() => {
 });
 
 const menuItems = [
-    { text: "Tentang Kami", href: "/" },
+    { text: "Tentang Kami", href: "/companyprofile" },
     { text: "Legalitas", href: "/legalitas" },
     { text: "Misi", href: "/missions" },
     { text: "Layanan", href: "/services" },
