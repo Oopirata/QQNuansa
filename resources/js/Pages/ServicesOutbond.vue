@@ -1,13 +1,41 @@
 <!-- Content Section -->
 <script setup>
 import { Head, Link, router } from "@inertiajs/vue3";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
+onMounted(() => {
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+        once: false,
+        mirror: true,
+        offset: 50,
+        delay: 100,
+        anchorPlacement: "top-bottom",
+    });
+
+    // Add click outside listener
+    document.addEventListener("click", handleClickOutside);
+});
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
 const page = usePage();
+const dropdownRef = ref(null);
+const dropdownOpen = ref(false);
 const currentRoute = computed(() => page.url);
 
 const isActive = (href) => {
@@ -29,20 +57,11 @@ const menuItems = [
     { text: "Layanan", href: "/services" },
 ];
 
-const topRowTags = [
-    "Assesment",
-    "Psikotes",
-    "Konseling",
-    "Coaching",
-    "Outbond",
-];
-
-const bottomRowTags = [
-    "Seminar",
-    "Training",
-    "Hypnotheraphy",
-    "Finger Test STIFIN",
-];
+const handleClickOutside = (event) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+        dropdownOpen.value = false;
+    }
+};
 </script>
 
 <template>
@@ -51,6 +70,7 @@ const bottomRowTags = [
     <div class="bg-white">
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
+            data-aos="fade-down"
         >
             <!-- Logo Section -->
             <div class="flex items-center">
@@ -69,14 +89,14 @@ const bottomRowTags = [
             <!-- Navigation Menu Section -->
             <nav class="flex-grow px-20">
                 <div
-                    class="pb-2 border-b-4 border-[#CDC052] w-fit mx-auto rounded-lg"
+                    class="pb-2 border-b-4 border-[#5099D5] w-fit mx-auto rounded-lg"
                 >
                     <div class="flex space-x-8 px-4">
                         <Link
                             v-for="(item, index) in menuItems"
                             :key="index"
                             :href="item.href"
-                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#CDC052]"
+                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#0E74B8]"
                             :class="{ 'nav-link-active': isActive(item.href) }"
                         >
                             {{ item.text }}
@@ -96,36 +116,48 @@ const bottomRowTags = [
                 </Link>
 
                 <!-- Auth Section -->
-                <div class="flex items-center">
+                <div class="flex items-center relative" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
-                        <Dropdown align="right" width="48">
-                            <template #trigger>
-                                <span class="inline-flex rounded-md">
-                                    <button
-                                        type="button"
-                                        class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                    >
-                                        {{ $page.props.auth.user.name }}
-                                        <i
-                                            class="fas fa-user-circle text-blue-900 text-3xl ml-2"
-                                        ></i>
-                                    </button>
-                                </span>
-                            </template>
+                        <button
+                            @click="dropdownOpen = !dropdownOpen"
+                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                        >
+                            {{ $page.props.auth.user.name }}
+                            <i
+                                class="fas fa-user-circle text-blue-900 text-3xl ml-2"
+                            ></i>
+                        </button>
 
-                            <template #content>
-                                <DropdownLink :href="route('profile.edit')">
-                                    Profile
-                                </DropdownLink>
-                                <DropdownLink
-                                    :href="route('logout')"
-                                    method="post"
-                                    as="button"
-                                >
-                                    Log Out
-                                </DropdownLink>
-                            </template>
-                        </Dropdown>
+                        <div
+                            v-show="dropdownOpen"
+                            class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 z-50"
+                            style="top: 100%"
+                        >
+                            <Link
+                                :href="route('profile.edit')"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Profile
+                            </Link>
+                            <Link
+                                v-if="
+                                    $page.props.auth.user.roles.some(
+                                        (role) => role.role_name === 'admin'
+                                    )
+                                "
+                                :href="route('admin.dashboard')"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Admin Dashboard
+                            </Link>
+                            <Link
+                                :href="route('logout')"
+                                method="post"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Log Out
+                            </Link>
+                        </div>
                     </template>
                     <template v-else>
                         <Link href="/login">
@@ -165,7 +197,7 @@ const bottomRowTags = [
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #fefce8;
+    background-color: #e0f2fe;
     border-radius: 0.375rem;
     transform: scale(0.7);
     opacity: 0;
@@ -181,7 +213,7 @@ const bottomRowTags = [
 }
 
 .nav-link-active {
-    color: #cdc052;
+    color: #0e74b8;
 }
 
 .tag-link {
