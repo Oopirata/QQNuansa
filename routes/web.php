@@ -7,10 +7,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-//GGOOOGLE LOGIN
-Route::get('oauth/google', [\App\Http\Controllers\OauthController::class, 'redirectToProvider'])->name('oauth.google');  
-Route::get('oauth/google/callback', [\App\Http\Controllers\OauthController::class, 'handleProviderCallback'])->name('oauth.google.callback');
-
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
     //     'canLogin' => Route::has('login'),
@@ -19,7 +15,7 @@ Route::get('/', function () {
     //     'phpVersion' => PHP_VERSION,
     // ]);
     return Inertia::render('LandingPage');
-});
+})->name('landing.page');
 
 // Route::get('/statuscv', function () {
 //     return Inertia::render('StatusCV');
@@ -33,6 +29,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+//GGOOOGLE LOGIN
+Route::middleware('guest')->group(function () {
+    Route::get('oauth/google', [\App\Http\Controllers\OauthController::class, 'redirectToProvider'])->name('oauth.google');  
+    Route::get('oauth/google/callback', [\App\Http\Controllers\OauthController::class, 'handleProviderCallback'])->name('oauth.google.callback');
 });
 
 // PUBLIC ROUTES

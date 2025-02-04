@@ -106,7 +106,8 @@ const submit = () => {
                             Forgot your password?
                         </Link>
 
-                        <a href="{{ route('oauth.google') }}"
+                        <a
+                            :href="`/oauth/google`"
                             class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
                             <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24">
                                 <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115Z"/>

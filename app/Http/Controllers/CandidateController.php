@@ -8,11 +8,27 @@ use Inertia\Inertia;
 
 class CandidateController extends Controller
 {
-    public function newCandidates()
+    public function newCandidates(Request $request)
     {
-        $newCandidates = Applicant::with(['user', 'jobVacancy'])
-            ->where('status', 0)
-            ->paginate(10);
+        $search = $request->input('search');
+
+        $query = Applicant::with(['user', 'jobVacancy'])
+            ->where('status', 0);
+
+        // Menambahkan kondisi pencarian
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->whereHas('user', function($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('jobVacancy', function($query) use ($search) {
+                    $query->where('title', 'like', "%{$search}%");
+                })
+                ->orWhere('degree', 'like', "%{$search}%");
+            });
+        }
+
+        $newCandidates = $query->paginate(10);
 
         // Transform the data manually
         $transformedCandidates = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -33,9 +49,12 @@ class CandidateController extends Controller
                 'query' => request()->query(),
             ]
         );
-        // dd($transformedCandidates->items());
+
         return Inertia::render('AdminNewCandidates', [
-            'candidates' => $transformedCandidates
+            'candidates' => $transformedCandidates,
+            'filters' => [
+                'search' => $search,
+            ]
         ]);
     }
 

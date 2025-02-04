@@ -11,7 +11,12 @@ class OauthController extends Controller
 {
     public function redirectToProvider()
     {
-        return Socialite::driver('google')->redirect();
+        try {
+            return Socialite::driver('google')
+                ->redirect();
+        } catch (\Exception $e) {
+            return redirect()->route('login')->with('error', $e->getMessage());
+        }
     }
     public function handleProviderCallback()
     {
@@ -25,7 +30,7 @@ class OauthController extends Controller
 
                 Auth::login($finduser);
 
-                return redirect('/dashboard');
+                return redirect('/');
 
             }else{
                 $newUser = User::create([
@@ -38,11 +43,11 @@ class OauthController extends Controller
 
                 Auth::login($newUser);
 
-                return redirect('/dashboard');
+                return redirect('/');
             }
 
-        } catch (Exception $e) {
-            dd($e->getMessage());
+        } catch (\Exception $e) {
+            return redirect()->route('login')->with('error', $e->getMessage());
         }
     }
 }
