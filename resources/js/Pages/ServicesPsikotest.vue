@@ -36,7 +36,7 @@ const isActive = (href) => {
 };
 
 const menuItems = [
-    { text: "Tentang Kami", href: "/" },
+    { text: "Tentang Kami", href: "/companyprofile" },
     { text: "Legalitas", href: "/legalitas" },
     { text: "Misi", href: "/missions" },
     { text: "Layanan", href: "/services" },
@@ -108,7 +108,9 @@ onBeforeUnmount(() => {
 <template>
     <Head title="Layanan Psikotes" />
 
-    <div class="min-h-screen bg-gradient-to-b from-white to-blue-50">
+    <div
+        class="min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden"
+    >
         <!-- Header Section -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"

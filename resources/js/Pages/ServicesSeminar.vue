@@ -69,14 +69,14 @@ const bottomRowTags = [
             <!-- Navigation Menu Section -->
             <nav class="flex-grow px-20">
                 <div
-                    class="pb-2 border-b-4 border-[#CDC052] w-fit mx-auto rounded-lg"
+                    class="pb-2 border-b-4 border-[#5099D5] w-fit mx-auto rounded-lg"
                 >
                     <div class="flex space-x-8 px-4">
                         <Link
                             v-for="(item, index) in menuItems"
                             :key="index"
                             :href="item.href"
-                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#CDC052]"
+                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#0E74B8]"
                             :class="{ 'nav-link-active': isActive(item.href) }"
                         >
                             {{ item.text }}
@@ -165,7 +165,7 @@ const bottomRowTags = [
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #fefce8;
+    background-color: #e0f2fe;
     border-radius: 0.375rem;
     transform: scale(0.7);
     opacity: 0;
@@ -181,7 +181,7 @@ const bottomRowTags = [
 }
 
 .nav-link-active {
-    color: #cdc052;
+    color: #0e74b8;
 }
 
 .tag-link {
