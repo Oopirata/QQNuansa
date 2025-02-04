@@ -15,7 +15,7 @@ const isActive = (href) => {
 };
 
 const menuItems = [
-    { text: "Tentang Kami", href: "/" },
+    { text: "Tentang Kami", href: "/companyprofile" },
     { text: "Legalitas", href: "/legalitas" },
     { text: "Misi", href: "/missions" },
     { text: "Layanan", href: "/services" },
@@ -72,12 +72,13 @@ onMounted(() => {
     <Head title="Services Assessment" />
 
     <div
-        class="min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-x-hidden"
+        class="min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden"
     >
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
             data-aos="fade-down"
         >
+            <div></div>
             <!-- Logo Section -->
             <div class="flex items-center">
                 <img
@@ -181,7 +182,7 @@ onMounted(() => {
             </div>
         </header>
 
-        <div class="container mx-auto px-0 py-12">
+        <div class="container mx-auto py-12">
             <!-- Hero Section -->
             <div class="text-center mb-16 px-4" data-aos="fade-up">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">
