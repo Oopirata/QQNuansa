@@ -69,7 +69,7 @@ const bottomRowTags = [
 </script>
 
 <template>
-    <Head title="Services" />
+    <Head title="Layanan" />
 
     <div class="bg-white">
         <!-- Header Section -->

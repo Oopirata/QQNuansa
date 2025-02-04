@@ -60,7 +60,7 @@ const menuItems = [
 </script>
 
 <template>
-    <Head title="Company Profile" />
+    <Head title="Misi" />
 
     <div class="bg-white">
         <!-- Header Section bg-blue-200-->
