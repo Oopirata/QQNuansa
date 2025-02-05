@@ -54,7 +54,7 @@ const menuItems = [
 </script>
 
 <template>
-    <Head title="Company Profile" />
+    <Head title="Legalitas" />
     <header
         class="p-4 flex justify-between items-center mt-2 container mx-auto"
         data-aos="fade-down"
