@@ -259,7 +259,47 @@ onMounted(() => {
                     </p>
                 </div>
             </section>
-
+            <!-- Images Section -->
+            <section class="mb-16" data-aos="fade-up">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="rounded-lg overflow-hidden shadow-lg">
+                        <img
+                            src="/images/qqnuansatraining1.jpg"
+                            alt="Training Image 1"
+                            class="w-full h-64 object-cover"
+                        />
+                        <div class="p-4 bg-white">
+                            <p class="text-gray-700 text-center">
+                                Pelatihan Soft Skill
+                            </p>
+                        </div>
+                    </div>
+                    <div class="rounded-lg overflow-hidden shadow-lg">
+                        <img
+                            src="/images/qqnuansatraining2.jpg"
+                            alt="Training Image 2"
+                            class="w-full h-64 object-cover"
+                        />
+                        <div class="p-4 bg-white">
+                            <p class="text-gray-700 text-center">
+                                Pelatihan Kepemimpinan
+                            </p>
+                        </div>
+                    </div>
+                    <div class="rounded-lg overflow-hidden shadow-lg">
+                        <img
+                            src="/images/qqnuansatraining3.jpg"
+                            alt="Training Image 3"
+                            class="w-full h-64 object-cover"
+                        />
+                        <div class="p-4 bg-white">
+                            <p class="text-gray-700 text-center">
+                                Pelatihan Korporat
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <!-- Training Fields Section -->
             <section class="mb-16" data-aos="fade-up">
                 <h2 class="text-3xl font-semibold text-gray-900 mb-6">

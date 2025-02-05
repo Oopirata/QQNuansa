@@ -1,18 +1,33 @@
 <script setup>
-import { ref } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { ref, watch } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
 
-const isSubMenuOpen = ref(false)
+const page = usePage();
+const isSubMenuOpen = ref(false);
+
+watch(
+    () => page.url,
+    (newUrl) => {
+        if (
+            newUrl.includes("admin") &&
+            (newUrl.includes("Candidates") || newUrl.includes("candidates"))
+        ) {
+            isSubMenuOpen.value = true;
+        }
+    },
+    { immediate: true }
+);
+
 const toggleSubMenu = () => {
-    isSubMenuOpen.value = !isSubMenuOpen.value
-}
+    isSubMenuOpen.value = !isSubMenuOpen.value;
+};
 
 const candidateItems = [
     { name: "New", path: "/adminNewCandidates" },
     { name: "Screened", path: "/adminScreenedCandidates" },
     { name: "Interview", path: "/adminInterviewCandidates" },
     { name: "Rejected", path: "/adminRejectedCandidates" },
-]
+];
 </script>
 
 <template>
@@ -21,7 +36,13 @@ const candidateItems = [
             <li class="mb-4">
                 <Link
                     href="/adminDashboard"
-                    class="flex items-center text-purple-600 hover:text-gray-900"
+                    class="flex items-center hover:text-gray-900"
+                    :class="[
+                        $page.url === '/adminDashboard' ||
+                        $page.url === '/adminDashboardSchedule'
+                            ? 'text-purple-600'
+                            : 'text-gray-600',
+                    ]"
                 >
                     <i class="fas fa-tachometer-alt mr-2"></i>
                     Dashboard
@@ -51,7 +72,12 @@ const candidateItems = [
                     >
                         <Link
                             :href="item.path"
-                            class="text-gray-600 hover:text-gray-900"
+                            class="hover:text-gray-900"
+                            :class="[
+                                $page.url === item.path
+                                    ? 'text-purple-600'
+                                    : 'text-gray-600',
+                            ]"
                         >
                             {{ item.name }}
                         </Link>
@@ -61,7 +87,12 @@ const candidateItems = [
             <li class="mb-4">
                 <Link
                     href="/adminEmail"
-                    class="flex items-center text-gray-600 hover:text-gray-900"
+                    class="flex items-center hover:text-gray-900"
+                    :class="[
+                        $page.url === '/adminEmail'
+                            ? 'text-purple-600'
+                            : 'text-gray-600',
+                    ]"
                 >
                     <i class="fas fa-envelope mr-2"></i>
                     E-mail
