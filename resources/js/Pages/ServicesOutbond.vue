@@ -62,16 +62,112 @@ const handleClickOutside = (event) => {
         dropdownOpen.value = false;
     }
 };
+
+const outboundTypes = [
+    {
+        title: "Outbound Team Building",
+        description:
+            "Fokus pada kerja sama tim melalui permainan yang mendorong koordinasi, kepercayaan, dan komunikasi yang efektif.",
+        icon: "fas fa-users",
+    },
+    {
+        title: "Corporate Outbound Training",
+        description:
+            "Program khusus untuk perusahaan, bertujuan meningkatkan kinerja tim dan membangun sinergi antar departemen.",
+        icon: "fas fa-building",
+    },
+    {
+        title: "Leadership Camp",
+        description:
+            "Pelatihan kepemimpinan untuk individu atau kelompok, membantu mengasah kemampuan memimpin dan pengambilan keputusan.",
+        icon: "fas fa-flag",
+    },
+    {
+        title: "Adventure Outbound",
+        description:
+            "Aktivitas petualangan seperti arung jeram, flying fox, trekking, dan wall climbing untuk meningkatkan keberanian dan semangat tantangan.",
+        icon: "fas fa-mountain",
+    },
+    {
+        title: "Family Outbound",
+        description:
+            "Program rekreasi keluarga yang menggabungkan permainan menyenangkan dengan momen kebersamaan.",
+        icon: "fas fa-home",
+    },
+    {
+        title: "Motivational Outbound",
+        description:
+            "Meningkatkan motivasi dan semangat hidup melalui kegiatan yang memotivasi secara mental dan emosional.",
+        icon: "fas fa-star",
+    },
+];
+
+const outboundBenefits = [
+    {
+        title: "Peningkatan Komunikasi dan Kerja Sama Tim",
+        description:
+            "Mendorong peserta untuk bekerja sama, saling mendukung, dan berkomunikasi lebih efektif.",
+        icon: "fas fa-comments",
+    },
+    {
+        title: "Mengasah Kepemimpinan",
+        description:
+            "Membantu peserta mengenali potensi kepemimpinan mereka melalui situasi yang menuntut pengambilan keputusan dan tanggung jawab.",
+        icon: "fas fa-crown",
+    },
+    {
+        title: "Meningkatkan Kepercayaan Diri",
+        description:
+            "Aktivitas menantang akan mendorong peserta keluar dari zona nyaman mereka.",
+        icon: "fas fa-shield-alt",
+    },
+    {
+        title: "Mengurangi Stres dan Meningkatkan Kebugaran",
+        description:
+            "Kegiatan di alam terbuka membantu relaksasi mental dan fisik.",
+        icon: "fas fa-heart",
+    },
+    {
+        title: "Membangun Hubungan yang Lebih Baik",
+        description:
+            "Mempererat hubungan antar peserta, baik dalam lingkungan kerja maupun keluarga.",
+        icon: "fas fa-handshake",
+    },
+];
+
+const outboundConcepts = [
+    {
+        title: "Fun Games",
+        description:
+            "Permainan seru yang menghibur, bertujuan untuk mencairkan suasana dan mempererat hubungan antar peserta.",
+        icon: "fas fa-gamepad",
+    },
+    {
+        title: "Leadership Training",
+        description:
+            "Program yang dirancang untuk mengasah keterampilan kepemimpinan melalui simulasi dan tantangan di lapangan.",
+        icon: "fas fa-chess-king",
+    },
+    {
+        title: "Survival Activities",
+        description:
+            "Aktivitas petualangan yang menantang, seperti simulasi bertahan hidup di alam bebas untuk meningkatkan ketahanan mental dan fisik.",
+        icon: "fas fa-campground",
+    },
+];
 </script>
 
 <template>
     <Head title="Services Outbond" />
-
-    <div class="bg-white">
+    <div
+        class="min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden"
+    >
+        <!-- Header section sama seperti sebelumnya -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
             data-aos="fade-down"
         >
+            <div></div>
             <!-- Logo Section -->
             <div class="flex items-center">
                 <img
@@ -174,6 +270,165 @@ const handleClickOutside = (event) => {
                 </div>
             </div>
         </header>
+
+        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
+            <!-- Introduction Section -->
+            <section class="mb-16" data-aos="fade-up">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">
+                    Layanan Outbound
+                </h1>
+                <div class="prose max-w-none">
+                    <p
+                        class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+                    >
+                        Outbound adalah kegiatan luar ruangan yang dirancang
+                        untuk meningkatkan kerja sama tim, kepemimpinan,
+                        komunikasi, serta membangun motivasi dan semangat di
+                        antara peserta.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Outbound Concepts -->
+            <section class="mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                    Konsep Outbound
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div
+                        v-for="(concept, index) in outboundConcepts"
+                        :key="index"
+                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow text-center"
+                    >
+                        <i
+                            :class="
+                                concept.icon + ' text-4xl text-blue-600 mb-4'
+                            "
+                        ></i>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">
+                            {{ concept.title }}
+                        </h3>
+                        <p class="text-gray-600">{{ concept.description }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Outbound Types -->
+            <section class="mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                    Jenis Outbound
+                </h2>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                    <div
+                        v-for="(type, index) in outboundTypes"
+                        :key="index"
+                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                    >
+                        <div class="flex items-center mb-4">
+                            <i
+                                :class="
+                                    type.icon + ' text-3xl text-blue-600 mr-4'
+                                "
+                            ></i>
+                            <h3 class="text-xl font-semibold text-gray-800">
+                                {{ type.title }}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600">{{ type.description }}</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Benefits Section -->
+            <section class="mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                    Manfaat Outbound
+                </h2>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                    <div
+                        v-for="(benefit, index) in outboundBenefits"
+                        :key="index"
+                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                    >
+                        <div class="flex items-center mb-4">
+                            <i
+                                :class="
+                                    benefit.icon +
+                                    ' text-3xl text-green-600 mr-4'
+                                "
+                            ></i>
+                            <h3 class="text-xl font-semibold text-gray-800">
+                                {{ benefit.title }}
+                            </h3>
+                        </div>
+                        <p class="text-gray-600">{{ benefit.description }}</p>
+                    </div>
+                </div>
+            </section>
+            <div
+                class="bg-white p-8 rounded-xl shadow-lg mx-4"
+                data-aos="fade-up"
+            >
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    Jadwal Pelaksanaan
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div data-aos="fade-right">
+                        <h3
+                            class="text-xl font-semibold mb-4 flex items-center"
+                        >
+                            <i
+                                class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
+                            ></i>
+                            Waktu Pelaksanaan
+                        </h3>
+                        <div class="space-y-3 text-gray-700">
+                            <p>Hari Kerja (Senin - Jumat):</p>
+                            <ul class="list-disc list-inside pl-4">
+                                <li>Sesi pagi: 08.30 – 12.00 WIB</li>
+                                <li>Sesi siang: 13.00 – 16.00 WIB</li>
+                            </ul>
+                            <p>Hari Sabtu dengan kesepakatan</p>
+                        </div>
+                    </div>
+
+                    <div data-aos="fade-left">
+                        <h3
+                            class="text-xl font-semibold mb-4 flex items-center"
+                        >
+                            <i
+                                class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
+                            ></i>
+                            Lokasi dan Biaya
+                        </h3>
+                        <div class="space-y-3 text-gray-700">
+                            <ul class="space-y-2">
+                                <li>
+                                    ✓ Di QQNuansa Consultant sesuai kesepakatan
+                                    waktu
+                                </li>
+                                <li>
+                                    ✓ In-house di perusahaan sesuai kesepakatan
+                                </li>
+                                <li>
+                                    ✓ Biaya transport gratis untuk peserta >5
+                                    orang di Kota Pekalongan
+                                </li>
+                                <li>
+                                    ✓ Biaya transport khusus untuk peserta <5
+                                    atau di luar Kota Pekalongan
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

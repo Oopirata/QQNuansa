@@ -1,14 +1,117 @@
-<!-- Content Section -->
+# Script section
 <script setup>
-import { Head, Link, router } from "@inertiajs/vue3";
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
+import { ref, onMounted, computed } from "vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+// Page and route handling
+const page = usePage();
+const currentRoute = computed(() => page.url);
+
+const isActive = (href) => {
+    return currentRoute.value === href;
+};
+
+// Menu items
+const menuItems = [
+    { text: "Tentang Kami", href: "/" },
+    { text: "Legalitas", href: "/legalitas" },
+    { text: "Misi", href: "/missions" },
+    { text: "Layanan", href: "/services" },
+];
+
+// Data untuk coaching types
+const coachingTypes = [
+    {
+        title: "Life Coaching",
+        description:
+            "Life coaching membantu individu dalam meningkatkan kualitas hidup dan mencapai keseimbangan di berbagai aspek, seperti hubungan, kesehatan, keuangan, dan pengembangan diri.",
+        examples: [
+            "Meningkatkan kepercayaan diri",
+            "Mengatasi kebiasaan buruk",
+            "Menemukan tujuan hidup",
+        ],
+        suitableFor:
+            "Orang yang merasa terjebak dalam rutinitas atau ingin membuat perubahan besar dalam hidupnya.",
+    },
+    {
+        title: "Business Coaching",
+        description:
+            "Business coaching membantu pemilik bisnis, manajer, atau eksekutif dalam mengembangkan strategi bisnis dan meningkatkan kinerja organisasi.",
+        examples: [
+            "Membuat strategi pengembangan bisnis",
+            "Meningkatkan keterampilan kepemimpinan",
+            "Mengelola konflik dalam tim",
+        ],
+        suitableFor:
+            "Pengusaha, pemimpin bisnis, atau manajer yang ingin membawa bisnis mereka ke level berikutnya.",
+    },
+    {
+        title: "Career Coaching",
+        description:
+            "Career coaching mendukung individu dalam menentukan, merencanakan, dan mengembangkan karier.",
+        examples: [
+            "Membantu transisi karier",
+            "Menyusun strategi pencarian kerja",
+            "Mengembangkan keterampilan wawancara dan personal branding",
+        ],
+        suitableFor:
+            "Seseorang yang ingin berganti profesi, mencari pekerjaan baru, atau mengembangkan potensi di tempat kerja.",
+    },
+];
+
+// Data untuk coaching methods
+const coachingMethods = [
+    {
+        title: "Pendekatan GROW",
+        description:
+            "Framework coaching yang populer membantu klien untuk menentukan tujuan, memahami kondisi saat ini, mengeksplorasi opsi, dan membuat rencana tindakan.",
+        steps: [
+            {
+                letter: "G",
+                meaning: "Goal",
+                desc: "Menentukan tujuan spesifik yang ingin dicapai",
+            },
+            {
+                letter: "R",
+                meaning: "Reality",
+                desc: "Mengevaluasi situasi saat ini dan mengidentifikasi hambatan",
+            },
+            {
+                letter: "O",
+                meaning: "Options",
+                desc: "Mengeksplorasi berbagai opsi dan solusi yang mungkin",
+            },
+            {
+                letter: "W",
+                meaning: "Will",
+                desc: "Membuat rencana tindakan dan komitmen untuk mencapainya",
+            },
+        ],
+    },
+    {
+        title: "Solution-Focused Coaching",
+        description:
+            "Fokus pada membangun solusi daripada menganalisis masalah. Membantu klien menemukan solusi dari pengalaman mereka yang berhasil sebelumnya.",
+        techniques: [
+            "Pertanyaan 'keajaiban' untuk membayangkan masa depan tanpa masalah",
+            "Scaling (penilaian dari 1-10) untuk mengukur kemajuan",
+        ],
+    },
+    {
+        title: "Cognitive Behavioral Coaching (CBC)",
+        description:
+            "Menggunakan prinsip-prinsip CBT untuk membantu klien mengubah pola pikir yang membatasi menjadi lebih positif dan produktif.",
+        techniques: [
+            "Identifikasi keyakinan yang membatasi",
+            "Reframing (mengubah cara pandang)",
+            "Self-monitoring dan penguatan perilaku positif",
+        ],
+    },
+];
+
 onMounted(() => {
-    // Initialize AOS
     AOS.init({
         duration: 800,
         easing: "ease-in-out",
@@ -18,60 +121,20 @@ onMounted(() => {
         delay: 100,
         anchorPlacement: "top-bottom",
     });
-
-    // Add click outside listener
-    document.addEventListener("click", handleClickOutside);
 });
-onBeforeUnmount(() => {
-    document.removeEventListener("click", handleClickOutside);
-});
-
-onMounted(() => {
-    document.addEventListener("click", handleClickOutside);
-});
-
-onBeforeUnmount(() => {
-    document.removeEventListener("click", handleClickOutside);
-});
-const page = usePage();
-const dropdownRef = ref(null);
-const dropdownOpen = ref(false);
-const currentRoute = computed(() => page.url);
-
-const isActive = (href) => {
-    return currentRoute.value === href;
-};
-
-const showingNavigationDropdown = ref(false);
-
-const logout = () => {
-    router.post(route("logout"));
-};
-
-const asset = (path) => `/assets/${path}`;
-
-const menuItems = [
-    { text: "Tentang Kami", href: "/" },
-    { text: "Legalitas", href: "/legalitas" },
-    { text: "Misi", href: "/missions" },
-    { text: "Layanan", href: "/services" },
-];
-
-const handleClickOutside = (event) => {
-    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
-        dropdownOpen.value = false;
-    }
-};
 </script>
 
 <template>
     <Head title="Services Coaching" />
-
-    <div class="bg-white">
+    <div
+        class="min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden"
+    >
+        <!-- Header section -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
             data-aos="fade-down"
         >
+            <div></div>
             <!-- Logo Section -->
             <div class="flex items-center">
                 <img
@@ -174,11 +237,188 @@ const handleClickOutside = (event) => {
                 </div>
             </div>
         </header>
+
+        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
+            <!-- Introduction Section -->
+            <section class="mb-16" data-aos="fade-up">
+                <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">
+                    Layanan Coaching
+                </h1>
+                <div class="prose max-w-none">
+                    <p
+                        class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+                    >
+                        Coaching adalah proses pendampingan yang berfokus pada
+                        membantu individu mencapai tujuan spesifik,
+                        mengembangkan potensi, serta meningkatkan kinerja di
+                        bidang tertentu, seperti karier, bisnis, atau kehidupan
+                        pribadi.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Coaching Types Section -->
+            <section class="mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                    Jenis Coaching
+                </h2>
+                <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                    <div
+                        v-for="(type, index) in coachingTypes"
+                        :key="index"
+                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                    >
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                            {{ type.title }}
+                        </h3>
+                        <p class="text-gray-600 mb-4">{{ type.description }}</p>
+                        <div class="space-y-2">
+                            <p class="font-semibold text-gray-700">Contoh:</p>
+                            <ul
+                                class="list-disc list-inside space-y-1 text-gray-600"
+                            >
+                                <li
+                                    v-for="(example, i) in type.examples"
+                                    :key="i"
+                                >
+                                    {{ example }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <p class="text-sm text-gray-700">
+                                <span class="font-semibold">Cocok untuk:</span>
+                                {{ type.suitableFor }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Coaching Methods Section -->
+            <section class="mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                    Metode Coaching
+                </h2>
+                <div class="space-y-8">
+                    <!-- GROW Method -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                            {{ coachingMethods[0].title }}
+                        </h3>
+                        <p class="text-gray-600 mb-6">
+                            {{ coachingMethods[0].description }}
+                        </p>
+                        <div
+                            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+                        >
+                            <div
+                                v-for="step in coachingMethods[0].steps"
+                                :key="step.letter"
+                                class="bg-blue-50 p-4 rounded-lg"
+                            >
+                                <div class="font-bold text-blue-600 mb-2">
+                                    {{ step.letter }} - {{ step.meaning }}
+                                </div>
+                                <p class="text-sm text-gray-600">
+                                    {{ step.desc }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Methods -->
+                    <div
+                        v-for="(method, index) in coachingMethods.slice(1)"
+                        :key="index"
+                        class="bg-white p-8 rounded-xl shadow-lg"
+                    >
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                            {{ method.title }}
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            {{ method.description }}
+                        </p>
+                        <div class="pl-4 border-l-4 border-blue-500">
+                            <ul class="space-y-2">
+                                <li
+                                    v-for="(technique, i) in method.techniques"
+                                    :key="i"
+                                    class="text-gray-700"
+                                >
+                                    {{ technique }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div
+                class="bg-white p-8 rounded-xl shadow-lg mx-4"
+                data-aos="fade-up"
+            >
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    Jadwal Pelaksanaan
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div data-aos="fade-right">
+                        <h3
+                            class="text-xl font-semibold mb-4 flex items-center"
+                        >
+                            <i
+                                class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
+                            ></i>
+                            Waktu Pelaksanaan
+                        </h3>
+                        <div class="space-y-3 text-gray-700">
+                            <p>Hari Kerja (Senin - Jumat):</p>
+                            <ul class="list-disc list-inside pl-4">
+                                <li>Sesi pagi: 08.30 – 12.00 WIB</li>
+                                <li>Sesi siang: 13.00 – 16.00 WIB</li>
+                            </ul>
+                            <p>Hari Sabtu dengan kesepakatan</p>
+                        </div>
+                    </div>
+
+                    <div data-aos="fade-left">
+                        <h3
+                            class="text-xl font-semibold mb-4 flex items-center"
+                        >
+                            <i
+                                class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
+                            ></i>
+                            Lokasi dan Biaya
+                        </h3>
+                        <div class="space-y-3 text-gray-700">
+                            <ul class="space-y-2">
+                                <li>
+                                    ✓ Di QQNuansa Consultant sesuai kesepakatan
+                                    waktu
+                                </li>
+                                <li>
+                                    ✓ In-house di perusahaan sesuai kesepakatan
+                                </li>
+                                <li>
+                                    ✓ Biaya transport gratis untuk peserta >5
+                                    orang di Kota Pekalongan
+                                </li>
+                                <li>
+                                    ✓ Biaya transport khusus untuk peserta <5
+                                    atau di luar Kota Pekalongan
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <style scoped>
-/* Menerapkan font ke seluruh komponen */
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
 }
@@ -214,29 +454,5 @@ const handleClickOutside = (event) => {
 
 .nav-link-active {
     color: #0e74b8;
-}
-
-.tag-link {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #f8f8f8;
-    border-radius: 100px;
-    font-size: 14px;
-    color: #333;
-    transition: all 0.2s ease-in-out;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.tag-link:hover {
-    background-color: #e8e8e8;
-    transform: translateY(-1px);
-}
-
-@media (max-width: 768px) {
-    .tag-link {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
 }
 </style>
