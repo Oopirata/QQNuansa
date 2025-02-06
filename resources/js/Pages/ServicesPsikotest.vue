@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
         </header>
 
         <!-- Main Content -->
-        <div class="container mx-auto px-4 py-12">
+        <div class="container mx-auto px-8 py-12 md:px-16 lg:px-24">
             <div class="text-center mb-16" data-aos="fade-up">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">
                     Layanan Psikotes

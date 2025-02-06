@@ -1,6 +1,6 @@
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
-import { ref, onMounted, computed } from "vue";
+import { Head, Link, router } from "@inertiajs/vue3";
+import { ref, onMounted, computed, onBeforeUnmount } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -10,6 +10,34 @@ const dropdownRef = ref(null);
 const dropdownOpen = ref(false);
 const currentRoute = computed(() => page.url);
 
+onMounted(() => {
+    AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+        once: false,
+        mirror: true,
+        offset: 50,
+        delay: 100,
+        anchorPlacement: "top-bottom",
+    });
+    document.addEventListener("click", handleClickOutside);
+});
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+const handleClickOutside = (event) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+        dropdownOpen.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
 const isActive = (href) => {
     return currentRoute.value === href;
 };
@@ -55,17 +83,6 @@ const reportSections = [
     "Kesimpulan",
     "Saran pengembangan",
 ];
-
-onMounted(() => {
-    AOS.init({
-        duration: 800,
-        easing: "ease-in-out",
-        once: false,
-        mirror: true,
-        offset: 50,
-        delay: 100,
-    });
-});
 </script>
 
 <template>
@@ -182,7 +199,7 @@ onMounted(() => {
             </div>
         </header>
 
-        <div class="container mx-auto py-12">
+        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
             <!-- Hero Section -->
             <div class="text-center mb-16 px-4" data-aos="fade-up">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">
