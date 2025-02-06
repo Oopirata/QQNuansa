@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\OauthController;
+use App\Http\Controllers\EmailController;
+use App\Models\Email;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -151,6 +153,9 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::get('/adminDetailRejectedCandidates', function () {
         return Inertia::render('AdminDetailRejectedCandidates');
     });
+
+    Route::post('/preview-email', [EmailController::class, 'preview'])->name('preview.email');
+    Route::post('/send-email', [EmailController::class, 'send'])->name('send.email');
 });
 
 require __DIR__.'/auth.php';
