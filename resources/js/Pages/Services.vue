@@ -1,50 +1,53 @@
-<!-- Content Section -->
 <script setup>
 import { Head, Link, router } from "@inertiajs/vue3";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-onMounted(() => {
-    AOS.init({
-        duration: 1200,
-        once: true,
-        offset: 50,
-    });
-    document.addEventListener("click", closeDropdown);
-});
-
+// Page and route handling
 const page = usePage();
 const currentRoute = computed(() => page.url);
+
+// Dropdown state
 const dropdownOpen = ref(false);
 const dropdownRef = ref(null);
 
+// Active route checker
+const isActive = (href) => {
+    return currentRoute.value === href;
+};
+
+// Dropdown handlers
 const closeDropdown = (e) => {
     if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
         dropdownOpen.value = false;
     }
 };
 
+// Lifecycle hooks with proper error handling
+onMounted(() => {
+    try {
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 50,
+        });
+    } catch (error) {
+        console.error("AOS initialization failed:", error);
+    }
+
+    // Add dropdown listener
+    document.addEventListener("click", closeDropdown);
+});
+
 onBeforeUnmount(() => {
     document.removeEventListener("click", closeDropdown);
 });
 
-const isActive = (href) => {
-    return currentRoute.value === href;
-};
-
-// const showingNavigationDropdown = ref(false);
-
-// const logout = () => {
-//     router.post(route("logout"));
-// };
-
-// const asset = (path) => `/assets/${path}`;
-
+// Navigation items
 const menuItems = [
     { text: "Tentang Kami", href: "/companyprofile" },
     { text: "Legalitas", href: "/legalitas" },
@@ -52,8 +55,9 @@ const menuItems = [
     { text: "Layanan", href: "/services" },
 ];
 
+// Service tags
 const topRowTags = [
-    { text: "Assessment", href: "/serviceassesment" }, // Update href untuk Assessment
+    { text: "Assessment", href: "/serviceassesment" },
     { text: "Psikotes", href: "/servicepsikotest" },
     { text: "Konseling", href: "/servicekonseling" },
     { text: "Coaching", href: "/servicecoaching" },
@@ -71,11 +75,10 @@ const bottomRowTags = [
 <template>
     <Head title="Layanan" />
 
-    <div class="bg-white">
+    <div class="bg-white min-h-screen">
         <!-- Header Section -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
-            data-aos="fade-down"
         >
             <!-- Logo Section -->
             <div class="flex items-center">
@@ -124,7 +127,7 @@ const bottomRowTags = [
                 <div class="flex items-center relative" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
                         <button
-                            @click="dropdownOpen = !dropdownOpen"
+                            @click.stop="dropdownOpen = !dropdownOpen"
                             class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                         >
                             {{ $page.props.auth.user.name }}
@@ -140,7 +143,7 @@ const bottomRowTags = [
                         >
                             <Link
                                 :href="route('profile.edit')"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                             >
                                 Profile
                             </Link>
@@ -151,14 +154,14 @@ const bottomRowTags = [
                                     )
                                 "
                                 :href="route('admin.dashboard')"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                             >
                                 Admin Dashboard
                             </Link>
                             <Link
                                 :href="route('logout')"
                                 method="post"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                             >
                                 Log Out
                             </Link>
@@ -167,7 +170,7 @@ const bottomRowTags = [
                     <template v-else>
                         <Link href="/login">
                             <button
-                                class="bg-green-200 text-green-800 px-4 py-2 rounded"
+                                class="bg-green-200 text-green-800 px-4 py-2 rounded cursor-pointer"
                             >
                                 Log In
                             </button>
@@ -180,15 +183,12 @@ const bottomRowTags = [
             </div>
         </header>
 
-        <!-- Tags Content Section -->
-        <main class="p-8" data-aos="fade-up">
+        <!-- Main Content -->
+        <main class="p-8">
             <h1 class="text-center text-2xl font-bold -mt-5">Layanan Kami</h1>
             <div class="max-w-7xl mx-auto mt-8">
-                <!-- Top Row Tags -->
-                <div
-                    class="flex flex-wrap gap-3 justify-center mb-4"
-                    data-aos="fade-right"
-                >
+                <!-- Service Tags -->
+                <div class="flex flex-wrap gap-3 justify-center mb-4">
                     <Link
                         v-for="tag in topRowTags"
                         :key="tag.text"
@@ -199,7 +199,6 @@ const bottomRowTags = [
                     </Link>
                 </div>
 
-                <!-- Bottom Row Tags -->
                 <div class="flex flex-wrap gap-3 justify-center mb-12">
                     <Link
                         v-for="tag in bottomRowTags"
@@ -213,10 +212,8 @@ const bottomRowTags = [
 
                 <!-- Gallery Grid -->
                 <div class="grid grid-cols-3 gap-4 max-w-6xl mx-auto mt-8">
-                    <!-- Gallery Item 1 -->
                     <div
                         class="relative overflow-hidden rounded-lg aspect-square"
-                        data-aos="zoom-in"
                     >
                         <img
                             src="/images/sakjose.jpeg"
@@ -224,10 +221,8 @@ const bottomRowTags = [
                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                     </div>
-                    <!-- Gallery Item 2 -->
                     <div
                         class="relative overflow-hidden rounded-lg aspect-square"
-                        data-aos="zoom-in"
                     >
                         <img
                             src="/images/asik.jpg"
@@ -235,7 +230,6 @@ const bottomRowTags = [
                             class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />
                     </div>
-                    <!-- Gallery Item 3 -->
                     <div
                         class="relative overflow-hidden rounded-lg aspect-auto"
                     >
@@ -246,7 +240,9 @@ const bottomRowTags = [
                         />
                     </div>
                 </div>
-                <p class="text-xl mt-10 mr-56 mb-10" data-aos="zoom-in">
+
+                <!-- Description -->
+                <p class="text-xl mt-10 mr-56 mb-10">
                     PT. Ara Nuansa Katumbiri menawarkan tiga layanan utama yang
                     sesuai dengan keahlian dan bidang jasa yang dikelola.
                     Layanan pertama adalah CONSULTING, yang berfokus pada jasa
@@ -259,13 +255,15 @@ const bottomRowTags = [
                     perusahaan. Layanan ketiga adalah RECRUITMENT AND
                     ASSESSMENT, yang bertujuan untuk mencari, menyeleksi, dan
                     merekomendasikan talenta terbaik untuk dikembangkan lebih
-                    lanjut, baik dalam dunia industri maupun dunia pendidikan
+                    lanjut, baik dalam dunia industri maupun dunia pendidikan.
                 </p>
+
+                <!-- Bottom Image -->
                 <div class="max-w-6xl mx-auto">
                     <div class="relative overflow-hidden rounded-lg mt-5">
                         <img
                             src="/images/seminar.jpg"
-                            alt="asselole"
+                            alt="seminar"
                             class="object-cover hover:scale-105 transition-transform duration-300"
                         />
                     </div>
@@ -276,11 +274,12 @@ const bottomRowTags = [
 </template>
 
 <style scoped>
-/* Menerapkan font ke seluruh komponen */
+/* Base styles */
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
 }
 
+/* Navigation styles */
 .nav-link {
     padding: 0.5rem 1rem;
     position: relative;
@@ -314,6 +313,17 @@ const bottomRowTags = [
     color: #0e74b8;
 }
 
+/* Dropdown styles */
+.text-gray-700 {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.hover\:bg-gray-100:hover {
+    background-color: #f3f4f6 !important;
+}
+
+/* Tag styles */
 .tag-link {
     display: inline-block;
     padding: 8px 16px;
@@ -331,6 +341,7 @@ const bottomRowTags = [
     transform: translateY(-1px);
 }
 
+/* Responsive styles */
 @media (max-width: 768px) {
     .tag-link {
         font-size: 12px;

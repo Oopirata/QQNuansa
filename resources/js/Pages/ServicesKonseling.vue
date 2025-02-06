@@ -1,7 +1,7 @@
 // Services.vue
 <script setup>
 import { Head, Link, usePage } from "@inertiajs/vue3";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -13,6 +13,37 @@ const isActive = (href) => {
     return currentRoute.value === href;
 };
 
+onMounted(() => {
+    AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+        once: false,
+        mirror: true,
+        offset: 50,
+        delay: 100,
+        anchorPlacement: "top-bottom",
+    });
+    document.addEventListener("click", handleClickOutside);
+});
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+const handleClickOutside = (event) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+        dropdownOpen.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+
+const dropdownRef = ref(null);
+const dropdownOpen = ref(false);
 // Menu items
 const menuItems = [
     { text: "Tentang Kami", href: "/" },
@@ -74,18 +105,6 @@ const manfaatList = [
             "Klien belajar menghargai potensi dan kekuatannya sendiri melalui dukungan dan pandangan yang lebih positif.",
     },
 ];
-
-onMounted(() => {
-    AOS.init({
-        duration: 800,
-        easing: "ease-in-out",
-        once: false,
-        mirror: true,
-        offset: 50,
-        delay: 100,
-        anchorPlacement: "top-bottom",
-    });
-});
 </script>
 
 <template>
@@ -94,9 +113,10 @@ onMounted(() => {
         class="min-h-screen bg-gradient-to-b from-white to-blue-50 overflow-hidden"
     >
         <header
-            class="p-4 flex justify-between items-center mt-2 container mx-auto px-8"
+            class="p-4 flex justify-between items-center mt-2 container mx-auto"
             data-aos="fade-down"
         >
+            <!-- Logo Section -->
             <div class="flex items-center">
                 <img
                     alt="Company Logo"
@@ -110,6 +130,7 @@ onMounted(() => {
                 />
             </div>
 
+            <!-- Navigation Menu Section -->
             <nav class="flex-grow px-20">
                 <div
                     class="pb-2 border-b-4 border-[#5099D5] w-fit mx-auto rounded-lg"
@@ -128,7 +149,9 @@ onMounted(() => {
                 </div>
             </nav>
 
+            <!-- Right Section -->
             <div class="flex items-center space-x-6">
+                <!-- Hiring Link -->
                 <Link
                     class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
                     href="/hiring"
@@ -136,9 +159,49 @@ onMounted(() => {
                     We are hiring!!
                 </Link>
 
-                <div class="flex items-center">
+                <!-- Auth Section -->
+                <div class="flex items-center relative" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
-                        <!-- Auth user content -->
+                        <button
+                            @click="dropdownOpen = !dropdownOpen"
+                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                        >
+                            {{ $page.props.auth.user.name }}
+                            <i
+                                class="fas fa-user-circle text-blue-900 text-3xl ml-2"
+                            ></i>
+                        </button>
+
+                        <div
+                            v-show="dropdownOpen"
+                            class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 z-50"
+                            style="top: 100%"
+                        >
+                            <Link
+                                :href="route('profile.edit')"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Profile
+                            </Link>
+                            <Link
+                                v-if="
+                                    $page.props.auth.user.roles.some(
+                                        (role) => role.role_name === 'admin'
+                                    )
+                                "
+                                :href="route('admin.dashboard')"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Admin Dashboard
+                            </Link>
+                            <Link
+                                :href="route('logout')"
+                                method="post"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                                Log Out
+                            </Link>
+                        </div>
                     </template>
                     <template v-else>
                         <Link href="/login">
