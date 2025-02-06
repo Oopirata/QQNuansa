@@ -1,7 +1,7 @@
 <!-- Content Section -->
 <script setup>
 import { Head, Link, usePage } from "@inertiajs/vue3";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -105,7 +105,27 @@ onMounted(() => {
         offset: 50,
         delay: 100,
     });
+    document.addEventListener("click", handleClickOutside);
 });
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+const handleClickOutside = (event) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+        dropdownOpen.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+
+const dropdownRef = ref(null);
+const dropdownOpen = ref(false);
 </script>
 
 <template>

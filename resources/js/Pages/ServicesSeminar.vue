@@ -1,14 +1,46 @@
 <!-- Content Section -->
 <script setup>
 import { Head, Link, router } from "@inertiajs/vue3";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const page = usePage();
 const currentRoute = computed(() => page.url);
+
+onMounted(() => {
+    AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+        once: false,
+        mirror: true,
+        offset: 50,
+        delay: 100,
+        anchorPlacement: "top-bottom",
+    });
+    document.addEventListener("click", handleClickOutside);
+});
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+const handleClickOutside = (event) => {
+    if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+        dropdownOpen.value = false;
+    }
+};
+
+onMounted(() => {
+    document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", handleClickOutside);
+});
+
+const dropdownRef = ref(null);
+const dropdownOpen = ref(false);
 
 const isActive = (href) => {
     return currentRoute.value === href;
@@ -176,7 +208,6 @@ const seminarStructure = [
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
             data-aos="fade-down"
         >
-            <div></div>
             <!-- Logo Section -->
             <div class="flex items-center">
                 <img
@@ -253,7 +284,7 @@ const seminarStructure = [
                                 :href="route('admin.dashboard')"
                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
-                                Admin Dashboard
+                                Admin Dashboad
                             </Link>
                             <Link
                                 :href="route('logout')"
