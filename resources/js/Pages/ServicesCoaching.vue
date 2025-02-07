@@ -257,183 +257,202 @@ const dropdownOpen = ref(false);
             </div>
         </header>
 
-        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
-            <!-- Introduction Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">
-                    Layanan Coaching
-                </h1>
-                <div class="prose max-w-none">
-                    <p
-                        class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+        <main class="p-10">
+            <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
+                <!-- Introduction Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h1
+                        class="text-4xl font-bold text-gray-900 mb-6 text-center"
                     >
-                        Coaching adalah proses pendampingan yang berfokus pada
-                        membantu individu mencapai tujuan spesifik,
-                        mengembangkan potensi, serta meningkatkan kinerja di
-                        bidang tertentu, seperti karier, bisnis, atau kehidupan
-                        pribadi.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Coaching Types Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Jenis Coaching
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    <div
-                        v-for="(type, index) in coachingTypes"
-                        :key="index"
-                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                            {{ type.title }}
-                        </h3>
-                        <p class="text-gray-600 mb-4">{{ type.description }}</p>
-                        <div class="space-y-2">
-                            <p class="font-semibold text-gray-700">Contoh:</p>
-                            <ul
-                                class="list-disc list-inside space-y-1 text-gray-600"
-                            >
-                                <li
-                                    v-for="(example, i) in type.examples"
-                                    :key="i"
-                                >
-                                    {{ example }}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-gray-200">
-                            <p class="text-sm text-gray-700">
-                                <span class="font-semibold">Cocok untuk:</span>
-                                {{ type.suitableFor }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Coaching Methods Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Metode Coaching
-                </h2>
-                <div class="space-y-8">
-                    <!-- GROW Method -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                            {{ coachingMethods[0].title }}
-                        </h3>
-                        <p class="text-gray-600 mb-6">
-                            {{ coachingMethods[0].description }}
-                        </p>
-                        <div
-                            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+                        Layanan Coaching
+                    </h1>
+                    <div class="prose max-w-none">
+                        <p
+                            class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
                         >
-                            <div
-                                v-for="step in coachingMethods[0].steps"
-                                :key="step.letter"
-                                class="bg-blue-50 p-4 rounded-lg"
+                            Coaching adalah proses pendampingan yang berfokus
+                            pada membantu individu mencapai tujuan spesifik,
+                            mengembangkan potensi, serta meningkatkan kinerja di
+                            bidang tertentu, seperti karier, bisnis, atau
+                            kehidupan pribadi.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Coaching Types Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Jenis Coaching
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        <div
+                            v-for="(type, index) in coachingTypes"
+                            :key="index"
+                            class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                        >
+                            <h3
+                                class="text-xl font-semibold text-gray-800 mb-4"
                             >
-                                <div class="font-bold text-blue-600 mb-2">
-                                    {{ step.letter }} - {{ step.meaning }}
-                                </div>
-                                <p class="text-sm text-gray-600">
-                                    {{ step.desc }}
+                                {{ type.title }}
+                            </h3>
+                            <p class="text-gray-600 mb-4">
+                                {{ type.description }}
+                            </p>
+                            <div class="space-y-2">
+                                <p class="font-semibold text-gray-700">
+                                    Contoh:
+                                </p>
+                                <ul
+                                    class="list-disc list-inside space-y-1 text-gray-600"
+                                >
+                                    <li
+                                        v-for="(example, i) in type.examples"
+                                        :key="i"
+                                    >
+                                        {{ example }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-sm text-gray-700">
+                                    <span class="font-semibold"
+                                        >Cocok untuk:</span
+                                    >
+                                    {{ type.suitableFor }}
                                 </p>
                             </div>
                         </div>
                     </div>
+                </section>
 
-                    <!-- Other Methods -->
-                    <div
-                        v-for="(method, index) in coachingMethods.slice(1)"
-                        :key="index"
-                        class="bg-white p-8 rounded-xl shadow-lg"
-                    >
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
-                            {{ method.title }}
-                        </h3>
-                        <p class="text-gray-600 mb-4">
-                            {{ method.description }}
-                        </p>
-                        <div class="pl-4 border-l-4 border-blue-500">
-                            <ul class="space-y-2">
-                                <li
-                                    v-for="(technique, i) in method.techniques"
-                                    :key="i"
-                                    class="text-gray-700"
+                <!-- Coaching Methods Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Metode Coaching
+                    </h2>
+                    <div class="space-y-8">
+                        <!-- GROW Method -->
+                        <div class="bg-white p-8 rounded-xl shadow-lg">
+                            <h3
+                                class="text-xl font-semibold text-gray-800 mb-4"
+                            >
+                                {{ coachingMethods[0].title }}
+                            </h3>
+                            <p class="text-gray-600 mb-6">
+                                {{ coachingMethods[0].description }}
+                            </p>
+                            <div
+                                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+                            >
+                                <div
+                                    v-for="step in coachingMethods[0].steps"
+                                    :key="step.letter"
+                                    class="bg-blue-50 p-4 rounded-lg"
                                 >
-                                    {{ technique }}
-                                </li>
-                            </ul>
+                                    <div class="font-bold text-blue-600 mb-2">
+                                        {{ step.letter }} - {{ step.meaning }}
+                                    </div>
+                                    <p class="text-sm text-gray-600">
+                                        {{ step.desc }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Other Methods -->
+                        <div
+                            v-for="(method, index) in coachingMethods.slice(1)"
+                            :key="index"
+                            class="bg-white p-8 rounded-xl shadow-lg"
+                        >
+                            <h3
+                                class="text-xl font-semibold text-gray-800 mb-4"
+                            >
+                                {{ method.title }}
+                            </h3>
+                            <p class="text-gray-600 mb-4">
+                                {{ method.description }}
+                            </p>
+                            <div class="pl-4 border-l-4 border-blue-500">
+                                <ul class="space-y-2">
+                                    <li
+                                        v-for="(
+                                            technique, i
+                                        ) in method.techniques"
+                                        :key="i"
+                                        class="text-gray-700"
+                                    >
+                                        {{ technique }}
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <div
-                class="bg-white p-8 rounded-xl shadow-lg mx-4"
-                data-aos="fade-up"
-            >
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    Jadwal Pelaksanaan
-                </h2>
+                </section>
+                <div
+                    class="bg-white p-8 rounded-xl shadow-lg mx-4"
+                    data-aos="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                        Jadwal Pelaksanaan
+                    </h2>
 
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div data-aos="fade-right">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
-                        >
-                            <i
-                                class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Waktu Pelaksanaan
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <p>Hari Kerja (Senin - Jumat):</p>
-                            <ul class="list-disc list-inside pl-4">
-                                <li>Sesi pagi: 08.30 – 12.00 WIB</li>
-                                <li>Sesi siang: 13.00 – 16.00 WIB</li>
-                            </ul>
-                            <p>Hari Sabtu dengan kesepakatan</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div data-aos="fade-right">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
+                                ></i>
+                                Waktu Pelaksanaan
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <p>Hari Kerja (Senin - Jumat):</p>
+                                <ul class="list-disc list-inside pl-4">
+                                    <li>Sesi pagi: 08.30 – 12.00 WIB</li>
+                                    <li>Sesi siang: 13.00 – 16.00 WIB</li>
+                                </ul>
+                                <p>Hari Sabtu dengan kesepakatan</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div data-aos="fade-left">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
-                        >
-                            <i
-                                class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Lokasi dan Biaya
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <ul class="space-y-2">
-                                <li>
-                                    ✓ Di QQNuansa Consultant sesuai kesepakatan
-                                    waktu
-                                </li>
-                                <li>
-                                    ✓ In-house di perusahaan sesuai kesepakatan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport gratis untuk peserta >5
-                                    orang di Kota Pekalongan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport khusus untuk peserta <5
-                                    atau di luar Kota Pekalongan
-                                </li>
-                            </ul>
+                        <div data-aos="fade-left">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
+                                ></i>
+                                Lokasi dan Biaya
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <ul class="space-y-2">
+                                    <li>
+                                        ✓ Di QQNuansa Consultant sesuai
+                                        kesepakatan waktu
+                                    </li>
+                                    <li>
+                                        ✓ In-house di perusahaan sesuai
+                                        kesepakatan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport gratis untuk peserta
+                                        >5 orang di Kota Pekalongan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport khusus untuk peserta
+                                        <5 atau di luar Kota Pekalongan
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </template>
 
