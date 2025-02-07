@@ -19,11 +19,11 @@ const closeDropdown = (e) => {
 };
 
 onMounted(() => {
-    document.addEventListener('click', closeDropdown);
+    document.addEventListener("click", closeDropdown);
 });
 
 onBeforeUnmount(() => {
-    document.removeEventListener('click', closeDropdown);
+    document.removeEventListener("click", closeDropdown);
 });
 
 // Candidate data

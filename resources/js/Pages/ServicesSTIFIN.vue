@@ -274,212 +274,221 @@ const dropdownOpen = ref(false);
             </div>
         </header>
 
-        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
-            <!-- Introduction Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">
-                    Finger Test STIFIN
-                </h1>
-                <div class="prose max-w-none">
-                    <p
-                        class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+        <main class="p-10">
+            <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
+                <!-- Introduction Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h1
+                        class="text-4xl font-bold text-gray-900 mb-6 text-center"
                     >
-                        Finger Test STIFIN adalah metode yang digunakan dalam
-                        tes kepribadian berbasis pada sistem STIFIN untuk
-                        mengklasifikasikan tipe kepribadian manusia berdasarkan
-                        pola penggunaan jari tangan.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Personality Types Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Tipe Kepribadian STIFIN
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                >
-                    <div
-                        v-for="(type, index) in personalityTypes"
-                        :key="index"
-                        class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <div class="flex items-center mb-4">
-                            <i
-                                :class="
-                                    type.icon + ' text-2xl text-indigo-600 mr-3'
-                                "
-                            ></i>
-                            <h3 class="text-xl font-semibold text-gray-800">
-                                {{ type.type }}
-                            </h3>
-                        </div>
-                        <p class="text-gray-600">{{ type.description }}</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Test Process Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Proses Tes
-                </h2>
-                <div class="relative">
-                    <div
-                        class="absolute top-0 bottom-0 left-1/2 w-0.5 bg-indigo-200 transform -translate-x-1/2"
-                    ></div>
-                    <div class="space-y-8">
-                        <div
-                            v-for="(step, index) in testSteps"
-                            :key="index"
-                            class="flex items-start"
-                            data-aos="fade-up"
+                        Finger Test STIFIN
+                    </h1>
+                    <div class="prose max-w-none">
+                        <p
+                            class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
                         >
-                            <div
-                                class="bg-white p-4 rounded-full shadow-lg z-10 mr-4"
-                            >
+                            Finger Test STIFIN adalah metode yang digunakan
+                            dalam tes kepribadian berbasis pada sistem STIFIN
+                            untuk mengklasifikasikan tipe kepribadian manusia
+                            berdasarkan pola penggunaan jari tangan.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Personality Types Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Tipe Kepribadian STIFIN
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    >
+                        <div
+                            v-for="(type, index) in personalityTypes"
+                            :key="index"
+                            class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                        >
+                            <div class="flex items-center mb-4">
                                 <i
                                     :class="
-                                        step.icon + ' text-2xl text-indigo-600'
+                                        type.icon +
+                                        ' text-2xl text-indigo-600 mr-3'
                                     "
                                 ></i>
-                            </div>
-                            <div
-                                class="bg-white p-6 rounded-xl shadow-lg flex-grow"
-                            >
-                                <h3
-                                    class="text-xl font-semibold text-gray-800 mb-3"
-                                >
-                                    {{ step.step }}
+                                <h3 class="text-xl font-semibold text-gray-800">
+                                    {{ type.type }}
                                 </h3>
-                                <p class="text-gray-600">
-                                    {{ step.description }}
-                                </p>
+                            </div>
+                            <p class="text-gray-600">{{ type.description }}</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Test Process Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Proses Tes
+                    </h2>
+                    <div class="relative">
+                        <div
+                            class="absolute top-0 bottom-0 left-1/2 w-0.5 bg-indigo-200 transform -translate-x-1/2"
+                        ></div>
+                        <div class="space-y-8">
+                            <div
+                                v-for="(step, index) in testSteps"
+                                :key="index"
+                                class="flex items-start"
+                                data-aos="fade-up"
+                            >
                                 <div
-                                    v-if="step.actions"
-                                    class="mt-4 bg-indigo-50 p-4 rounded-lg"
+                                    class="bg-white p-4 rounded-full shadow-lg z-10 mr-4"
                                 >
-                                    <ul class="space-y-2">
-                                        <li
-                                            v-for="(
-                                                action, aIndex
-                                            ) in step.actions"
-                                            :key="aIndex"
-                                            class="flex items-start"
-                                        >
-                                            <i
-                                                class="fas fa-angle-right text-indigo-600 mt-1 mr-2"
-                                            ></i>
-                                            <span class="text-gray-600">{{
-                                                action
-                                            }}</span>
-                                        </li>
-                                    </ul>
+                                    <i
+                                        :class="
+                                            step.icon +
+                                            ' text-2xl text-indigo-600'
+                                        "
+                                    ></i>
+                                </div>
+                                <div
+                                    class="bg-white p-6 rounded-xl shadow-lg flex-grow"
+                                >
+                                    <h3
+                                        class="text-xl font-semibold text-gray-800 mb-3"
+                                    >
+                                        {{ step.step }}
+                                    </h3>
+                                    <p class="text-gray-600">
+                                        {{ step.description }}
+                                    </p>
+                                    <div
+                                        v-if="step.actions"
+                                        class="mt-4 bg-indigo-50 p-4 rounded-lg"
+                                    >
+                                        <ul class="space-y-2">
+                                            <li
+                                                v-for="(
+                                                    action, aIndex
+                                                ) in step.actions"
+                                                :key="aIndex"
+                                                class="flex items-start"
+                                            >
+                                                <i
+                                                    class="fas fa-angle-right text-indigo-600 mt-1 mr-2"
+                                                ></i>
+                                                <span class="text-gray-600">{{
+                                                    action
+                                                }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Benefits Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Manfaat dan Keunggulan
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div
-                        v-for="(benefit, index) in benefits"
-                        :key="index"
-                        class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <div class="flex items-center mb-4">
-                            <i
-                                :class="
-                                    benefit.icon +
-                                    ' text-2xl text-indigo-600 mr-3'
-                                "
-                            ></i>
-                            <h3 class="text-xl font-semibold text-gray-800">
-                                {{ benefit.title }}
-                            </h3>
+                <!-- Benefits Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Manfaat dan Keunggulan
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div
+                            v-for="(benefit, index) in benefits"
+                            :key="index"
+                            class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                        >
+                            <div class="flex items-center mb-4">
+                                <i
+                                    :class="
+                                        benefit.icon +
+                                        ' text-2xl text-indigo-600 mr-3'
+                                    "
+                                ></i>
+                                <h3 class="text-xl font-semibold text-gray-800">
+                                    {{ benefit.title }}
+                                </h3>
+                            </div>
+                            <ul class="space-y-2">
+                                <li
+                                    v-for="(point, pIndex) in benefit.points"
+                                    :key="pIndex"
+                                    class="flex items-start"
+                                >
+                                    <i
+                                        class="fas fa-check text-green-500 mt-1 mr-2"
+                                    ></i>
+                                    <span class="text-gray-600">{{
+                                        point
+                                    }}</span>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="space-y-2">
-                            <li
-                                v-for="(point, pIndex) in benefit.points"
-                                :key="pIndex"
-                                class="flex items-start"
+                    </div>
+                </section>
+                <div
+                    class="bg-white p-8 rounded-xl shadow-lg mx-4"
+                    data-aos="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                        Jadwal Pelaksanaan
+                    </h2>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div data-aos="fade-right">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
                             >
                                 <i
-                                    class="fas fa-check text-green-500 mt-1 mr-2"
+                                    class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
                                 ></i>
-                                <span class="text-gray-600">{{ point }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            <div
-                class="bg-white p-8 rounded-xl shadow-lg mx-4"
-                data-aos="fade-up"
-            >
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    Jadwal Pelaksanaan
-                </h2>
-
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div data-aos="fade-right">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
-                        >
-                            <i
-                                class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Waktu Pelaksanaan
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <p>Hari Kerja (Senin - Jumat):</p>
-                            <ul class="list-disc list-inside pl-4">
-                                <li>Sesi pagi: 08.30 – 12.00 WIB</li>
-                                <li>Sesi siang: 13.00 – 16.00 WIB</li>
-                            </ul>
-                            <p>Hari Sabtu dengan kesepakatan</p>
+                                Waktu Pelaksanaan
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <p>Hari Kerja (Senin - Jumat):</p>
+                                <ul class="list-disc list-inside pl-4">
+                                    <li>Sesi pagi: 08.30 – 12.00 WIB</li>
+                                    <li>Sesi siang: 13.00 – 16.00 WIB</li>
+                                </ul>
+                                <p>Hari Sabtu dengan kesepakatan</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div data-aos="fade-left">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
-                        >
-                            <i
-                                class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Lokasi dan Biaya
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <ul class="space-y-2">
-                                <li>
-                                    ✓ Di QQNuansa Consultant sesuai kesepakatan
-                                    waktu
-                                </li>
-                                <li>
-                                    ✓ In-house di perusahaan sesuai kesepakatan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport gratis untuk peserta >5
-                                    orang di Kota Pekalongan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport khusus untuk peserta <5
-                                    atau di luar Kota Pekalongan
-                                </li>
-                            </ul>
+                        <div data-aos="fade-left">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
+                                ></i>
+                                Lokasi dan Biaya
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <ul class="space-y-2">
+                                    <li>
+                                        ✓ Di QQNuansa Consultant sesuai
+                                        kesepakatan waktu
+                                    </li>
+                                    <li>
+                                        ✓ In-house di perusahaan sesuai
+                                        kesepakatan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport gratis untuk peserta
+                                        >5 orang di Kota Pekalongan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport khusus untuk peserta
+                                        <5 atau di luar Kota Pekalongan
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </template>
 

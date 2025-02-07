@@ -219,157 +219,180 @@ const manfaatList = [
             </div>
         </header>
 
-        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
-            <!-- Introduction Section -->
-            <section class="mb-16 px-4" data-aos="fade-up">
-                <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">
-                    Layanan Konseling
-                </h1>
-                <div class="prose max-w-none">
-                    <p
-                        class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+        <main class="p-10">
+            <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
+                <!-- Introduction Section -->
+                <section class="mb-16 px-4" data-aos="fade-up">
+                    <h1
+                        class="text-4xl font-bold text-gray-900 mb-6 text-center"
                     >
-                        Konseling adalah proses pemberian bantuan yang dilakukan
-                        oleh seorang profesional (konselor) kepada individu atau
-                        kelompok yang menghadapi masalah, dengan tujuan membantu
-                        mereka memahami, mengatasi, dan menyelesaikan masalah
-                        tersebut.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Tujuan Section -->
-            <section class="mb-16 px-4" data-aos="fade-up" data-aos-delay="100">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Tujuan Konseling
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                >
-                    <div
-                        v-for="(tujuan, index) in tujuanList"
-                        :key="index"
-                        class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">
-                            {{ tujuan.title }}
-                        </h3>
-                        <p class="text-gray-600">
-                            {{ tujuan.description }}
+                        Layanan Konseling
+                    </h1>
+                    <div class="prose max-w-none">
+                        <p
+                            class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+                        >
+                            Konseling adalah proses pemberian bantuan yang
+                            dilakukan oleh seorang profesional (konselor) kepada
+                            individu atau kelompok yang menghadapi masalah,
+                            dengan tujuan membantu mereka memahami, mengatasi,
+                            dan menyelesaikan masalah tersebut.
                         </p>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Metode Section -->
-            <section class="mb-16 px-4" data-aos="fade-up" data-aos-delay="200">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Metode Konseling
-                </h2>
-                <div class="space-y-6">
+                <!-- Tujuan Section -->
+                <section
+                    class="mb-16 px-4"
+                    data-aos="fade-up"
+                    data-aos-delay="100"
+                >
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Tujuan Konseling
+                    </h2>
                     <div
-                        v-for="(metode, index) in metodeList"
-                        :key="index"
-                        class="bg-white p-8 rounded-xl shadow-lg"
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">
-                            {{ metode.title }}
-                        </h3>
-                        <p class="text-gray-600 mb-4">
-                            {{ metode.description }}
-                        </p>
-                        <div class="pl-4 border-l-4 border-blue-500">
-                            <p class="text-gray-700">
-                                Teknik: {{ metode.techniques }}
+                        <div
+                            v-for="(tujuan, index) in tujuanList"
+                            :key="index"
+                            class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                        >
+                            <h3
+                                class="text-xl font-semibold text-gray-800 mb-3"
+                            >
+                                {{ tujuan.title }}
+                            </h3>
+                            <p class="text-gray-600">
+                                {{ tujuan.description }}
                             </p>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Manfaat Section -->
-            <section class="mb-16 px-4" data-aos="fade-up" data-aos-delay="300">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Manfaat Konseling
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                <!-- Metode Section -->
+                <section
+                    class="mb-16 px-4"
+                    data-aos="fade-up"
+                    data-aos-delay="200"
                 >
-                    <div
-                        v-for="(manfaat, index) in manfaatList"
-                        :key="index"
-                        class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">
-                            {{ manfaat.title }}
-                        </h3>
-                        <p class="text-gray-600">
-                            {{ manfaat.description }}
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Jadwal Section -->
-            <div
-                class="bg-white p-8 rounded-xl shadow-lg mx-4"
-                data-aos="fade-up"
-            >
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    Jadwal Pelaksanaan
-                </h2>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div data-aos="fade-right">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Metode Konseling
+                    </h2>
+                    <div class="space-y-6">
+                        <div
+                            v-for="(metode, index) in metodeList"
+                            :key="index"
+                            class="bg-white p-8 rounded-xl shadow-lg"
                         >
-                            <i
-                                class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Waktu Pelaksanaan
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <p>Hari Kerja (Senin - Jumat):</p>
-                            <ul class="list-disc list-inside pl-4">
-                                <li>Sesi pagi: 08.30 – 12.00 WIB</li>
-                                <li>Sesi siang: 13.00 – 16.00 WIB</li>
-                            </ul>
-                            <p>Hari Sabtu dengan kesepakatan</p>
+                            <h3
+                                class="text-xl font-semibold text-gray-800 mb-3"
+                            >
+                                {{ metode.title }}
+                            </h3>
+                            <p class="text-gray-600 mb-4">
+                                {{ metode.description }}
+                            </p>
+                            <div class="pl-4 border-l-4 border-blue-500">
+                                <p class="text-gray-700">
+                                    Teknik: {{ metode.techniques }}
+                                </p>
+                            </div>
                         </div>
                     </div>
+                </section>
 
-                    <div data-aos="fade-left">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
+                <!-- Manfaat Section -->
+                <section
+                    class="mb-16 px-4"
+                    data-aos="fade-up"
+                    data-aos-delay="300"
+                >
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Manfaat Konseling
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        <div
+                            v-for="(manfaat, index) in manfaatList"
+                            :key="index"
+                            class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                         >
-                            <i
-                                class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Lokasi Pelaksanaan
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <ul class="space-y-2">
-                                <li>
-                                    ✓ Di QQNuansa Consultant sesuai kesepakatan
-                                    waktu
-                                </li>
-                                <li>
-                                    ✓ In-house di perusahaan sesuai kesepakatan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport gratis untuk peserta >5
-                                    orang di Kota Pekalongan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport khusus untuk peserta <5
-                                    atau di luar Kota Pekalongan
-                                </li>
-                            </ul>
+                            <h3
+                                class="text-xl font-semibold text-gray-800 mb-3"
+                            >
+                                {{ manfaat.title }}
+                            </h3>
+                            <p class="text-gray-600">
+                                {{ manfaat.description }}
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Jadwal Section -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-lg mx-4"
+                    data-aos="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                        Jadwal Pelaksanaan
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div data-aos="fade-right">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
+                                ></i>
+                                Waktu Pelaksanaan
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <p>Hari Kerja (Senin - Jumat):</p>
+                                <ul class="list-disc list-inside pl-4">
+                                    <li>Sesi pagi: 08.30 – 12.00 WIB</li>
+                                    <li>Sesi siang: 13.00 – 16.00 WIB</li>
+                                </ul>
+                                <p>Hari Sabtu dengan kesepakatan</p>
+                            </div>
+                        </div>
+
+                        <div data-aos="fade-left">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
+                                ></i>
+                                Lokasi Pelaksanaan
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <ul class="space-y-2">
+                                    <li>
+                                        ✓ Di QQNuansa Consultant sesuai
+                                        kesepakatan waktu
+                                    </li>
+                                    <li>
+                                        ✓ In-house di perusahaan sesuai
+                                        kesepakatan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport gratis untuk peserta
+                                        >5 orang di Kota Pekalongan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport khusus untuk peserta
+                                        <5 atau di luar Kota Pekalongan
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </template>
 
