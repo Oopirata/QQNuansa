@@ -271,164 +271,177 @@ const outboundConcepts = [
             </div>
         </header>
 
-        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
-            <!-- Introduction Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">
-                    Layanan Outbound
-                </h1>
-                <div class="prose max-w-none">
-                    <p
-                        class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+        <main class="p-10">
+            <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
+                <!-- Introduction Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h1
+                        class="text-4xl font-bold text-gray-900 mb-6 text-center"
                     >
-                        Outbound adalah kegiatan luar ruangan yang dirancang
-                        untuk meningkatkan kerja sama tim, kepemimpinan,
-                        komunikasi, serta membangun motivasi dan semangat di
-                        antara peserta.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Outbound Concepts -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Konsep Outbound
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div
-                        v-for="(concept, index) in outboundConcepts"
-                        :key="index"
-                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow text-center"
-                    >
-                        <i
-                            :class="
-                                concept.icon + ' text-4xl text-blue-600 mb-4'
-                            "
-                        ></i>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">
-                            {{ concept.title }}
-                        </h3>
-                        <p class="text-gray-600">{{ concept.description }}</p>
+                        Layanan Outbound
+                    </h1>
+                    <div class="prose max-w-none">
+                        <p
+                            class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+                        >
+                            Outbound adalah kegiatan luar ruangan yang dirancang
+                            untuk meningkatkan kerja sama tim, kepemimpinan,
+                            komunikasi, serta membangun motivasi dan semangat di
+                            antara peserta.
+                        </p>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Outbound Types -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Jenis Outbound
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    <div
-                        v-for="(type, index) in outboundTypes"
-                        :key="index"
-                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <div class="flex items-center mb-4">
-                            <i
-                                :class="
-                                    type.icon + ' text-3xl text-blue-600 mr-4'
-                                "
-                            ></i>
-                            <h3 class="text-xl font-semibold text-gray-800">
-                                {{ type.title }}
-                            </h3>
-                        </div>
-                        <p class="text-gray-600">{{ type.description }}</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Benefits Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Manfaat Outbound
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    <div
-                        v-for="(benefit, index) in outboundBenefits"
-                        :key="index"
-                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <div class="flex items-center mb-4">
-                            <i
-                                :class="
-                                    benefit.icon +
-                                    ' text-3xl text-green-600 mr-4'
-                                "
-                            ></i>
-                            <h3 class="text-xl font-semibold text-gray-800">
-                                {{ benefit.title }}
-                            </h3>
-                        </div>
-                        <p class="text-gray-600">{{ benefit.description }}</p>
-                    </div>
-                </div>
-            </section>
-            <div
-                class="bg-white p-8 rounded-xl shadow-lg mx-4"
-                data-aos="fade-up"
-            >
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    Jadwal Pelaksanaan
-                </h2>
-
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div data-aos="fade-right">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
+                <!-- Outbound Concepts -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Konsep Outbound
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div
+                            v-for="(concept, index) in outboundConcepts"
+                            :key="index"
+                            class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow text-center"
                         >
                             <i
-                                class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
+                                :class="
+                                    concept.icon +
+                                    ' text-4xl text-blue-600 mb-4'
+                                "
                             ></i>
-                            Waktu Pelaksanaan
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <p>Hari Kerja (Senin - Jumat):</p>
-                            <ul class="list-disc list-inside pl-4">
-                                <li>Sesi pagi: 08.30 – 12.00 WIB</li>
-                                <li>Sesi siang: 13.00 – 16.00 WIB</li>
-                            </ul>
-                            <p>Hari Sabtu dengan kesepakatan</p>
+                            <h3
+                                class="text-xl font-semibold text-gray-800 mb-3"
+                            >
+                                {{ concept.title }}
+                            </h3>
+                            <p class="text-gray-600">
+                                {{ concept.description }}
+                            </p>
                         </div>
                     </div>
+                </section>
 
-                    <div data-aos="fade-left">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
+                <!-- Outbound Types -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Jenis Outbound
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        <div
+                            v-for="(type, index) in outboundTypes"
+                            :key="index"
+                            class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                         >
-                            <i
-                                class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Lokasi dan Biaya
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <ul class="space-y-2">
-                                <li>
-                                    ✓ Di QQNuansa Consultant sesuai kesepakatan
-                                    waktu
-                                </li>
-                                <li>
-                                    ✓ In-house di perusahaan sesuai kesepakatan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport gratis untuk peserta >5
-                                    orang di Kota Pekalongan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport khusus untuk peserta <5
-                                    atau di luar Kota Pekalongan
-                                </li>
-                            </ul>
+                            <div class="flex items-center mb-4">
+                                <i
+                                    :class="
+                                        type.icon +
+                                        ' text-3xl text-blue-600 mr-4'
+                                    "
+                                ></i>
+                                <h3 class="text-xl font-semibold text-gray-800">
+                                    {{ type.title }}
+                                </h3>
+                            </div>
+                            <p class="text-gray-600">{{ type.description }}</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Benefits Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Manfaat Outbound
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        <div
+                            v-for="(benefit, index) in outboundBenefits"
+                            :key="index"
+                            class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                        >
+                            <div class="flex items-center mb-4">
+                                <i
+                                    :class="
+                                        benefit.icon +
+                                        ' text-3xl text-green-600 mr-4'
+                                    "
+                                ></i>
+                                <h3 class="text-xl font-semibold text-gray-800">
+                                    {{ benefit.title }}
+                                </h3>
+                            </div>
+                            <p class="text-gray-600">
+                                {{ benefit.description }}
+                            </p>
+                        </div>
+                    </div>
+                </section>
+                <div
+                    class="bg-white p-8 rounded-xl shadow-lg mx-4"
+                    data-aos="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                        Jadwal Pelaksanaan
+                    </h2>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div data-aos="fade-right">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
+                                ></i>
+                                Waktu Pelaksanaan
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <p>Hari Kerja (Senin - Jumat):</p>
+                                <ul class="list-disc list-inside pl-4">
+                                    <li>Sesi pagi: 08.30 – 12.00 WIB</li>
+                                    <li>Sesi siang: 13.00 – 16.00 WIB</li>
+                                </ul>
+                                <p>Hari Sabtu dengan kesepakatan</p>
+                            </div>
+                        </div>
+
+                        <div data-aos="fade-left">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
+                                <i
+                                    class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
+                                ></i>
+                                Lokasi dan Biaya
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <ul class="space-y-2">
+                                    <li>
+                                        ✓ Di QQNuansa Consultant sesuai
+                                        kesepakatan waktu
+                                    </li>
+                                    <li>
+                                        ✓ In-house di perusahaan sesuai
+                                        kesepakatan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport gratis untuk peserta
+                                        >5 orang di Kota Pekalongan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport khusus untuk peserta
+                                        <5 atau di luar Kota Pekalongan
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </template>
 

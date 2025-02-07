@@ -241,256 +241,270 @@ const dropdownOpen = ref(false);
             </div>
         </header>
 
-        <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
-            <!-- Introduction Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h1 class="text-4xl font-bold text-gray-900 mb-6 text-center">
-                    Layanan Hypnotherapy
-                </h1>
-                <div class="prose max-w-none">
-                    <p
-                        class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
+        <main class="p-10">
+            <div class="container mx-auto py-12 px-8 md:px-16 lg:px-24">
+                <!-- Introduction Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h1
+                        class="text-4xl font-bold text-gray-900 mb-6 text-center"
                     >
-                        Hypnotherapy atau hipnoterapi adalah metode terapi yang
-                        menggunakan teknik hipnosis untuk membantu seseorang
-                        mencapai kondisi relaksasi mendalam (trance) dan
-                        meningkatkan fokus pikiran.
-                    </p>
-                </div>
-            </section>
-
-            <!-- Problems Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Masalah yang Bisa Diatasi
-                </h2>
-                <div
-                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    <div
-                        v-for="(category, index) in problems"
-                        :key="index"
-                        class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
-                    >
-                        <div class="flex items-center mb-4">
-                            <i
-                                :class="
-                                    category.icon +
-                                    ' text-3xl text-purple-600 mr-4'
-                                "
-                            ></i>
-                            <h3 class="text-xl font-semibold text-gray-800">
-                                {{ category.category }}
-                            </h3>
-                        </div>
-                        <ul class="space-y-3">
-                            <li
-                                v-for="(item, iIndex) in category.items"
-                                :key="iIndex"
-                                class="flex items-start"
-                            >
-                                <i
-                                    class="fas fa-check text-green-500 mt-1 mr-2"
-                                ></i>
-                                <span class="text-gray-600">{{ item }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Process Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <h2 class="text-3xl font-semibold text-gray-900 mb-6">
-                    Proses Hypnotherapy
-                </h2>
-                <div class="relative">
-                    <div
-                        class="absolute top-0 bottom-0 left-1/2 w-0.5 bg-purple-200 transform -translate-x-1/2"
-                    ></div>
-                    <div class="space-y-8">
-                        <div
-                            v-for="(step, index) in therapyProcess"
-                            :key="index"
-                            class="flex items-start"
-                            data-aos="fade-up"
+                        Layanan Hypnotherapy
+                    </h1>
+                    <div class="prose max-w-none">
+                        <p
+                            class="text-center text-xl text-gray-700 max-w-3xl mx-auto"
                         >
-                            <div
-                                class="bg-white p-4 rounded-full shadow-lg z-10 mr-4"
-                            >
+                            Hypnotherapy atau hipnoterapi adalah metode terapi
+                            yang menggunakan teknik hipnosis untuk membantu
+                            seseorang mencapai kondisi relaksasi mendalam
+                            (trance) dan meningkatkan fokus pikiran.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Problems Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Masalah yang Bisa Diatasi
+                    </h2>
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        <div
+                            v-for="(category, index) in problems"
+                            :key="index"
+                            class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                        >
+                            <div class="flex items-center mb-4">
                                 <i
                                     :class="
-                                        step.icon + ' text-2xl text-purple-600'
+                                        category.icon +
+                                        ' text-3xl text-purple-600 mr-4'
                                     "
                                 ></i>
-                            </div>
-                            <div
-                                class="bg-white p-6 rounded-xl shadow-lg flex-grow"
-                            >
-                                <h3
-                                    class="text-xl font-semibold text-gray-800 mb-3"
-                                >
-                                    {{ step.step }}
+                                <h3 class="text-xl font-semibold text-gray-800">
+                                    {{ category.category }}
                                 </h3>
-                                <p class="text-gray-600 mb-3">
-                                    {{ step.description }}
-                                </p>
-
-                                <div
-                                    v-if="step.techniques"
-                                    class="mt-4 bg-purple-50 p-4 rounded-lg"
-                                >
-                                    <h4
-                                        class="font-semibold text-gray-800 mb-2"
-                                    >
-                                        Teknik yang Digunakan:
-                                    </h4>
-                                    <ul class="space-y-2">
-                                        <li
-                                            v-for="(
-                                                technique, tIndex
-                                            ) in step.techniques"
-                                            :key="tIndex"
-                                            class="flex items-start"
-                                        >
-                                            <i
-                                                class="fas fa-star text-purple-500 mt-1 mr-2"
-                                            ></i>
-                                            <span class="text-gray-600">{{
-                                                technique
-                                            }}</span>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div
-                                    v-if="step.examples"
-                                    class="mt-4 bg-purple-50 p-4 rounded-lg"
-                                >
-                                    <h4
-                                        class="font-semibold text-gray-800 mb-2"
-                                    >
-                                        Contoh Sugesti:
-                                    </h4>
-                                    <ul class="space-y-2">
-                                        <li
-                                            v-for="(
-                                                example, eIndex
-                                            ) in step.examples"
-                                            :key="eIndex"
-                                            class="flex items-start"
-                                        >
-                                            <i
-                                                class="fas fa-quote-left text-purple-500 mt-1 mr-2"
-                                            ></i>
-                                            <span
-                                                class="text-gray-600 italic"
-                                                >{{ example }}</span
-                                            >
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
+                            <ul class="space-y-3">
+                                <li
+                                    v-for="(item, iIndex) in category.items"
+                                    :key="iIndex"
+                                    class="flex items-start"
+                                >
+                                    <i
+                                        class="fas fa-check text-green-500 mt-1 mr-2"
+                                    ></i>
+                                    <span class="text-gray-600">{{
+                                        item
+                                    }}</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- Duration Section -->
-            <section class="mb-16" data-aos="fade-up">
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-semibold text-gray-900 mb-6">
-                        Durasi dan Frekuensi
+                <!-- Process Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <h2 class="text-3xl font-semibold text-gray-900 mb-6">
+                        Proses Hypnotherapy
                     </h2>
+                    <div class="relative">
+                        <div
+                            class="absolute top-0 bottom-0 left-1/2 w-0.5 bg-purple-200 transform -translate-x-1/2"
+                        ></div>
+                        <div class="space-y-8">
+                            <div
+                                v-for="(step, index) in therapyProcess"
+                                :key="index"
+                                class="flex items-start"
+                                data-aos="fade-up"
+                            >
+                                <div
+                                    class="bg-white p-4 rounded-full shadow-lg z-10 mr-4"
+                                >
+                                    <i
+                                        :class="
+                                            step.icon +
+                                            ' text-2xl text-purple-600'
+                                        "
+                                    ></i>
+                                </div>
+                                <div
+                                    class="bg-white p-6 rounded-xl shadow-lg flex-grow"
+                                >
+                                    <h3
+                                        class="text-xl font-semibold text-gray-800 mb-3"
+                                    >
+                                        {{ step.step }}
+                                    </h3>
+                                    <p class="text-gray-600 mb-3">
+                                        {{ step.description }}
+                                    </p>
+
+                                    <div
+                                        v-if="step.techniques"
+                                        class="mt-4 bg-purple-50 p-4 rounded-lg"
+                                    >
+                                        <h4
+                                            class="font-semibold text-gray-800 mb-2"
+                                        >
+                                            Teknik yang Digunakan:
+                                        </h4>
+                                        <ul class="space-y-2">
+                                            <li
+                                                v-for="(
+                                                    technique, tIndex
+                                                ) in step.techniques"
+                                                :key="tIndex"
+                                                class="flex items-start"
+                                            >
+                                                <i
+                                                    class="fas fa-star text-purple-500 mt-1 mr-2"
+                                                ></i>
+                                                <span class="text-gray-600">{{
+                                                    technique
+                                                }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div
+                                        v-if="step.examples"
+                                        class="mt-4 bg-purple-50 p-4 rounded-lg"
+                                    >
+                                        <h4
+                                            class="font-semibold text-gray-800 mb-2"
+                                        >
+                                            Contoh Sugesti:
+                                        </h4>
+                                        <ul class="space-y-2">
+                                            <li
+                                                v-for="(
+                                                    example, eIndex
+                                                ) in step.examples"
+                                                :key="eIndex"
+                                                class="flex items-start"
+                                            >
+                                                <i
+                                                    class="fas fa-quote-left text-purple-500 mt-1 mr-2"
+                                                ></i>
+                                                <span
+                                                    class="text-gray-600 italic"
+                                                    >{{ example }}</span
+                                                >
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Duration Section -->
+                <section class="mb-16" data-aos="fade-up">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+                            Durasi dan Frekuensi
+                        </h2>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="bg-purple-50 p-6 rounded-lg">
+                                <div class="flex items-center mb-3">
+                                    <i
+                                        class="fas fa-clock text-purple-600 text-2xl mr-3"
+                                    ></i>
+                                    <h3
+                                        class="text-xl font-semibold text-gray-800"
+                                    >
+                                        Durasi per Sesi
+                                    </h3>
+                                </div>
+                                <p class="text-gray-600">
+                                    30-60 menit per sesi
+                                </p>
+                            </div>
+                            <div class="bg-purple-50 p-6 rounded-lg">
+                                <div class="flex items-center mb-3">
+                                    <i
+                                        class="fas fa-calendar-alt text-purple-600 text-2xl mr-3"
+                                    ></i>
+                                    <h3
+                                        class="text-xl font-semibold text-gray-800"
+                                    >
+                                        Frekuensi
+                                    </h3>
+                                </div>
+                                <p class="text-gray-600">
+                                    3-6 sesi, tergantung pada tingkat keparahan
+                                    masalah
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div
+                    class="bg-white p-8 rounded-xl shadow-lg mx-4"
+                    data-aos="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                        Jadwal Pelaksanaan
+                    </h2>
+
                     <div class="grid md:grid-cols-2 gap-8">
-                        <div class="bg-purple-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-3">
+                        <div data-aos="fade-right">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
                                 <i
-                                    class="fas fa-clock text-purple-600 text-2xl mr-3"
+                                    class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
                                 ></i>
-                                <h3 class="text-xl font-semibold text-gray-800">
-                                    Durasi per Sesi
-                                </h3>
+                                Waktu Pelaksanaan
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <p>Hari Kerja (Senin - Jumat):</p>
+                                <ul class="list-disc list-inside pl-4">
+                                    <li>Sesi pagi: 08.30 – 12.00 WIB</li>
+                                    <li>Sesi siang: 13.00 – 16.00 WIB</li>
+                                </ul>
+                                <p>Hari Sabtu dengan kesepakatan</p>
                             </div>
-                            <p class="text-gray-600">30-60 menit per sesi</p>
                         </div>
-                        <div class="bg-purple-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-3">
+
+                        <div data-aos="fade-left">
+                            <h3
+                                class="text-xl font-semibold mb-4 flex items-center"
+                            >
                                 <i
-                                    class="fas fa-calendar-alt text-purple-600 text-2xl mr-3"
+                                    class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
                                 ></i>
-                                <h3 class="text-xl font-semibold text-gray-800">
-                                    Frekuensi
-                                </h3>
+                                Lokasi dan Biaya
+                            </h3>
+                            <div class="space-y-3 text-gray-700">
+                                <ul class="space-y-2">
+                                    <li>
+                                        ✓ Di QQNuansa Consultant sesuai
+                                        kesepakatan waktu
+                                    </li>
+                                    <li>
+                                        ✓ In-house di perusahaan sesuai
+                                        kesepakatan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport gratis untuk peserta
+                                        >5 orang di Kota Pekalongan
+                                    </li>
+                                    <li>
+                                        ✓ Biaya transport khusus untuk peserta
+                                        <5 atau di luar Kota Pekalongan
+                                    </li>
+                                </ul>
                             </div>
-                            <p class="text-gray-600">
-                                3-6 sesi, tergantung pada tingkat keparahan
-                                masalah
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div
-                class="bg-white p-8 rounded-xl shadow-lg mx-4"
-                data-aos="fade-up"
-            >
-                <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                    Jadwal Pelaksanaan
-                </h2>
-
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div data-aos="fade-right">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
-                        >
-                            <i
-                                class="fas fa-clock text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Waktu Pelaksanaan
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <p>Hari Kerja (Senin - Jumat):</p>
-                            <ul class="list-disc list-inside pl-4">
-                                <li>Sesi pagi: 08.30 – 12.00 WIB</li>
-                                <li>Sesi siang: 13.00 – 16.00 WIB</li>
-                            </ul>
-                            <p>Hari Sabtu dengan kesepakatan</p>
-                        </div>
-                    </div>
-
-                    <div data-aos="fade-left">
-                        <h3
-                            class="text-xl font-semibold mb-4 flex items-center"
-                        >
-                            <i
-                                class="fas fa-map-pin text-blue-600 w-6 h-6 mr-2"
-                            ></i>
-                            Lokasi dan Biaya
-                        </h3>
-                        <div class="space-y-3 text-gray-700">
-                            <ul class="space-y-2">
-                                <li>
-                                    ✓ Di QQNuansa Consultant sesuai kesepakatan
-                                    waktu
-                                </li>
-                                <li>
-                                    ✓ In-house di perusahaan sesuai kesepakatan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport gratis untuk peserta >5
-                                    orang di Kota Pekalongan
-                                </li>
-                                <li>
-                                    ✓ Biaya transport khusus untuk peserta <5
-                                    atau di luar Kota Pekalongan
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </template>
 
