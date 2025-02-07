@@ -5,6 +5,13 @@ import { usePage } from "@inertiajs/vue3";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+const props = defineProps({
+    job: {
+        type: Object,
+        required: true,
+    },
+});
+
 const showDropdown = ref(false);
 const cities = ref(["Jakarta", "Surabaya", "Bandung", "Medan", "Makassar"]);
 
@@ -203,16 +210,10 @@ const submit = () => {
         <main class="flex flex-col items-center mt-6">
             <div>
                 <h1 class="text-2xl font-bold mb-6 text-center">
-                    Psikolog Klinis
+                   {{ job.title }}
                 </h1>
                 <h1 class="text-lg font-normal mb-6 text-center ml-20 mr-20">
-                    Psikolog klinis yang bekerja di perusahaan konsultan
-                    memiliki peran yang unik karena mereka tidak hanya fokus
-                    pada terapi individu seperti di lingkungan klinis
-                    tradisional, tetapi juga memberikan layanan yang disesuaikan
-                    dengan kebutuhan organisasi. Berikut adalah jobdesk atau
-                    tanggung jawab umum seorang psikolog klinis dalam perusahaan
-                    konsultan:
+                    {{ job.description }}
                 </h1>
             </div>
 
