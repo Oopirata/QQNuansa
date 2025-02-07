@@ -5,6 +5,7 @@ use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\OauthController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\JobVacancyController; // Add this line
+use App\Http\Controllers\UploadCVController;
 use App\Models\Email;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -95,13 +96,9 @@ Route::get('/servicesSTIFIN', function () {
     return Inertia::render('ServicesSTIFIN');
 })->name('/servicesSTIFIN');
 
-Route::get('/hiring', function () {
-    return Inertia::render('PosisiCV');
-});
+Route::get('/hiring', [JobVacancyController::class, 'show']);
 
-Route::get('/uploadcv', function () {
-    return Inertia::render('UploadCV');
-});
+Route::get('/uploadcv/{id}', [UploadCVController::class, 'uploadcv_page']);
 
 Route::get('/statuscv', function () {
     return Inertia::render('StatusCV');

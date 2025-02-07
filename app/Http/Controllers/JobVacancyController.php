@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class JobVacancyController extends Controller
 {
+    public function show()
+    {
+        $jobs = JobVacancy::with(['salaryRanges', 'questions', 'applicants'])->get();
+
+        return Inertia::render('PosisiCV', [
+            'jobs' => $jobs
+        ]);
+    }
+    
     public function index()
     {
         return Inertia::render('Jobs/Index', [

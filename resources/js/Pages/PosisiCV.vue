@@ -66,20 +66,19 @@ const form = useForm({
     position: "",
 });
 
-const submitPosition = (position) => {
-    form.post(route("positions.apply"), {
-        preserveScroll: true,
-        onSuccess: () => {
-            showDropdown.value = false;
-        },
-    });
+const submitPosition = (id) => {
+    router.visit(`/uploadcv/${id}`)
 };
 
-defineProps({
+const props = defineProps({
     success: {
         type: String,
         default: "",
     },
+    jobs: {
+        type: Object,
+        required: true,
+    }
 });
 </script>
 
@@ -239,13 +238,13 @@ defineProps({
                             class="absolute mt-1 w-48 bg-white border border-gray-200 rounded shadow-lg z-10"
                         >
                             <button
-                                v-for="position in positions"
-                                :key="position"
+                                v-for="job in jobs"
+                                :key="job.id"
                                 type="button"
-                                @click="submitPosition(position)"
+                                @click="submitPosition(job.id)"
                                 class="w-full text-left px-4 py-2 hover:bg-blue-50 text-gray-700"
                             >
-                                {{ position }}
+                                {{ job.title }}
                             </button>
                         </div>
                     </div>
