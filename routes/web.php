@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\OauthController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\JobVacancyController; // Add this line
 use App\Models\Email;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -154,8 +155,14 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
         return Inertia::render('AdminDetailRejectedCandidates');
     });
 
+    //EMAIL
     Route::post('/preview-email', [EmailController::class, 'preview'])->name('preview.email');
     Route::post('/send-email', [EmailController::class, 'send'])->name('send.email');
+
+    //POST JOB
+    Route::get('/jobs/create', [JobVacancyController::class, 'create'])->name('jobs.create');
+    Route::post('/jobs', [JobVacancyController::class, 'store'])->name('jobs.store');
+    Route::get('/jobs', [JobVacancyController::class, 'index'])->name('jobs.index');
 });
 
 require __DIR__.'/auth.php';

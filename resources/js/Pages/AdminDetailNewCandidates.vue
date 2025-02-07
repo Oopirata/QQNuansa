@@ -170,6 +170,20 @@ const moveToScreened = (user_id) => {
                     </div>
                 </div>
                 <div class="flex items-center">
+                    <div class="flex justify-end space-x-4 -mt-10">
+                        <button
+                            @click="disqualifyCandidate"
+                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        >
+                            Disqualify
+                        </button>
+                        <button
+                            @click="moveToScreened"
+                            class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+                        >
+                            Move to screened
+                        </button>
+                    </div>
                     <span class="mr-4"
                         >{{ currentPage }} of {{ totalPages }}</span
                     >
@@ -342,22 +356,6 @@ const moveToScreened = (user_id) => {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex justify-end space-x-4 -mt-10">
-                <button
-                    @click="disqualifyCandidate"
-                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                    Disqualify
-                </button>
-                <button
-                    @click="moveToScreened"
-                    class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-                >
-                    Move to screened
-                </button>
             </div>
         </div>
     </div>
