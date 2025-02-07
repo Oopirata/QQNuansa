@@ -115,6 +115,8 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
 
+            $jobIds[] = $jobId;
+
             // Add sample questions for each job
             $questions = [
                 'What is your experience with our required technologies?',
@@ -126,6 +128,21 @@ class DatabaseSeeder extends Seeder
                 DB::table('questions')->insert([
                     'job_vacancy_id' => $jobId,
                     'question_text' => $question,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            $numberOfRanges = rand(2, 3);
+    
+            for ($i = 0; $i < $numberOfRanges; $i++) {
+                $minSalary = rand(5000000, 12000000);
+                $maxSalary = $minSalary + rand(2000000, 5000000);
+                
+                DB::table('salary_ranges')->insert([
+                    'job_vacancy_id' => $jobId,
+                    'min_salary' => $minSalary,
+                    'max_salary' => $maxSalary,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

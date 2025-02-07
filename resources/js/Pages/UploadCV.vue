@@ -1,13 +1,10 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { usePage } from "@inertiajs/vue3";
-
 import AOS from "aos";
 import "aos/dist/aos.css";
+
 const showDropdown = ref(false);
 const cities = ref(["Jakarta", "Surabaya", "Bandung", "Medan", "Makassar"]);
 
@@ -19,23 +16,14 @@ const selectCity = (city) => {
 const hideDropdown = () => {
     setTimeout(() => {
         showDropdown.value = false;
-    }, 200); // Delay untuk memungkinkan klik pada dropdown
+    }, 200);
 };
 
-const menuItems = [
-    { text: "Tentang Kami", href: "/companyprofile" },
-    { text: "Legalitas", href: "/legalitas" },
-    { text: "Misi", href: "/missions" },
-    { text: "Layanan", href: "/services" },
-];
 onMounted(() => {
-    AOS.init({
-        duration: 1200,
-        once: true,
-        offset: 50,
-    });
+    AOS.init({ duration: 1200, once: true, offset: 50 });
     document.addEventListener("click", closeDropdown);
 });
+
 const page = usePage();
 const currentRoute = computed(() => page.url);
 const dropdownOpen = ref(false);
@@ -51,17 +39,7 @@ onBeforeUnmount(() => {
     document.removeEventListener("click", closeDropdown);
 });
 
-const isActive = (href) => {
-    return currentRoute.value === href;
-};
-
-const showingNavigationDropdown = ref(false);
-
-const logout = () => {
-    router.post(route("logout"));
-};
-
-const fileName = ref("");
+const isActive = (href) => currentRoute.value === href;
 
 const form = useForm({
     cv_file: null,
@@ -70,9 +48,11 @@ const form = useForm({
     lokasi: "",
     IPK: "",
     nomer_telepon: "",
-    linkedin_url: null,
+    linkedin_url: "",
     gaji: "",
 });
+
+const fileName = ref("");
 
 const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -86,7 +66,18 @@ const handleFileChange = (event) => {
 };
 
 const submit = () => {
+    const formData = new FormData();
+    formData.append("cv_file", form.cv_file);
+    formData.append("nama_lengkap", form.nama_lengkap);
+    formData.append("email", form.email);
+    formData.append("lokasi", form.lokasi);
+    formData.append("IPK", form.IPK);
+    formData.append("nomer_telepon", form.nomer_telepon);
+    formData.append("linkedin_url", form.linkedin_url);
+    formData.append("gaji", form.gaji);
+
     form.post(route("cv.upload"), {
+        data: formData,
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
