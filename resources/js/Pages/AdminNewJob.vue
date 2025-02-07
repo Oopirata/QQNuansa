@@ -1,7 +1,7 @@
-# NewJobForm.vue
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import Sidebar from "@/Components/Sidebar/Sidebar.vue";
 
 const dropdownOpen = ref(false);
 const dropdownRef = ref(null);
@@ -25,30 +25,56 @@ onBeforeUnmount(() => {
     document.removeEventListener('click', closeDropdown);
 });
 
-// Form data
-const jobTitle = ref("");
-const jobDescription = ref("");
-const additionalQuestions = ref(["", ""]);
-const salaryMin = ref("");
-const salaryMax = ref("");
-const salaryRanges = ref([{ min: "", max: "" }]);
+const form = useForm({
+    title: "",
+    description: "",
+    additional_questions: [""], // Ganti dari 'questions' ke 'additional_questions'
+    salary_ranges: [{ min_salary: "", max_salary: "" }] // Array untuk salary ranges
+});
 
-// Methods
+// Method untuk pertanyaan tambahan
 const addQuestion = () => {
-    additionalQuestions.value.push("");
+    form.additional_questions.push("");
 };
 
+const removeQuestion = (index) => {
+    if (form.additional_questions.length > 1) {
+        form.additional_questions.splice(index, 1);
+    }
+};
+
+// Method untuk salary range
 const addSalaryRange = () => {
-    salaryRanges.value.push({ min: "", max: "" });
+    form.salary_ranges.push({ min_salary: "", max_salary: "" });
+};
+
+const formatSalary = (value) => {
+    // Hapus semua karakter non-digit
+    const numericValue = value.replace(/\D/g, '');
+    // Format dengan ribuan separator
+    return new Intl.NumberFormat('id-ID').format(numericValue);
+};
+
+const updateSalary = (index, type, event) => {
+    let value = event.target.value;
+    // Hapus format sebelum menyimpan ke form
+    const numericValue = value.replace(/\D/g, '');
+    
+    if (type === 'min') {
+        form.salary_ranges[index].min_salary = numericValue;
+    } else {
+        form.salary_ranges[index].max_salary = numericValue;
+    }
 };
 
 const submitJob = () => {
-    // Handle job submission
-    console.log({
-        jobTitle: jobTitle.value,
-        jobDescription: jobDescription.value,
-        additionalQuestions: additionalQuestions.value,
-        salaryRanges: salaryRanges.value,
+    form.post(route('jobs.store'), {
+        onSuccess: () => {
+            window.location = route('admin.dashboard');
+        },
+        onError: (errors) => {
+            console.error(errors);
+        }
     });
 };
 
@@ -60,6 +86,7 @@ const candidateItems = [
     { name: "Interview", path: "/adminInterviewCandidates" },
     { name: "Rejected", path: "/adminRejectedCandidates" },
 ];
+
 const toggleSubMenu = () => {
     isSubMenuOpen.value = !isSubMenuOpen.value;
 };
@@ -68,129 +95,7 @@ const toggleSubMenu = () => {
 <template>
     <Head title="New Job" />
     <div class="flex h-screen">
-        <!-- Sidebar Section -->
-        <div class="bg-blue-100 w-64 p-4 flex flex-col">
-            <div class="flex items-center mb-8">
-                <img
-                    src="/images/QQ crop.png"
-                    alt="Company Logo"
-                    class="w-20 h-16 mr-2"
-                />
-                <img
-                    src="/images/Nuansa crop.png"
-                    alt="Company Logo"
-                    class="w-24 h-8 mr-2 ml-3"
-                />
-            </div>
-
-            <nav class="flex-1">
-                <ul>
-                    <li class="mb-4">
-                        <Link
-                            href="/adminDashboard"
-                            class="flex items-center text-purple-600 hover:text-gray-900"
-                        >
-                            <i class="fas fa-tachometer-alt mr-2"></i>
-                            Dashboard
-                        </Link>
-                    </li>
-                    <li class="mb-4">
-                        <button
-                            @click="toggleSubMenu"
-                            class="flex items-center w-full text-gray-600 hover:text-gray-900"
-                        >
-                            <i class="fas fa-users mr-2"></i>
-                            Candidates
-                            <i
-                                :class="[
-                                    'fas ml-auto',
-                                    isSubMenuOpen
-                                        ? 'fa-chevron-down'
-                                        : 'fa-chevron-right',
-                                ]"
-                            ></i>
-                        </button>
-                        <ul v-if="isSubMenuOpen" class="ml-6 mt-2">
-                            <li
-                                v-for="item in candidateItems"
-                                :key="item.name"
-                                class="mb-2"
-                            >
-                                <Link
-                                    :href="item.path"
-                                    class="text-gray-600 hover:text-gray-900"
-                                >
-                                    {{ item.name }}
-                                </Link>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="mb-4">
-                        <Link
-                            href="/adminEmail"
-                            class="flex items-center text-gray-600 hover:text-gray-900"
-                        >
-                            <i class="fas fa-envelope mr-2"></i>
-                            E-mail
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
-            <template v-if="$page.props.auth.user">
-                <div class="mt-auto relative" ref="dropdownRef">
-                    <button
-                        @click="toggleDropdown"
-                        type="button"
-                        class="flex items-center w-full p-2 hover:bg-gray-100 rounded-md">
-                            <img
-                                src="/images/profile.png"
-                                alt="User Avatar"
-                                class="w-10 h-10 rounded-full mr-2"
-                            />
-                            <div>
-                                <p class="text-gray-600">
-                                    {{ $page.props.auth.user.name }}
-                                </p>
-                            </div>
-                    </button>
-                    
-                    <Transition
-                        enter-active-class="transition ease-out duration-100"
-                        enter-from-class="transform opacity-0 translate-y-2"
-                        enter-to-class="transform opacity-100 translate-y-0"
-                        leave-active-class="transition ease-in duration-75"
-                        leave-from-class="transform opacity-100 translate-y-0"
-                        leave-to-class="transform opacity-0 translate-y-2"
-                    >
-                        <div
-                            v-show="dropdownOpen"
-                            class="absolute left-0 bottom-full mb-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 py-1 z-50"
-                        >
-                            <Link
-                                :href="route('profile.edit')"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            >
-                                Profile
-                            </Link>
-                            <Link
-                                v-if="$page.props.auth.user.roles.some((role) => role.role_name === 'admin')"
-                                :href="route('landing.page')"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            >
-                                Website
-                            </Link>
-                            <Link
-                                :href="route('logout')"
-                                method="post"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            >
-                                Log Out
-                            </Link>
-                        </div>
-                    </Transition>
-                </div>
-            </template>
-        </div>
+        <Sidebar :user="$page.props.auth.user" />
 
         <!-- Main Content -->
         <div class="w-4/5 p-8">
@@ -212,17 +117,25 @@ const toggleSubMenu = () => {
                     <div class="mb-4">
                         <label class="block mb-2">Job Title</label>
                         <input
-                            v-model="jobTitle"
+                            v-model="form.title"
                             type="text"
                             class="w-full p-2 border rounded"
+                            :class="{ 'border-red-500': form.errors.title }"
                         />
+                        <div v-if="form.errors.title" class="text-red-500 text-sm mt-1">
+                            {{ form.errors.title }}
+                        </div>
                     </div>
                     <div>
                         <label class="block mb-2">Job Description</label>
                         <textarea
-                            v-model="jobDescription"
+                            v-model="form.description"
                             class="w-full p-2 border rounded h-32"
+                            :class="{ 'border-red-500': form.errors.description }"
                         ></textarea>
+                        <div v-if="form.errors.description" class="text-red-500 text-sm mt-1">
+                            {{ form.errors.description }}
+                        </div>
                     </div>
                 </div>
 
@@ -230,50 +143,94 @@ const toggleSubMenu = () => {
                 <div class="w-1/2 pl-4">
                     <div class="mb-8">
                         <h3 class="font-bold mb-4">Additional Question</h3>
-                        <div
-                            v-for="(question, index) in additionalQuestions"
-                            :key="index"
-                        >
-                            <input
-                                v-model="additionalQuestions[index]"
-                                type="text"
-                                placeholder="Lorem Ipsum"
-                                class="w-full p-2 border rounded mb-2"
-                            />
+                        <div v-for="(question, index) in form.additional_questions" :key="index" class="mb-4">
+                            <div class="flex items-center gap-4">
+                                <input
+                                    v-model="form.additional_questions[index]"
+                                    type="text"
+                                    placeholder="Masukkan pertanyaan tambahan"
+                                    class="w-full p-2 border rounded"
+                                />
+                                <!-- Tombol hapus jika lebih dari satu pertanyaan -->
+                                <button 
+                                    v-if="form.additional_questions.length > 1"
+                                    type="button"
+                                    @click="removeQuestion(index)"
+                                    class="text-red-500 hover:text-red-700"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <!-- Pesan error jika ada -->
+                            <div v-if="form.errors[`additional_questions.${index}`]" class="text-red-500 text-sm mt-1">
+                                {{ form.errors[`additional_questions.${index}`] }}
+                            </div>
                         </div>
+
+                        <!-- Tombol Tambah Pertanyaan -->
                         <button
                             @click="addQuestion"
                             class="bg-purple-500 text-white px-4 py-2 rounded w-full"
                         >
-                            + Add Question
+                            + Tambah Pertanyaan
                         </button>
                     </div>
                     <div>
                         <h3 class="font-bold mb-4">Salary Range</h3>
                         <div
-                            v-for="(range, index) in salaryRanges"
+                            v-for="(range, index) in form.salary_ranges"
                             :key="index"
+                            class="mb-4"
                         >
-                            <div class="flex items-center mb-2">
-                                <input
-                                    v-model="range.min"
-                                    type="text"
-                                    placeholder="500.000"
-                                    class="w-full p-2 border rounded mr-2"
-                                />
-                                <input
-                                    v-model="range.max"
-                                    type="text"
-                                    placeholder="1.000.000"
-                                    class="w-full p-2 border rounded"
-                                />
+                            <div class="flex items-center gap-4">
+                                <div class="relative flex-1">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                    <input
+                                        :value="formatSalary(range.min_salary)"
+                                        @keypress="(e) => {
+                                            if (!/[0-9]/.test(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }"
+                                        @input="(e) => updateSalary(index, 'min', e)"
+                                        type="text"
+                                        placeholder="5.000.000"
+                                        class="w-full p-2 pl-12 border rounded"
+                                    />
+                                </div>
+                                <span class="text-gray-500">-</span>
+                                <div class="relative flex-1">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                    <input
+                                        :value="formatSalary(range.max_salary)"
+                                        @input="(e) => updateSalary(index, 'max', e)"
+                                        type="text"
+                                        placeholder="8.000.000"
+                                        class="w-full p-2 pl-12 border rounded"
+                                    />
+                                </div>
+                                <button 
+                                    v-if="form.salary_ranges.length > 1"
+                                    type="button"
+                                    @click="form.salary_ranges.splice(index, 1)"
+                                    class="text-red-500 hover:text-red-700"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <div v-if="form.errors[`salary_ranges.${index}.min_salary`]" class="text-red-500 text-sm mt-1">
+                                {{ form.errors[`salary_ranges.${index}.min_salary`] }}
+                            </div>
+                            <div v-if="form.errors[`salary_ranges.${index}.max_salary`]" class="text-red-500 text-sm mt-1">
+                                {{ form.errors[`salary_ranges.${index}.max_salary`] }}
                             </div>
                         </div>
                         <button
+                            type="button"
                             @click="addSalaryRange"
-                            class="bg-purple-500 text-white px-4 py-2 rounded w-full"
+                            class="bg-purple-500 text-white px-4 py-2 rounded w-full hover:bg-purple-600 transition-colors"
                         >
-                            + Add Salary
+                            + Add Salary Range
                         </button>
                     </div>
                 </div>

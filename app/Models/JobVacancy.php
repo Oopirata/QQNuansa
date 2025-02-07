@@ -9,6 +9,11 @@ class JobVacancy extends Model
 {
     protected $fillable = ['title', 'description'];
 
+    public function salaryRanges(): HasMany
+    {
+        return $this->hasMany(SalaryRange::class);
+    }
+
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class);
