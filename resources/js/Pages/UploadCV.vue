@@ -92,6 +92,12 @@ const submit = () => {
         },
     });
 };
+const menuItems = [
+    { text: "Tentang Kami", href: "/" },
+    { text: "Legalitas", href: "/legalitas" },
+    { text: "Misi", href: "/missions" },
+    { text: "Layanan", href: "/services" },
+];
 </script>
 
 <template>
@@ -210,7 +216,7 @@ const submit = () => {
         <main class="flex flex-col items-center mt-6">
             <div>
                 <h1 class="text-2xl font-bold mb-6 text-center">
-                   {{ job.title }}
+                    {{ job.title }}
                 </h1>
                 <h1 class="text-lg font-normal mb-6 text-center ml-20 mr-20">
                     {{ job.description }}
