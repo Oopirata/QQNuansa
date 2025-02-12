@@ -325,6 +325,7 @@ const menuItems = [
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="nama-lengkap"
                             type="text"
+                            placeholder="Masukkan nama lengkap anda"
                         />
                         <div
                             v-if="form.errors.nama_lengkap"
@@ -345,6 +346,7 @@ const menuItems = [
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="email"
                             type="email"
+                            placeholder="Masukkan Email anda"
                         />
                     </div>
                 </div>
@@ -393,6 +395,7 @@ const menuItems = [
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="ipk"
                             type="text"
+                            placeholder="Masukkan IPK (IP Komulatif) anda"
                         />
                     </div>
                 </div>
@@ -410,6 +413,7 @@ const menuItems = [
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="nomer-telepon"
                             type="text"
+                            placeholder="Masukkan Nomer Telepon anda"
                         />
                     </div>
                 </div>
@@ -418,40 +422,43 @@ const menuItems = [
                     <div class="w-full px-3">
                         <label
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                            for="gaji"
+                            for="linkedin"
                         >
                             Linkedin URL
                         </label>
                         <input
                             v-model="form.linkedin_url"
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="gaji"
+                            id="linkedin"
                             type="text"
+                            placeholder="Masukkan LinkedIn URL anda"
                         />
                     </div>
                 </div>
 
                 <div class="flex flex-wrap -mx-3 mb-6">
-                    <label
-                        class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        for="salary_range"
-                    >
-                        Pilih Range Gaji
-                    </label>
-                    <Multiselect
-                        v-model="form.salary_range_id"
-                        :options="salaryRangeOptions"
-                        track-by="value"
-                        label="label"
-                        :searchable="true"
-                        placeholder="Pilih range gaji yang diinginkan"
-                        class="appearance-none block w-full text-gray-700 rounded"
-                    />
-                    <div
-                        v-if="form.errors.salary_range_id"
-                        class="text-red-500 text-xs italic mt-1"
-                    >
-                        {{ form.errors.salary_range_id }}
+                    <div class="w-full px-3">
+                        <label
+                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            for="salary_range"
+                        >
+                            Pilih Range Gaji
+                        </label>
+                        <Multiselect
+                            v-model="form.salary_range_id"
+                            :options="salaryRangeOptions"
+                            track-by="value"
+                            label="label"
+                            :searchable="true"
+                            placeholder="Pilih range gaji yang diinginkan"
+                            class="appearance-none block w-full text-gray-700 rounded"
+                        />
+                        <div
+                            v-if="form.errors.salary_range_id"
+                            class="text-red-500 text-xs italic mt-1"
+                        >
+                            {{ form.errors.salary_range_id }}
+                        </div>
                     </div>
                 </div>
 
@@ -470,7 +477,7 @@ const menuItems = [
                             v-model="form.answers[question.id]"
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             rows="3"
-                            :placeholder="`Jawaban untuk: ${question.question_text}`"
+                            :placeholder="`Masukkan Jawaban anda`"
                         ></textarea>
                     </div>
                 </div>
