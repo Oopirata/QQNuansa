@@ -20,8 +20,9 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@vueform/multiselect": "^2.6.11",
+        "aos": "^2.3.4",
         "datatables.net-dt": "^2.2.1",
-        "datatables.net-vue3": "^3.0.4",
-        "aos": "^2.3.4"
+        "datatables.net-vue3": "^3.0.4"
     }
 }

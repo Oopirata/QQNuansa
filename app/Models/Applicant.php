@@ -8,7 +8,19 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Applicant extends Model
 {
-    protected $fillable = ['users_id', 'degree', 'job_vacancy_id', 'expected_salary', 'status'];
+    protected $fillable = [
+        'users_id',
+        'job_vacancy_id',
+        'name',
+        'degree',
+        'ipk',
+        'nomor_hp',
+        'expected_salary',
+        'applicant_email',
+        'linkedin',
+        'cv_path',
+        'status'
+    ];
 
     protected $casts = [
         'status' => 'integer',

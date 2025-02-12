@@ -107,6 +107,7 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        $jobIds = [];
         foreach ($jobs as $job) {
             $jobId = DB::table('job_vacancies')->insertGetId([
                 'title' => $job['title'],
@@ -133,8 +134,8 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
 
+            // Add salary ranges for each job
             $numberOfRanges = rand(2, 3);
-    
             for ($i = 0; $i < $numberOfRanges; $i++) {
                 $minSalary = rand(5000000, 12000000);
                 $maxSalary = $minSalary + rand(2000000, 5000000);
@@ -148,6 +149,8 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        $faker = \Faker\Factory::create('id_ID'); // Gunakan lokalisasi Indonesia
 
         // Seed applicant users and their details
         $applicantUsers = [
@@ -195,19 +198,26 @@ class DatabaseSeeder extends Seeder
             // Create applicant record
             DB::table('applicants')->insert([
                 'users_id' => $userId,
-                'job_vacancy_id' => rand(1, 2),
+                'job_vacancy_id' => $jobIds[array_rand($jobIds)],
+                'name' => $applicant['name'],
                 'degree' => $applicant['degree'],
+                'ipk' => $faker->randomFloat(2, 2.5, 4.0),
+                'nomor_hp' => $faker->phoneNumber,
+                'province' => $faker->state,
+                'city' => $faker->city,
                 'expected_salary' => $applicant['expected_salary'],
-                'status' => 0, // new status
+                'applicant_email' => $applicant['email'],
+                'linkedin' => 'https://linkedin.com/in/' . $faker->userName,
+                'cv_path' => 'cv_files/sample.pdf',
+                'status' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        $faker = \Faker\Factory::create();
-
+        // Generate random applicants
         for ($i = 1; $i <= 30; $i++) {
-            // Buat user baru
+            // Create user
             $userId = DB::table('users')->insertGetId([
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
@@ -216,18 +226,19 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
 
-            // Assign role sebagai applicant
+            // Assign applicant role
             DB::table('user_roles')->insert([
                 'user_id' => $userId,
-                'role_id' => 3, // applicant role
+                'role_id' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
-            // Buat record applicant
+            // Create applicant record
             DB::table('applicants')->insert([
                 'users_id' => $userId,
-                'job_vacancy_id' => rand(1, 2), // Assign job vacancy secara acak
+                'job_vacancy_id' => $jobIds[array_rand($jobIds)],
+                'name' => $faker->name,
                 'degree' => $faker->randomElement([
                     'Bachelor of Science',
                     'Master of Science',
@@ -235,8 +246,15 @@ class DatabaseSeeder extends Seeder
                     'Master of Business Administration',
                     'Bachelor of Engineering'
                 ]),
-                'expected_salary' => rand(5000000, 15000000), // Gaji ekspektasi random
-                'status' => 0, // Status baru
+                'ipk' => $faker->randomFloat(2, 2.5, 4.0),
+                'nomor_hp' => $faker->phoneNumber,
+                'province' => $faker->state,
+                'city' => $faker->city,
+                'expected_salary' => rand(5000000, 15000000),
+                'applicant_email' => $faker->email,
+                'linkedin' => 'https://linkedin.com/in/' . $faker->userName,
+                'cv_path' => 'cv_files/sample.pdf',
+                'status' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
