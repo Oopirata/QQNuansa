@@ -152,6 +152,9 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::get('/adminDetailRejectedCandidates', function () {
         return Inertia::render('AdminDetailRejectedCandidates');
     });
+    Route::get('/adminJobList', function(){
+        return Inertia::render('AdminJobList');
+    });
 
     //EMAIL
     Route::post('/preview-email', [EmailController::class, 'preview'])->name('preview.email');
