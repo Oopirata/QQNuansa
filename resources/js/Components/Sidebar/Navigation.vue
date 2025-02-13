@@ -98,6 +98,20 @@ const candidateItems = [
                     E-mail
                 </Link>
             </li>
+            <li class="mb-4">
+                <Link
+                    href="/adminJobList"
+                    class="flex items-center hover:text-gray-900"
+                    :class="[
+                        $page.url === '/adminJobList'
+                            ? 'text-purple-600'
+                            : 'text-gray-600',
+                    ]"
+                >
+                    <i class="fas fa-envelope mr-2"></i>
+                    Job List
+                </Link>
+            </li>
         </ul>
     </nav>
 </template>
