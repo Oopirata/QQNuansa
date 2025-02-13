@@ -107,6 +107,7 @@ const form = useForm({
     email: "",
     lokasi: "",
     IPK: "",
+    degree: "",
     nomer_telepon: "",
     linkedin_url: "",
     salary_range_id: "",
@@ -396,6 +397,24 @@ const menuItems = [
                             id="ipk"
                             type="text"
                             placeholder="Masukkan IPK (IP Komulatif) anda"
+                        />
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap -mx-3 mb-6">
+                    <div class="w-full px-3">
+                        <label
+                            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            for="nomer-telepon"
+                        >
+                            Jenjang pendidikan terakhir
+                        </label>
+                        <input
+                            v-model="form.degree"
+                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="degree"
+                            type="text"
+                            placeholder="Masukkan Jenjang pendidikan terakhir anda"
                         />
                     </div>
                 </div>

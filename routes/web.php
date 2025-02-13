@@ -121,7 +121,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
 
     Route::get('/adminNewJob', function () {
         return Inertia::render('AdminNewJob');
-    });
+    })->name('adminNewJob');
 
     Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
 

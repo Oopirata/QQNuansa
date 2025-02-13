@@ -18,13 +18,11 @@ class CandidateController extends Controller
         // Menambahkan kondisi pencarian
         if ($search) {
             $query->where(function($q) use ($search) {
-                $q->whereHas('user', function($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%");
-                })
-                ->orWhereHas('jobVacancy', function($query) use ($search) {
-                    $query->where('title', 'like', "%{$search}%");
-                })
-                ->orWhere('degree', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%") // Mencari langsung di kolom name Applicant
+                  ->orWhereHas('jobVacancy', function($query) use ($search) {
+                      $query->where('title', 'like', "%{$search}%");
+                  })
+                  ->orWhere('degree', 'like', "%{$search}%");
             });
         }
 
@@ -35,7 +33,7 @@ class CandidateController extends Controller
             collect($newCandidates->items())->map(function ($candidate) {
                 return [
                     'id' => $candidate->id,
-                    'user' => $candidate->user->name,
+                    'user' => $candidate->name,
                     'degree' => $candidate->degree,
                     'job_vacancy' => $candidate->jobVacancy->title,
                     'created_at' => $candidate->created_at
@@ -67,7 +65,7 @@ class CandidateController extends Controller
         $candidate = [
             'id' => $newCandidate->id,
             'user_id' => $newCandidate->user->id,
-            'user' => $newCandidate->user->name,
+            'user' => $newCandidate->name,
             'email' => $newCandidate->user->email,
             'degree' => $newCandidate->degree,
             'job_vacancy' => $newCandidate->jobVacancy->title,

@@ -22,6 +22,8 @@ const props = defineProps({
 const searchQuery = ref('')
 const selectedJobTitles = ref([])
 const selectedDegrees = ref([])
+const selectedIPK = ref([])
+const selectedSalary = ref([])
 
 const handleSearch = (query) => {
     searchQuery.value = query
@@ -38,11 +40,23 @@ const handleDegreesUpdate = (degrees) => {
     applyFilters()
 }
 
+const handleIPKUpdate = (ipk) => {
+    selectedIPK.value = ipk
+    applyFilters()
+}
+
+const handleSalaryUpdate = (salary) => {
+    selectedSalary.value = salary
+    applyFilters()
+}
+
 const applyFilters = () => {
     router.visit(route('adminNewCandidates'), {
         data: {
             jobTitles: selectedJobTitles.value,
             degrees: selectedDegrees.value,
+            ipk: selectedIPK.value,
+            salary: selectedSalary.value,
             search: searchQuery.value,
         },
         preserveState: true,
@@ -71,8 +85,12 @@ const goToDetail = (id) => {
                     <FilterPanel
                         :selectedJobTitles="selectedJobTitles"
                         :selectedDegrees="selectedDegrees"
+                        :selectedIPK="selectedIPK"
+                        :selectedSalary="selectedSalary"
                         @updateJobTitles="handleJobTitlesUpdate"
                         @updateDegrees="handleDegreesUpdate"
+                        @updateIPK="handleIPKUpdate"
+                        @updateSalary="handleSalaryUpdate"
                     />
                     
                     <CandidatesTable

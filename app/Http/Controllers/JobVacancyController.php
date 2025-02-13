@@ -86,6 +86,6 @@ class JobVacancyController extends Controller
             }
         });
 
-        return redirect()->route('admin.dashboard')->with('success', 'Job vacancy created successfully.');
+        return redirect()->back();
     }
 }

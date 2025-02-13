@@ -94,11 +94,9 @@ const submitJob = () => {
                 </div>
             `;
 
-            // Event handler untuk menutup dialog ketika mengklik background
             alertDialog.addEventListener("click", function (event) {
                 if (event.target === alertDialog) {
                     document.body.removeChild(alertDialog);
-                    window.location.href = route("admin.dashboard");
                 }
             });
 
