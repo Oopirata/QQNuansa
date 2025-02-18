@@ -1,38 +1,30 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { ref, onMounted } from "vue";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
-import { router } from "@inertiajs/vue3";
 
-const dropdownOpen = ref(false);
-const dropdownRef = ref(null);
-
-const showNotification = ref(false);
-
-const toggleDropdown = () => {
-    dropdownOpen.value = !dropdownOpen.value;
-};
-
-// Menutup dropdown ketika klik di luar
-const closeDropdown = (e) => {
-    if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
-        dropdownOpen.value = false;
-    }
-};
-
-onMounted(() => {
-    document.addEventListener("click", closeDropdown);
+const props = defineProps({
+    errors: Object,
+    auth: Object,
+    ziggy: Object,
+    jobs: Object
 });
+console.log(props.jobs);
 
-onBeforeUnmount(() => {
-    document.removeEventListener("click", closeDropdown);
-});
-
+// Initialize form with existing job data
 const form = useForm({
-    title: "",
-    description: "",
-    additional_questions: [""],
-    salary_ranges: [{ min_salary: "", max_salary: "" }],
+    title: props.jobs.title || "",
+    description: props.jobs.description || "",
+    status: props.jobs.status === 1, // true for Open (1), false for Closed (0)
+    additional_questions: props.jobs.questions?.length 
+        ? props.jobs.questions.map(q => q.question_text)
+        : [""],
+    salary_ranges: props.jobs.salary_ranges?.length
+        ? props.jobs.salary_ranges.map(range => ({
+            min_salary: range.min_salary.toString(),
+            max_salary: range.max_salary.toString()
+        }))
+        : [{ min_salary: "", max_salary: "" }],
 });
 
 // Method untuk pertanyaan tambahan
@@ -71,14 +63,13 @@ const updateSalary = (index, type, event) => {
 };
 
 const submitJob = () => {
-    form.post(route("jobs.store"), {
+    form.put(route("jobs.update", props.jobs.id), {
         onSuccess: () => {
             // Create and show alert dialog
             const alertDialog = document.createElement("div");
             alertDialog.className =
                 "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
 
-            // HTML untuk dialog
             alertDialog.innerHTML = `
                 <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm mx-4" onclick="event.stopPropagation()">
                     <div class="flex items-center justify-center mb-6">
@@ -89,7 +80,7 @@ const submitJob = () => {
                         </div>
                     </div>
                     <h3 class="text-xl font-semibold text-center text-gray-800 mb-3">Berhasil!</h3>
-                    <p class="text-center text-gray-700 text-base mb-6">Posisi baru telah berhasil ditambahkan</p>
+                    <p class="text-center text-gray-700 text-base mb-6">Job telah berhasil diperbarui</p>
                     <p class="text-center text-gray-600 text-sm">Klik di luar kotak untuk menutup</p>
                 </div>
             `;
@@ -108,22 +99,13 @@ const submitJob = () => {
     });
 };
 
-const isSubMenuOpen = ref(false);
-
-const candidateItems = [
-    { name: "New", path: "/adminNewCandidates" },
-    { name: "Screened", path: "/adminScreenedCandidates" },
-    { name: "Interview", path: "/adminInterviewCandidates" },
-    { name: "Rejected", path: "/adminRejectedCandidates" },
-];
-
-const toggleSubMenu = () => {
-    isSubMenuOpen.value = !isSubMenuOpen.value;
+const goBack = (id) => {
+    router.visit(route('adminJobDetail', id));
 };
 </script>
 
 <template>
-    <Head title="New Job" />
+    <Head title="Edit Job" />
     <div class="flex h-screen">
         <Sidebar :user="$page.props.auth.user" />
 
@@ -133,20 +115,38 @@ const toggleSubMenu = () => {
                 <a href="/adminDashboard" class="text-xl">
                     <i class="fas fa-arrow-left"></i>
                 </a>
-                <h2 class="text-xl font-bold">New job</h2>
-                <button
-                    @click="submitJob"
-                    :disabled="form.processing"
-                    class="bg-purple-500 text-white px-4 py-2 rounded disabled:opacity-75 disabled:cursor-not-allowed"
-                >
-                    {{ form.processing ? "Processing..." : "Post job" }}
-                </button>
+                <h2 class="text-xl font-bold">Edit Job</h2>
+                <div class="flex gap-4">
+                    <button @click="goBack(jobs.id)" class="bg-gray-500 text-white px-4 py-2 rounded">
+                        Cancel
+                    </button>
+                    <button
+                        @click="submitJob"
+                        :disabled="form.processing"
+                        class="bg-purple-500 text-white px-4 py-2 rounded disabled:opacity-75 disabled:cursor-not-allowed"
+                    >
+                        {{ form.processing ? "Processing..." : "Save Changes" }}
+                    </button>
+                </div>
             </div>
+            
             <div class="flex">
                 <!-- Left Column -->
                 <div class="w-1/2 pr-4">
                     <div class="mb-4">
-                        <label class="block mb-2">Job Title</label>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block">Job Title</label>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">Status:</span>
+                                <select 
+                                    v-model="form.status"
+                                    class="p-2 border rounded bg-white"
+                                >
+                                    <option :value="true">Open</option>
+                                    <option :value="false">Closed</option>
+                                </select>
+                            </div>
+                        </div>
                         <input
                             v-model="form.title"
                             type="text"
@@ -183,9 +183,7 @@ const toggleSubMenu = () => {
                     <div class="mb-8">
                         <h3 class="font-bold mb-4">Additional Question</h3>
                         <div
-                            v-for="(
-                                question, index
-                            ) in form.additional_questions"
+                            v-for="(question, index) in form.additional_questions"
                             :key="index"
                             class="mb-4"
                         >
@@ -196,7 +194,6 @@ const toggleSubMenu = () => {
                                     placeholder="Masukkan pertanyaan tambahan"
                                     class="w-full p-2 border rounded"
                                 />
-                                <!-- Tombol hapus jika lebih dari satu pertanyaan -->
                                 <button
                                     v-if="form.additional_questions.length > 1"
                                     type="button"
@@ -206,20 +203,14 @@ const toggleSubMenu = () => {
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
-                            <!-- Pesan error jika ada -->
                             <div
-                                v-if="
-                                    form.errors[`additional_questions.${index}`]
-                                "
+                                v-if="form.errors[`additional_questions.${index}`]"
                                 class="text-red-500 text-sm mt-1"
                             >
-                                {{
-                                    form.errors[`additional_questions.${index}`]
-                                }}
+                                {{ form.errors[`additional_questions.${index}`] }}
                             </div>
                         </div>
 
-                        <!-- Tombol Tambah Pertanyaan -->
                         <button
                             @click="addQuestion"
                             class="bg-purple-500 text-white px-4 py-2 rounded w-full"
@@ -227,6 +218,7 @@ const toggleSubMenu = () => {
                             + Tambah Pertanyaan
                         </button>
                     </div>
+
                     <div>
                         <h3 class="font-bold mb-4">Salary Range</h3>
                         <div
@@ -236,22 +228,10 @@ const toggleSubMenu = () => {
                         >
                             <div class="flex items-center gap-4">
                                 <div class="relative flex-1">
-                                    <span
-                                        class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                                        >Rp</span
-                                    >
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
                                     <input
                                         :value="formatSalary(range.min_salary)"
-                                        @keypress="
-                                            (e) => {
-                                                if (!/[0-9]/.test(e.key)) {
-                                                    e.preventDefault();
-                                                }
-                                            }
-                                        "
-                                        @input="
-                                            (e) => updateSalary(index, 'min', e)
-                                        "
+                                        @input="(e) => updateSalary(index, 'min', e)"
                                         type="text"
                                         placeholder="5.000.000"
                                         class="w-full p-2 pl-12 border rounded"
@@ -259,15 +239,10 @@ const toggleSubMenu = () => {
                                 </div>
                                 <span class="text-gray-500">-</span>
                                 <div class="relative flex-1">
-                                    <span
-                                        class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                                        >Rp</span
-                                    >
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
                                     <input
                                         :value="formatSalary(range.max_salary)"
-                                        @input="
-                                            (e) => updateSalary(index, 'max', e)
-                                        "
+                                        @input="(e) => updateSalary(index, 'max', e)"
                                         type="text"
                                         placeholder="8.000.000"
                                         class="w-full p-2 pl-12 border rounded"
@@ -283,32 +258,16 @@ const toggleSubMenu = () => {
                                 </button>
                             </div>
                             <div
-                                v-if="
-                                    form.errors[
-                                        `salary_ranges.${index}.min_salary`
-                                    ]
-                                "
+                                v-if="form.errors[`salary_ranges.${index}.min_salary`]"
                                 class="text-red-500 text-sm mt-1"
                             >
-                                {{
-                                    form.errors[
-                                        `salary_ranges.${index}.min_salary`
-                                    ]
-                                }}
+                                {{ form.errors[`salary_ranges.${index}.min_salary`] }}
                             </div>
                             <div
-                                v-if="
-                                    form.errors[
-                                        `salary_ranges.${index}.max_salary`
-                                    ]
-                                "
+                                v-if="form.errors[`salary_ranges.${index}.max_salary`]"
                                 class="text-red-500 text-sm mt-1"
                             >
-                                {{
-                                    form.errors[
-                                        `salary_ranges.${index}.max_salary`
-                                    ]
-                                }}
+                                {{ form.errors[`salary_ranges.${index}.max_salary`] }}
                             </div>
                         </div>
                         <button

@@ -4,12 +4,17 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\OauthController;
 use App\Http\Controllers\EmailController;
-use App\Http\Controllers\JobVacancyController; // Add this line
+use App\Http\Controllers\JobVacancyController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UploadCVController;
+use App\Http\Controllers\API\ScheduleController;
 use App\Models\Email;
+use App\Http\Controllers\API\CalendarController;
+use Illuminate\Contracts\Queue\Job;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
@@ -47,6 +52,8 @@ Route::middleware('guest')->group(function () {
 // Route::get('/landingpage', function(){
 //     return Inertia::render('LandingPage');
 // });
+
+Route::get('/calendar-data', [CalendarController::class, 'getCalendarData']);
 
 Route::get('/legalitas', function () {
     return Inertia::render('Legalitas');
@@ -111,17 +118,11 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
         return Inertia::render('AdminDashboard');
     })->name('admin.dashboard');
 
-    Route::get('/adminDashboardSchedule', function () {
-        return Inertia::render('AdminDashboardSchedule');
-    });
-
-    Route::get('/adminEmail', function () {
-        return Inertia::render('AdminEmail');
-    });
+    Route::get('/adminDashboardSchedule', [DashboardController::class, 'schedule'])->name('admin.dashboard.schedule');
 
     Route::get('/adminNewJob', function () {
         return Inertia::render('AdminNewJob');
-    });
+    })->name('adminNewJob');
 
     Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
 
@@ -137,9 +138,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
         return Inertia::render('AdminRejectedCandidates');
     })->name('adminRejectedCandidates');
 
-    Route::get('/adminEmail', function () {
-        return Inertia::render('AdminEmail');
-    })->name('adminEmail');
+    Route::get('/adminEmail', [EmailController::class, 'page'])->name('adminEmail');
 
     Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
 
@@ -152,9 +151,12 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::get('/adminDetailRejectedCandidates', function () {
         return Inertia::render('AdminDetailRejectedCandidates');
     });
-    Route::get('/adminJobList', function(){
-        return Inertia::render('AdminJobList');
-    });
+    Route::get('/adminJobList', [JobVacancyController::class, 'jobList'])->name('adminJobList');
+    Route::get('/adminJobDetail/{id}', [JobVacancyController::class, 'jobDetail'])->name('adminJobDetail');
+    Route::get('/adminJobDetail/{id}/edit', [JobVacancyController::class, 'jobEdit'])->name('jobs.edit');
+    Route::put('/jobs/{job}', [JobVacancyController::class, 'update'])->name('jobs.update');
+    Route::post('/schedules', [ScheduleController::class, 'store']);
+    Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy']);
 
     //EMAIL
     Route::post('/preview-email', [EmailController::class, 'preview'])->name('preview.email');

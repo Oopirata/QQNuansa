@@ -10,10 +10,18 @@ const props = defineProps({
     selectedDegrees: {
         type: Array,
         required: true
+    },
+    selectedIPK: {
+        type: Array,
+        required: true
+    },
+    selectedSalary: {
+        type: Array,
+        required: true
     }
 })
 
-const emit = defineEmits(['updateJobTitles', 'updateDegrees'])
+const emit = defineEmits(['updateJobTitles', 'updateDegrees', 'updateIPK', 'updateSalary'])
 
 const filters = {
     jobTitles: [
@@ -24,6 +32,15 @@ const filters = {
         { id: 1, name: "Bachelor", color: "pink" },
         { id: 2, name: "Master", color: "purple" },
     ],
+    ipk: [
+        { id: 1, name: "3.0 - 3.5", color: "yellow" },
+        { id: 2, name: "3.6 - 4.0", color: "orange" },
+    ],
+    salary: [
+        { id: 1, name: "< 5M", color: "red" },
+        { id: 2, name: "5M - 10M", color: "blue" },
+        { id: 3, name: "> 10M", color: "green" },
+    ]
 }
 </script>
 
@@ -44,6 +61,18 @@ const filters = {
                 :items="filters.degrees"
                 :selectedItems="selectedDegrees"
                 @updateSelection="$emit('updateDegrees', $event)"
+            />
+            <FilterButton
+                title="IPK"
+                :items="filters.ipk"
+                :selectedItems="selectedIPK"
+                @updateSelection="$emit('updateIPK', $event)"
+            />
+            <FilterButton
+                title="Salary"
+                :items="filters.salary"
+                :selectedItems="selectedSalary"
+                @updateSelection="$emit('updateSalary', $event)"
             />
         </div>
     </div>
