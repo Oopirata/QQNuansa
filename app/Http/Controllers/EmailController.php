@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class EmailController extends Controller
 {
@@ -99,5 +100,17 @@ class EmailController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function page()
+    {
+        $email = Email::with(['sender', 'receiver'])
+            ->where('receiver_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('AdminEmail', [
+            'emails' => $email
+        ]);
     }
 }

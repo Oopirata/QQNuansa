@@ -49,6 +49,7 @@ class UploadCVController extends Controller
             'users_id' => Auth::user()->id,
             'job_vacancy_id' => $id,
             'name' => $request->nama_lengkap,
+            'degree' => $request->degree,
             'province' => explode(', ', $request->lokasi)[0],  // Ambil bagian province
             'city' => explode(', ', $request->lokasi)[1],
             'degree' => $request->degree,
@@ -79,6 +80,6 @@ class UploadCVController extends Controller
         if (!empty($answersData)) {
             DB::table('answers')->insert($answersData);
         }
-        return redirect()->route('statuscv')->with('success', 'CV berhasil diunggah!');
+        return redirect()->back();
     }
 }

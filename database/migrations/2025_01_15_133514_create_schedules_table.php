@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('schedules', function (Blueprint $table) {
-            $table->id('jadwal_id');
+            $table->id();
             $table->foreignId('users_id')->constrained()->onDelete('cascade');
             $table->string('hari');
             $table->dateTime('jam_mulai');

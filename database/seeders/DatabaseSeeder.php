@@ -96,14 +96,17 @@ class DatabaseSeeder extends Seeder
         }
 
         // Seed sample jobs
+        // Active = 1, Inactive = 0
         $jobs = [
             [
                 'title' => 'Software Engineer',
                 'description' => 'We are looking for a skilled Software Engineer to join our team.',
+                'status' => 1,
             ],
             [
                 'title' => 'Product Manager',
                 'description' => 'Experienced Product Manager needed for our growing product team.',
+                'status' => 1, 
             ],
         ];
 
@@ -112,6 +115,7 @@ class DatabaseSeeder extends Seeder
             $jobId = DB::table('job_vacancies')->insertGetId([
                 'title' => $job['title'],
                 'description' => $job['description'],
+                'status' => $job['status'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -255,6 +259,69 @@ class DatabaseSeeder extends Seeder
                 'linkedin' => 'https://linkedin.com/in/' . $faker->userName,
                 'cv_path' => 'cv_files/sample.pdf',
                 'status' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Seed schedules
+        $this->seedSchedules($faker);
+    }
+
+    private function seedSchedules($faker)
+    {
+        // Get all user IDs
+        $userIds = DB::table('users')->pluck('id')->toArray();
+        
+        // Days of the week in Indonesian
+        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        
+        // Sample descriptions for schedules
+        $descriptions = [
+            'Meeting dengan tim',
+            'Interview calon karyawan',
+            'Review project',
+            'Training karyawan baru',
+            'Diskusi dengan client',
+            'Presentasi project',
+            'Brainstorming',
+            'Evaluasi kinerja',
+            'Webinar',
+            'Workshop'
+        ];
+
+        // Generate 50 random schedules
+        for ($i = 0; $i < 50; $i++) {
+            // Select random user
+            $userId = $userIds[array_rand($userIds)];
+            
+            // Generate random date within next 30 days
+            $date = now()->addDays(rand(1, 30))->format('Y-m-d');
+            
+            // Generate random start time between 8:00 and 16:00
+            $startHour = rand(8, 16);
+            $startMinute = rand(0, 11) * 5; // 5-minute intervals
+            $startTime = sprintf('%02d:%02d:00', $startHour, $startMinute);
+            
+            // Calculate end time (1-3 hours after start time)
+            $duration = rand(1, 3);
+            $endTime = sprintf('%02d:%02d:00', $startHour + $duration, $startMinute);
+            
+            // Build full datetime strings
+            $startDateTime = $date . ' ' . $startTime;
+            $endDateTime = $date . ' ' . $endTime;
+            
+            // Get day of week in Indonesian
+            $dayOfWeek = $days[date('N', strtotime($date)) - 1];
+            
+            // Insert the schedule
+            DB::table('schedules')->insert([
+                'users_id' => $userId,
+                'hari' => $dayOfWeek,
+                'jam_mulai' => $startDateTime,
+                'jam_selesai' => $endDateTime,
+                'tanggal' => $date,
+                'deskripsi' => $descriptions[array_rand($descriptions)],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
