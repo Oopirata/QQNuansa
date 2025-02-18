@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
 import dayjs from 'dayjs';
 
@@ -10,6 +10,8 @@ const props = defineProps({
         required: true
     }
 });
+
+console.log(props.jobs);
 
 const formatSalary = (value) => {
     return new Intl.NumberFormat("id-ID").format(value);
@@ -30,6 +32,20 @@ const getStatusColor = (status) => {
         default: return 'bg-gray-100 text-gray-800';
     }
 };
+
+const goToEdit = (id) => {
+    router.visit(route('jobs.edit', id));
+};
+
+const getApplicantStatusLabel = (status) => {
+    switch(status) {
+        case 0: return 'New';
+        case 1: return 'Screened';
+        case 2: return 'Interview';
+        case 3: return 'Rejected';
+        default: return 'Unknown';
+    }
+};
 </script>
 
 <template>
@@ -45,11 +61,9 @@ const getStatusColor = (status) => {
                 </a>
                 <h2 class="text-xl font-bold">Job Details</h2>
                 <div class="flex gap-4">
-                    <a :href="`/adminEditJob/${jobs?.id}`">
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded">
-                            Edit Job
-                        </button>
-                    </a>
+                    <button @click="goToEdit(jobs.id)" class="bg-blue-500 text-white px-4 py-2 rounded">
+                        Edit Job
+                    </button>
                 </div>
             </div>
             
@@ -85,10 +99,10 @@ const getStatusColor = (status) => {
                         <h3 class="font-bold mb-4">Additional Questions</h3>
                         <div v-if="jobs?.questions?.length" class="space-y-2">
                             <div v-for="(question, index) in jobs.questions" 
-                                 :key="question.id"
-                                 class="p-2 bg-gray-50 rounded">
+                                :key="question.id"
+                                class="p-2 bg-gray-50 rounded">
                                 <span class="font-medium">Question {{ index + 1 }}:</span>
-                                {{ question.question }}
+                                {{ question.question_text }}
                             </div>
                         </div>
                         <div v-else class="p-2 bg-gray-50 rounded">
@@ -127,20 +141,20 @@ const getStatusColor = (status) => {
                         </div>
                         <div v-if="jobs?.applicants?.length" class="space-y-2 max-h-[300px] overflow-y-auto">
                             <div v-for="applicant in jobs.applicants" 
-                                 :key="applicant.id"
-                                 class="p-2 bg-gray-50 rounded flex justify-between items-center">
+                                :key="applicant.id"
+                                class="p-2 bg-gray-50 rounded flex justify-between items-center">
                                 <div>
                                     <div class="font-medium">{{ applicant.name }}</div>
                                     <div class="text-sm text-gray-500">{{ applicant.email }}</div>
                                 </div>
                                 <div class="text-sm">
                                     <span :class="`px-2 py-1 rounded-full ${
-                                        applicant.status === 'new' ? 'bg-blue-100 text-blue-800' :
-                                        applicant.status === 'screened' ? 'bg-yellow-100 text-yellow-800' :
-                                        applicant.status === 'interview' ? 'bg-green-100 text-green-800' :
+                                        applicant.status === 0 ? 'bg-blue-100 text-blue-800' :
+                                        applicant.status === 1 ? 'bg-yellow-100 text-yellow-800' :
+                                        applicant.status === 2 ? 'bg-green-100 text-green-800' :
                                         'bg-red-100 text-red-800'
                                     }`">
-                                        {{ applicant.status }}
+                                        {{ getApplicantStatusLabel(applicant.status) }}
                                     </span>
                                 </div>
                             </div>

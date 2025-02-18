@@ -1,42 +1,96 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
+import axios from 'axios';
 
-const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-];
-const years = Array.from(
-    { length: 10 },
-    (_, i) => new Date().getFullYear() - 5 + i
-);
+const props = defineProps({
+    initialEvents: Array
+});
+
+const months = ref([]);
+const years = ref([]);
+const today = ref(null);
 
 const currentDate = ref({
-    month: new Date().getMonth(),
-    year: new Date().getFullYear(),
+    month: null,
+    year: null,
 });
 const selectedDate = ref(null);
 const showEventModal = ref(false);
-const events = ref([]);
+const events = ref(props.initialEvents || []);
 const newEvent = ref({
     title: "",
     date: "",
-    time: "",
+    start_time: "",
+    end_time: "",
     description: "",
 });
+const isLoading = ref(true);
+
+// Fetch date-related data from API
+onMounted(async () => {
+    try {
+        const response = await axios.get('/calendar-data');
+        
+        // Set months from API
+        months.value = response.data.months;
+        
+        // Set years from API
+        years.value = response.data.years;
+        
+        // Set current date from API
+        currentDate.value = {
+            month: response.data.currentMonth,
+            year: response.data.currentYear
+        };
+        
+        // Check for events on today's date
+        if (response.data.today) {
+            today.value = new Date(response.data.today);
+            const todayEvents = getEventsForDate(today.value);
+            if (todayEvents.length > 0) {
+                selectDate({
+                    day: today.value.getDate(),
+                    date: today.value,
+                    isCurrentMonth: true,
+                    events: todayEvents
+                });
+            }
+        }
+        
+        isLoading.value = false;
+    } catch (error) {
+        console.error('Failed to load calendar data:', error);
+        // Fall back to client-side defaults if API fails
+        setDefaultDateValues();
+        isLoading.value = false;
+    }
+});
+
+// Fallback function in case API fails
+const setDefaultDateValues = () => {
+    const now = new Date();
+    months.value = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    years.value = Array.from(
+        { length: 10 },
+        (_, i) => now.getFullYear() - 5 + i
+    );
+    currentDate.value = {
+        month: now.getMonth(),
+        year: now.getFullYear()
+    };
+    today.value = now;
+};
 
 const calendarDays = computed(() => {
+    if (isLoading.value || currentDate.value.month === null) {
+        return []; // Return empty array while loading
+    }
+    
     const year = currentDate.value.year;
     const month = currentDate.value.month;
     const firstDay = new Date(year, month, 1);
@@ -81,7 +135,9 @@ const calendarDays = computed(() => {
     return days;
 });
 
+// Rest of your existing functions...
 const getEventsForDate = (date) => {
+    if (!date) return [];
     return events.value.filter((event) => {
         const eventDate = new Date(event.date);
         return eventDate.toDateString() === date.toDateString();
@@ -146,21 +202,56 @@ const closeEventModal = () => {
     newEvent.value = {
         title: "",
         date: "",
-        time: "",
+        start_time: "",
+        end_time: "",
         description: "",
     };
 };
 
-const addEvent = () => {
-    events.value.push({
-        ...newEvent.value,
-        id: Date.now(),
-    });
-    closeEventModal();
+const startTime = computed(() => `${newEvent.value.date} ${newEvent.value.start_time}:00`);
+const endTime = computed(() => `${newEvent.value.date} ${newEvent.value.end_time}:00`);
+
+const addEvent = async () => {
+    // Cek apakah jam selesai lebih awal dari jam mulai
+    if (new Date(endTime.value) < new Date(startTime.value)) {
+        alert("Jam selesai tidak boleh lebih awal dari jam mulai!");
+        return; // Stop execution hanya di dalam fungsi
+    }
+
+    // Kirim data ke server jika valid
+    try {
+        const response = await axios.post('/schedules', {
+            deskripsi: newEvent.value.title,
+            tanggal: newEvent.value.date,
+            jam_mulai: startTime.value,
+            jam_selesai: endTime.value,
+            hari: new Date(newEvent.value.date).toLocaleDateString('id-ID', { weekday: 'long' }),
+            description: newEvent.value.description
+        });
+
+        // Tambahkan event ke daftar lokal
+        const newEventWithId = {
+            ...newEvent.value,
+            id: response.data.id
+        };
+        events.value.push(newEventWithId);
+        closeEventModal();
+    } catch (error) {
+        console.error('Failed to add event:', error);
+        // Handle error (show message to user, etc.)
+    }
 };
 
-const deleteEvent = (eventId) => {
-    events.value = events.value.filter((event) => event.id !== eventId);
+const deleteEvent = async (eventId) => {
+    // Send delete request to the server
+    try {
+        await axios.delete(`/schedules/${eventId}`);
+        // Remove from local array
+        events.value = events.value.filter((event) => event.id !== eventId);
+    } catch (error) {
+        console.error('Failed to delete event:', error);
+        // Handle error
+    }
 };
 </script>
 
@@ -430,10 +521,22 @@ const deleteEvent = (eventId) => {
                                 <div class="mb-4">
                                     <label
                                         class="block text-sm font-medium mb-1"
-                                        >Time</label
+                                        >Start Time</label
                                     >
                                     <input
-                                        v-model="newEvent.time"
+                                        v-model="newEvent.start_time"
+                                        type="time"
+                                        class="w-full border rounded p-2"
+                                        required
+                                    />
+                                </div>
+                                <div class="mb-4">
+                                    <label
+                                        class="block text-sm font-medium mb-1"
+                                        >End Time</label
+                                    >
+                                    <input
+                                        v-model="newEvent.end_time"
                                         type="time"
                                         class="w-full border rounded p-2"
                                         required

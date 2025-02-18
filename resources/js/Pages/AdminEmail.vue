@@ -1,8 +1,17 @@
 # EmailDashboard.vue
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
+
+const page = usePage();
+
+const props = defineProps({
+    emails: {
+        type: Object,
+        required: true,
+    },
+});
 
 const dropdownOpen = ref(false);
 const dropdownRef = ref(null);

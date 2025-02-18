@@ -17,6 +17,37 @@ class JobVacancyController extends Controller
             'jobs' => $jobs
         ]);
     }
+
+    public function jobList()
+    {
+        $jobs = JobVacancy::with(['applicants'])->get();
+
+        return Inertia::render('AdminJobList', [
+            'jobs' => $jobs
+        ]);
+    }
+
+    public function jobDetail($id)
+    {
+        $jobs = JobVacancy::with(['salaryRanges', 'questions', 'applicants'])
+        ->where('id', $id)
+        ->first();
+
+        return Inertia::render('AdminJobDetail', [
+            'jobs' => $jobs
+        ]);
+    }
+
+    public function jobEdit($id)
+    {
+        $jobs = JobVacancy::with(['salaryRanges', 'questions', 'applicants'])
+        ->where('id', $id)
+        ->first();
+
+        return Inertia::render('AdminJobEdit', [
+            'jobs' => $jobs
+        ]);
+    }
     
     public function index()
     {
@@ -78,6 +109,71 @@ class JobVacancyController extends Controller
             }
 
             // Buat salary ranges
+            foreach ($validated['salary_ranges'] as $range) {
+                $job->salaryRanges()->create([
+                    'min_salary' => $range['min_salary'],
+                    'max_salary' => $range['max_salary']
+                ]);
+            }
+        });
+
+        return redirect()->back();
+    }
+
+    public function update(Request $request, JobVacancy $job)
+    {
+        $validated = $request->validate([
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) use ($job) {
+                    $exists = JobVacancy::whereRaw('LOWER(title) = LOWER(?)', [$value])
+                        ->where('id', '!=', $job->id) // Exclude current job
+                        ->exists();
+                    if ($exists) {
+                        $fail('Sudah ada Job Vacancy dengan judul yang sama.');
+                    }
+                }
+            ],
+            'description' => 'required|string',
+            'status' => 'required|boolean',
+            'additional_questions' => 'required|array|min:1',
+            'additional_questions.*' => 'required|string|max:255',
+            'salary_ranges' => 'required|array|min:1',
+            'salary_ranges.*.min_salary' => 'required|numeric|min:0',
+            'salary_ranges.*.max_salary' => [
+                'required',
+                'numeric',
+                'min:0',
+                function ($attribute, $value, $fail) use ($request) {
+                    $index = explode('.', $attribute)[1];
+                    $minSalary = $request->input("salary_ranges.{$index}.min_salary");
+                    if ($value <= $minSalary) {
+                        $fail('Maximum salary must be greater than minimum salary.');
+                    }
+                },
+            ],
+        ]);
+
+        DB::transaction(function () use ($validated, $job) {
+            // Update job vacancy
+            $job->update([
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'status' => $validated['status'] ? 1 : 0,
+            ]);
+
+            // Delete existing questions and create new ones
+            $job->questions()->delete();
+            foreach ($validated['additional_questions'] as $questionText) {
+                $job->questions()->create([
+                    'question_text' => $questionText
+                ]);
+            }
+
+            // Delete existing salary ranges and create new ones
+            $job->salaryRanges()->delete();
             foreach ($validated['salary_ranges'] as $range) {
                 $job->salaryRanges()->create([
                     'min_salary' => $range['min_salary'],
