@@ -112,9 +112,9 @@ const goBack = (id) => {
         <!-- Main Content -->
         <div class="w-4/5 p-8">
             <div class="flex justify-between items-center mb-8">
-                <a href="/adminDashboard" class="text-xl">
+                <button @click="goBack(jobs.id)" class="text-xl">
                     <i class="fas fa-arrow-left"></i>
-                </a>
+                </button>
                 <h2 class="text-xl font-bold">Edit Job</h2>
                 <div class="flex gap-4">
                     <button @click="goBack(jobs.id)" class="bg-gray-500 text-white px-4 py-2 rounded">

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('salary_ranges', function (Blueprint $table) {
             $table->id();
             $table->foreignId('job_vacancy_id')->constrained('job_vacancies')->onDelete('cascade');
-            $table->decimal('min_salary', 12, 2);
-            $table->decimal('max_salary', 12, 2);
+            $table->bigInteger('min_salary');
+            $table->bigInteger('max_salary');
             $table->timestamps();
         });
     }

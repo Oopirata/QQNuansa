@@ -99,17 +99,24 @@ class JobVacancyController extends Controller
             $job = JobVacancy::create([
                 'title' => $validated['title'],
                 'description' => $validated['description'],
+                'status' => 1
             ]);
-
+        
             // Buat questions
             foreach ($validated['additional_questions'] as $questionText) {
                 $job->questions()->create([
                     'question_text' => $questionText
                 ]);
             }
-
-            // Buat salary ranges
-            foreach ($validated['salary_ranges'] as $range) {
+        
+            // Sort salary ranges berdasarkan min_salary
+            $sortedSalaryRanges = collect($validated['salary_ranges'])
+                ->sortBy('min_salary')
+                ->values()
+                ->all();
+        
+            // Buat salary ranges yang sudah terurut
+            foreach ($sortedSalaryRanges as $range) {
                 $job->salaryRanges()->create([
                     'min_salary' => $range['min_salary'],
                     'max_salary' => $range['max_salary']
@@ -163,7 +170,7 @@ class JobVacancyController extends Controller
                 'description' => $validated['description'],
                 'status' => $validated['status'] ? 1 : 0,
             ]);
-
+        
             // Delete existing questions and create new ones
             $job->questions()->delete();
             foreach ($validated['additional_questions'] as $questionText) {
@@ -171,10 +178,18 @@ class JobVacancyController extends Controller
                     'question_text' => $questionText
                 ]);
             }
-
-            // Delete existing salary ranges and create new ones
+        
+            // Delete existing salary ranges
             $job->salaryRanges()->delete();
-            foreach ($validated['salary_ranges'] as $range) {
+            
+            // Sort salary ranges berdasarkan min_salary
+            $sortedSalaryRanges = collect($validated['salary_ranges'])
+                ->sortBy('min_salary')
+                ->values()
+                ->all();
+        
+            // Create new sorted salary ranges
+            foreach ($sortedSalaryRanges as $range) {
                 $job->salaryRanges()->create([
                     'min_salary' => $range['min_salary'],
                     'max_salary' => $range['max_salary']
@@ -183,5 +198,16 @@ class JobVacancyController extends Controller
         });
 
         return redirect()->back();
+    }
+
+    public function destroy(JobVacancy $job)
+    {
+        try {
+            $job->delete();
+            
+            return redirect()->back()->with('success', 'Job vacancy berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus job vacancy');
+        }
     }
 }

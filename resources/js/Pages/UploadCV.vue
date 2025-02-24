@@ -157,6 +157,49 @@ const menuItems = [
     { text: "Misi", href: "/missions" },
     { text: "Layanan", href: "/services" },
 ];
+
+// Add new reactive refs for IPK validation
+const ipkError = ref(false);
+const ipkErrorMessage = ref('');
+
+// Add IPK validation function
+const validateIPK = () => {
+    // Replace any dot with comma
+    form.IPK = form.IPK.replace('.', ',');
+    
+    // Only allow numbers and one comma
+    form.IPK = form.IPK.replace(/[^0-9,]/g, '');
+    
+    // Ensure only one comma
+    const commaCount = (form.IPK.match(/,/g) || []).length;
+    if (commaCount > 1) {
+        form.IPK = form.IPK.replace(/,/g, (match, index) => 
+            index === form.IPK.indexOf(',') ? ',' : ''
+        );
+    }
+    
+    // Ensure max one decimal place
+    const parts = form.IPK.split(',');
+    if (parts[1] && parts[1].length > 1) {
+        parts[1] = parts[1].slice(0, 1);
+        form.IPK = parts.join(',');
+    }
+    
+    // Validate the numeric value
+    const numericValue = parseFloat(form.IPK.replace(',', '.'));
+    
+    if (numericValue > 4) {
+        form.IPK = '4,0';
+        ipkError.value = true;
+        ipkErrorMessage.value = 'IPK maksimal adalah 4,0';
+    } else if (numericValue < 0) {
+        ipkError.value = true;
+        ipkErrorMessage.value = 'IPK minimal adalah 0,0';
+    } else {
+        ipkError.value = false;
+        ipkErrorMessage.value = '';
+    }
+};
 </script>
 
 <template>
@@ -391,13 +434,23 @@ const menuItems = [
                         >
                             IPK
                         </label>
-                        <input
-                            v-model="form.IPK"
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="ipk"
-                            type="text"
-                            placeholder="Masukkan IPK (IP Komulatif) anda"
-                        />
+                        <div class="relative">
+                            <input
+                                v-model="form.IPK"
+                                @input="validateIPK"
+                                class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-1 leading-tight focus:outline-none focus:bg-white"
+                                :class="{ 'border-red-500': ipkError }"
+                                id="ipk"
+                                type="text"
+                                placeholder="Masukkan IPK"
+                            />
+                            <div class="absolute right-3 top-3 text-sm text-gray-500">
+                                Format: x,x
+                            </div>
+                        </div>
+                        <div v-if="ipkError" class="text-red-500 text-xs italic">
+                            {{ ipkErrorMessage }}
+                        </div>
                     </div>
                 </div>
 

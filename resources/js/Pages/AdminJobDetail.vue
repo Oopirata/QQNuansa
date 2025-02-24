@@ -56,7 +56,7 @@ const getApplicantStatusLabel = (status) => {
         <!-- Main Content -->
         <div class="w-4/5 p-8">
             <div class="flex justify-between items-center mb-8">
-                <a href="/adminDashboard" class="text-xl">
+                <a href="/adminJobList" class="text-xl">
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <h2 class="text-xl font-bold">Job Details</h2>

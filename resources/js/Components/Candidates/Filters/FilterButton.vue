@@ -55,16 +55,12 @@ const toggleItem = (itemId) => {
                 ></i>
             </div>
             
-            <!-- Selected Items Tags -->
+            <!-- Selected Items Tags - Hanya tampilkan yang dipilih -->
             <div class="flex flex-wrap gap-2">
                 <span
-                    v-for="item in items"
+                    v-for="item in items.filter(item => selectedItems.includes(item.id))"
                     :key="item.id"
-                    :class="`bg-${item.color}-100 text-${item.color}-800 px-3 py-1 rounded-full text-sm font-medium ${
-                        selectedItems.includes(item.id)
-                            ? 'ring-2 ring-' + item.color + '-400'
-                            : ''
-                    }`"
+                    :class="`bg-${item.color}-100 text-${item.color}-800 px-3 py-1 rounded-full text-sm font-medium`"
                 >
                     {{ item.name }}
                 </span>
