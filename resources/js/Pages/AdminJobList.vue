@@ -20,6 +20,45 @@ const truncateText = (text, length = 20) => {
 const goToDetail = (id) => {
     router.visit(route('adminJobDetail', id));
 };
+
+const deleteJob = (id) => {
+    if (confirm('Apakah Anda yakin ingin menghapus job ini?')) {
+        router.delete(route('adminJobDelete', id), {
+            onSuccess: () => {
+                // Create and show alert dialog
+                const alertDialog = document.createElement("div");
+                alertDialog.className =
+                    "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
+
+                alertDialog.innerHTML = `
+                    <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm mx-4" onclick="event.stopPropagation()">
+                        <div class="flex items-center justify-center mb-6">
+                            <div class="bg-green-100 rounded-full p-4">
+                                <svg class="h-10 w-10 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center text-gray-800 mb-3">Berhasil!</h3>
+                        <p class="text-center text-gray-700 text-base mb-6">Job telah berhasil dihapus</p>
+                        <p class="text-center text-gray-600 text-sm">Klik di luar kotak untuk menutup</p>
+                    </div>
+                `;
+
+                alertDialog.addEventListener("click", function (event) {
+                    if (event.target === alertDialog) {
+                        document.body.removeChild(alertDialog);
+                    }
+                });
+
+                document.body.appendChild(alertDialog);
+            },
+            onError: (errors) => {
+                console.error(errors);
+            },
+        });
+    }
+};
 </script>
 
 <template>
@@ -103,7 +142,7 @@ const goToDetail = (id) => {
                                         <button @click="goToDetail(job.id)" class="text-indigo-600 hover:text-indigo-900 mr-3">
                                             Edit
                                         </button>
-                                        <button class="text-red-600 hover:text-red-900">
+                                        <button @click="deleteJob(job.id)" class="text-red-600 hover:text-red-900">
                                             Delete
                                         </button>
                                     </td>

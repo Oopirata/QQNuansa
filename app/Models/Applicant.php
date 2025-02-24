@@ -11,11 +11,13 @@ class Applicant extends Model
     protected $fillable = [
         'users_id',
         'job_vacancy_id',
+        'salary_range_id',
         'name',
         'degree',
         'ipk',
         'nomor_hp',
-        'expected_salary',
+        'province',
+        'city',
         'applicant_email',
         'linkedin',
         'cv_path',
@@ -39,5 +41,10 @@ class Applicant extends Model
     public function jobVacancy(): BelongsTo
     {
         return $this->belongsTo(JobVacancy::class, 'job_vacancy_id');
+    }
+
+    public function salaryRange()
+    {
+        return $this->belongsTo(SalaryRange::class);
     }
 }

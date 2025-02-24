@@ -155,6 +155,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::get('/adminJobDetail/{id}', [JobVacancyController::class, 'jobDetail'])->name('adminJobDetail');
     Route::get('/adminJobDetail/{id}/edit', [JobVacancyController::class, 'jobEdit'])->name('jobs.edit');
     Route::put('/jobs/{job}', [JobVacancyController::class, 'update'])->name('jobs.update');
+    Route::delete('/admin/jobs/{job}', [JobVacancyController::class, 'destroy'])->name('adminJobDelete');
     Route::post('/schedules', [ScheduleController::class, 'store']);
     Route::delete('/schedules/{schedule}', [ScheduleController::class, 'destroy']);
 

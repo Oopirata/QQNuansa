@@ -95,22 +95,37 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Seed sample jobs
-        // Active = 1, Inactive = 0
+        // Seed sample jobs with more variety
         $jobs = [
             [
                 'title' => 'Software Engineer',
-                'description' => 'We are looking for a skilled Software Engineer to join our team.',
+                'description' => 'We are looking for a skilled Software Engineer to join our team. The ideal candidate should have experience with modern web technologies and frameworks.',
                 'status' => 1,
             ],
             [
                 'title' => 'Product Manager',
-                'description' => 'Experienced Product Manager needed for our growing product team.',
+                'description' => 'Experienced Product Manager needed for our growing product team. You will be responsible for guiding product development and strategy.',
                 'status' => 1, 
+            ],
+            [
+                'title' => 'UI/UX Designer',
+                'description' => 'Creative UI/UX Designer with a portfolio of user-centered design projects. You will work closely with our development team to create seamless user experiences.',
+                'status' => 1,
+            ],
+            [
+                'title' => 'Data Scientist',
+                'description' => 'Data Scientist with strong analytical skills needed. Experience with machine learning algorithms and data visualization required.',
+                'status' => 1,
+            ],
+            [
+                'title' => 'DevOps Engineer',
+                'description' => 'DevOps Engineer with knowledge of CI/CD pipelines, container technologies, and cloud platforms. You will help automate our infrastructure.',
+                'status' => 1,
             ],
         ];
 
         $jobIds = [];
+        $allSalaryRangeIds = [];
         foreach ($jobs as $job) {
             $jobId = DB::table('job_vacancies')->insertGetId([
                 'title' => $job['title'],
@@ -126,7 +141,9 @@ class DatabaseSeeder extends Seeder
             $questions = [
                 'What is your experience with our required technologies?',
                 'Why do you want to work with us?',
-                'What are your salary expectations?'
+                'What are your salary expectations?',
+                'Tell us about a challenging project you worked on',
+                'How do you keep up with industry trends?'
             ];
 
             foreach ($questions as $question) {
@@ -139,130 +156,201 @@ class DatabaseSeeder extends Seeder
             }
 
             // Add salary ranges for each job
-            $numberOfRanges = rand(2, 3);
+            $jobSalaryRanges = [];
+            $numberOfRanges = rand(2, 4);
+            
+            // Set different salary ranges based on job title
+            switch ($job['title']) {
+                case 'Software Engineer':
+                    $baseSalary = rand(8000000, 12000000);
+                    break;
+                case 'Product Manager':
+                    $baseSalary = rand(12000000, 18000000);
+                    break;
+                case 'UI/UX Designer':
+                    $baseSalary = rand(8000000, 14000000);
+                    break;
+                case 'Data Scientist':
+                    $baseSalary = rand(10000000, 15000000);
+                    break;
+                case 'DevOps Engineer':
+                    $baseSalary = rand(10000000, 15000000);
+                    break;
+                default:
+                    $baseSalary = rand(5000000, 10000000);
+            }
+            
             for ($i = 0; $i < $numberOfRanges; $i++) {
-                $minSalary = rand(5000000, 12000000);
+                // Generate increasingly higher salary ranges
+                $minSalary = $baseSalary + ($i * 2000000);
                 $maxSalary = $minSalary + rand(2000000, 5000000);
                 
-                DB::table('salary_ranges')->insert([
+                $salaryRangeId = DB::table('salary_ranges')->insertGetId([
                     'job_vacancy_id' => $jobId,
                     'min_salary' => $minSalary,
                     'max_salary' => $maxSalary,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+                
+                $jobSalaryRanges[] = $salaryRangeId;
+                $allSalaryRangeIds[$jobId][] = $salaryRangeId;
             }
         }
 
         $faker = \Faker\Factory::create('id_ID'); // Gunakan lokalisasi Indonesia
 
-        // Seed applicant users and their details
-        $applicantUsers = [
-            [
-                'name' => 'Applicant One',
-                'email' => 'applicant1@example.com',
-                'password' => Hash::make('password'),
-                'degree' => 'Bachelor of Computer Science',
-                'expected_salary' => '8000000',
+        // List of universities in Indonesia
+        $universities = [
+            'Universitas Indonesia',
+            'Institut Teknologi Bandung',
+            'Universitas Gadjah Mada',
+            'Institut Teknologi Sepuluh Nopember',
+            'Universitas Airlangga',
+            'Universitas Diponegoro',
+            'Universitas Brawijaya',
+            'Universitas Padjadjaran',
+            'Universitas Hasanuddin',
+            'Bina Nusantara University',
+        ];
+        
+        // List of common degrees with variations
+        $degrees = [
+            'Bachelor' => [
+                'Bachelor of Computer Science',
+                'Bachelor of Information Technology',
+                'Bachelor of Engineering',
+                'Bachelor of Business Administration',
+                'Bachelor of Economics',
+                'Bachelor of Communication',
+                'Bachelor of Design',
+                'Bachelor of Science in Statistics',
+                'Bachelor of Psychology',
+                'Bachelor of Accounting',
             ],
-            [
-                'name' => 'Applicant Two',
-                'email' => 'applicant2@example.com',
-                'password' => Hash::make('password'),
-                'degree' => 'Master of Business Administration',
-                'expected_salary' => '12000000',
+            'Master' => [
+                'Master of Computer Science',
+                'Master of Information Technology',
+                'Master of Business Administration',
+                'Master of Data Science',
+                'Master of Finance',
+                'Master of Engineering',
+                'Master of Management',
+                'Master of Public Relations',
+                'Master of Marketing',
+                'Master of Human Resource Management',
             ],
-            [
-                'name' => 'Applicant Three',
-                'email' => 'applicant3@example.com',
-                'password' => Hash::make('password'),
-                'degree' => 'Bachelor of Engineering',
-                'expected_salary' => '10000000',
+            'Doctorate' => [
+                'Doctor of Computer Science',
+                'Doctor of Business Administration',
+                'Doctor of Engineering',
+                'Doctor of Information Technology',
             ],
         ];
+        
+        // List of Indonesian provinces and major cities
+        $provinces = [
+            'DKI Jakarta' => ['Jakarta Pusat', 'Jakarta Selatan', 'Jakarta Barat', 'Jakarta Timur', 'Jakarta Utara'],
+            'Jawa Barat' => ['Bandung', 'Bekasi', 'Depok', 'Bogor', 'Cimahi', 'Tasikmalaya'],
+            'Jawa Tengah' => ['Semarang', 'Solo', 'Magelang', 'Pekalongan', 'Salatiga'],
+            'Jawa Timur' => ['Surabaya', 'Malang', 'Kediri', 'Madiun', 'Mojokerto'],
+            'Banten' => ['Serang', 'Tangerang', 'Cilegon', 'Tangerang Selatan'],
+            'DI Yogyakarta' => ['Yogyakarta', 'Sleman', 'Bantul', 'Kulon Progo'],
+            'Bali' => ['Denpasar', 'Badung', 'Gianyar', 'Tabanan'],
+            'Sumatera Utara' => ['Medan', 'Binjai', 'Pematang Siantar', 'Tebing Tinggi'],
+            'Sumatera Barat' => ['Padang', 'Bukittinggi', 'Payakumbuh', 'Padang Panjang'],
+            'Sulawesi Selatan' => ['Makassar', 'Parepare', 'Palopo', 'Maros'],
+        ];
 
-        foreach ($applicantUsers as $applicant) {
+        // Seed 50 applicant users
+        for ($i = 1; $i <= 50; $i++) {
+            // Generate random dates within the last 3 months
+            $createdAt = now()->subDays(rand(0, 90));
+            
+            // Choose a random degree level and specific degree
+            $degreeLevel = array_rand($degrees);
+            $specificDegree = $degrees[$degreeLevel][array_rand($degrees[$degreeLevel])];
+            
+            // Choose a random province and city
+            $province = array_rand($provinces);
+            $city = $provinces[$province][array_rand($provinces[$province])];
+            
+            // Create a unique email
+            $firstName = $faker->firstName;
+            $lastName = $faker->lastName;
+            $name = $firstName . ' ' . $lastName;
+            $emailUsername = strtolower(str_replace(' ', '.', $name)) . $i;
+            $email = $emailUsername . '@' . $faker->freeEmailDomain;
+            
             // Create user
             $userId = DB::table('users')->insertGetId([
-                'name' => $applicant['name'],
-                'email' => $applicant['email'],
-                'password' => $applicant['password'],
-                'created_at' => now(),
-                'updated_at' => now(),
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make('password'),
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
             ]);
-
+        
             // Assign applicant role
             DB::table('user_roles')->insert([
                 'user_id' => $userId,
                 'role_id' => 3, // applicant role
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
             ]);
-
+        
+            // Select a random job
+            $jobVacancyId = $jobIds[array_rand($jobIds)];
+            
+            // Select a salary range that matches the job
+            if (isset($allSalaryRangeIds[$jobVacancyId]) && !empty($allSalaryRangeIds[$jobVacancyId])) {
+                $salaryRangeId = $allSalaryRangeIds[$jobVacancyId][array_rand($allSalaryRangeIds[$jobVacancyId])];
+            } else {
+                // Fallback if no salary ranges found
+                $salaryRangeId = DB::table('salary_ranges')->inRandomOrder()->value('id');
+            }
+            
+            // Generate university
+            $university = $universities[array_rand($universities)];
+            
+            // Generate IPK based on degree level (higher degrees generally have higher IPK)
+            $baseIpk = 2.5;
+            switch ($degreeLevel) {
+                case 'Master':
+                    $baseIpk = 3.0;
+                    break;
+                case 'Doctorate':
+                    $baseIpk = 3.3;
+                    break;
+            }
+            $ipk = $faker->randomFloat(2, $baseIpk, 4.0);
+            
+            // Generate status (mostly new applicants, some in other stages)
+            $statusDistribution = [0, 0, 0, 0, 0, 0, 0, 1, 1, 2]; // 70% new, 20% screened, 10% other
+            $status = $statusDistribution[array_rand($statusDistribution)];
+            
+            // Create LinkedIn URL based on name
+            $linkedinUsername = strtolower(str_replace(' ', '-', $name)) . '-' . $faker->randomNumber(5);
+            
             // Create applicant record
             DB::table('applicants')->insert([
                 'users_id' => $userId,
-                'job_vacancy_id' => $jobIds[array_rand($jobIds)],
-                'name' => $applicant['name'],
-                'degree' => $applicant['degree'],
-                'ipk' => $faker->randomFloat(2, 2.5, 4.0),
+                'job_vacancy_id' => $jobVacancyId,
+                'salary_range_id' => $salaryRangeId,
+                'name' => $name,
+                'degree' => $specificDegree . ' (' . $university . ')',
+                'ipk' => $ipk,
                 'nomor_hp' => $faker->phoneNumber,
-                'province' => $faker->state,
-                'city' => $faker->city,
-                'expected_salary' => $applicant['expected_salary'],
-                'applicant_email' => $applicant['email'],
-                'linkedin' => 'https://linkedin.com/in/' . $faker->userName,
-                'cv_path' => 'cv_files/sample.pdf',
-                'status' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'province' => $province,
+                'city' => $city,
+                'applicant_email' => $email,
+                'linkedin' => 'https://linkedin.com/in/' . $linkedinUsername,
+                'cv_path' => 'cv_files/sample_' . rand(1, 5) . '.pdf',
+                'status' => $status,
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
             ]);
-        }
-
-        // Generate random applicants
-        for ($i = 1; $i <= 30; $i++) {
-            // Create user
-            $userId = DB::table('users')->insertGetId([
-                'name' => $faker->name,
-                'email' => $faker->unique()->safeEmail,
-                'password' => Hash::make('password'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            // Assign applicant role
-            DB::table('user_roles')->insert([
-                'user_id' => $userId,
-                'role_id' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
-            // Create applicant record
-            DB::table('applicants')->insert([
-                'users_id' => $userId,
-                'job_vacancy_id' => $jobIds[array_rand($jobIds)],
-                'name' => $faker->name,
-                'degree' => $faker->randomElement([
-                    'Bachelor of Science',
-                    'Master of Science',
-                    'Bachelor of Arts',
-                    'Master of Business Administration',
-                    'Bachelor of Engineering'
-                ]),
-                'ipk' => $faker->randomFloat(2, 2.5, 4.0),
-                'nomor_hp' => $faker->phoneNumber,
-                'province' => $faker->state,
-                'city' => $faker->city,
-                'expected_salary' => rand(5000000, 15000000),
-                'applicant_email' => $faker->email,
-                'linkedin' => 'https://linkedin.com/in/' . $faker->userName,
-                'cv_path' => 'cv_files/sample.pdf',
-                'status' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        }        
 
         // Seed schedules
         $this->seedSchedules($faker);
@@ -287,7 +375,17 @@ class DatabaseSeeder extends Seeder
             'Brainstorming',
             'Evaluasi kinerja',
             'Webinar',
-            'Workshop'
+            'Workshop',
+            'Screening kandidat',
+            'Orientasi karyawan baru',
+            'Rapat dengan manajemen',
+            'Technical interview',
+            'HR interview',
+            'Final interview',
+            'Diskusi internal team',
+            'Koordinasi dengan departemen lain',
+            'Follow-up kandidat potensial',
+            'Review aplikasi pelamar'
         ];
 
         // Generate 50 random schedules
