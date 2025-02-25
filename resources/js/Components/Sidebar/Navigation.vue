@@ -109,7 +109,7 @@ const candidateItems = [
                     ]"
                 >
                     <i class="fas fa-envelope mr-2"></i>
-                    Job List
+                    Job
                 </Link>
             </li>
         </ul>

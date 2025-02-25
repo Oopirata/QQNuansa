@@ -2,10 +2,10 @@
 import { Head, Link } from "@inertiajs/vue3";
 import { ref, computed, onMounted } from "vue";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
-import axios from 'axios';
+import axios from "axios";
 
 const props = defineProps({
-    initialEvents: Array
+    initialEvents: Array,
 });
 
 const months = ref([]);
@@ -31,20 +31,20 @@ const isLoading = ref(true);
 // Fetch date-related data from API
 onMounted(async () => {
     try {
-        const response = await axios.get('/calendar-data');
-        
+        const response = await axios.get("/calendar-data");
+
         // Set months from API
         months.value = response.data.months;
-        
+
         // Set years from API
         years.value = response.data.years;
-        
+
         // Set current date from API
         currentDate.value = {
             month: response.data.currentMonth,
-            year: response.data.currentYear
+            year: response.data.currentYear,
         };
-        
+
         // Check for events on today's date
         if (response.data.today) {
             today.value = new Date(response.data.today);
@@ -54,14 +54,14 @@ onMounted(async () => {
                     day: today.value.getDate(),
                     date: today.value,
                     isCurrentMonth: true,
-                    events: todayEvents
+                    events: todayEvents,
                 });
             }
         }
-        
+
         isLoading.value = false;
     } catch (error) {
-        console.error('Failed to load calendar data:', error);
+        console.error("Failed to load calendar data:", error);
         // Fall back to client-side defaults if API fails
         setDefaultDateValues();
         isLoading.value = false;
@@ -72,8 +72,18 @@ onMounted(async () => {
 const setDefaultDateValues = () => {
     const now = new Date();
     months.value = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     ];
     years.value = Array.from(
         { length: 10 },
@@ -81,7 +91,7 @@ const setDefaultDateValues = () => {
     );
     currentDate.value = {
         month: now.getMonth(),
-        year: now.getFullYear()
+        year: now.getFullYear(),
     };
     today.value = now;
 };
@@ -90,7 +100,7 @@ const calendarDays = computed(() => {
     if (isLoading.value || currentDate.value.month === null) {
         return []; // Return empty array while loading
     }
-    
+
     const year = currentDate.value.year;
     const month = currentDate.value.month;
     const firstDay = new Date(year, month, 1);
@@ -208,8 +218,12 @@ const closeEventModal = () => {
     };
 };
 
-const startTime = computed(() => `${newEvent.value.date} ${newEvent.value.start_time}:00`);
-const endTime = computed(() => `${newEvent.value.date} ${newEvent.value.end_time}:00`);
+const startTime = computed(
+    () => `${newEvent.value.date} ${newEvent.value.start_time}:00`
+);
+const endTime = computed(
+    () => `${newEvent.value.date} ${newEvent.value.end_time}:00`
+);
 
 const addEvent = async () => {
     // Cek apakah jam selesai lebih awal dari jam mulai
@@ -220,24 +234,26 @@ const addEvent = async () => {
 
     // Kirim data ke server jika valid
     try {
-        const response = await axios.post('/schedules', {
+        const response = await axios.post("/schedules", {
             deskripsi: newEvent.value.title,
             tanggal: newEvent.value.date,
             jam_mulai: startTime.value,
             jam_selesai: endTime.value,
-            hari: new Date(newEvent.value.date).toLocaleDateString('id-ID', { weekday: 'long' }),
-            description: newEvent.value.description
+            hari: new Date(newEvent.value.date).toLocaleDateString("id-ID", {
+                weekday: "long",
+            }),
+            description: newEvent.value.description,
         });
 
         // Tambahkan event ke daftar lokal
         const newEventWithId = {
             ...newEvent.value,
-            id: response.data.id
+            id: response.data.id,
         };
         events.value.push(newEventWithId);
         closeEventModal();
     } catch (error) {
-        console.error('Failed to add event:', error);
+        console.error("Failed to add event:", error);
         // Handle error (show message to user, etc.)
     }
 };
@@ -249,7 +265,7 @@ const deleteEvent = async (eventId) => {
         // Remove from local array
         events.value = events.value.filter((event) => event.id !== eventId);
     } catch (error) {
-        console.error('Failed to delete event:', error);
+        console.error("Failed to delete event:", error);
         // Handle error
     }
 };
@@ -257,7 +273,7 @@ const deleteEvent = async (eventId) => {
 
 <template>
     <Head title="Dashboard" />
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen ml-64">
         <!-- Fixed Sidebar -->
         <Sidebar :user="$page.props.auth.user" />
 

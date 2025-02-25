@@ -161,7 +161,7 @@ const moveToScreened = (user_id) => {
 
 <template>
     <Head title="Candidate Detail" />
-    <div class="flex h-screen">
+    <div class="flex h-screen ml-64">
         <Sidebar :user="$page?.props?.auth?.user || {}" />
 
         <!-- Main Content -->
@@ -386,19 +386,21 @@ const moveToScreened = (user_id) => {
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex justify-end space-x-4 mt-6">
-                <button
-                    @click="disqualifyCandidate"
-                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                    Disqualify
-                </button>
-                <button
-                    @click="moveToScreened"
-                    class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-                >
-                    Move to screened
-                </button>
+            <div class="container pb-2">
+                <div class="flex justify-end space-x-4 mb-5">
+                    <button
+                        @click="disqualifyCandidate"
+                        class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                        Disqualify
+                    </button>
+                    <button
+                        @click="moveToScreened"
+                        class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+                    >
+                        Move to screened
+                    </button>
+                </div>
             </div>
         </div>
     </div>

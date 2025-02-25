@@ -129,7 +129,7 @@ const toggleSubMenu = () => {
         <Sidebar :user="$page.props.auth.user" />
 
         <!-- Main Content -->
-        <div class="w-4/5 p-8">
+        <div class="w-4/5 p-8 ml-64">
             <div class="flex justify-between items-center mb-8">
                 <a href="/adminJobList" class="text-xl">
                     <i class="fas fa-arrow-left"></i>
@@ -315,7 +315,7 @@ const toggleSubMenu = () => {
                         <button
                             type="button"
                             @click="addSalaryRange"
-                            class="bg-purple-500 text-white px-4 py-2 rounded w-full hover:bg-purple-600 transition-colors"
+                            class="bg-purple-500 text-white px-4 py-2 rounded w-full hover:bg-purple-600 transition-colors mb-5"
                         >
                             + Add Salary Range
                         </button>
