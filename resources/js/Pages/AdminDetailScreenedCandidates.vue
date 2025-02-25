@@ -99,11 +99,11 @@ const moveToScreened = () => {
 
 <template>
     <Head title="Candidate Detail" />
-    <div class="flex h-screen">
+    <div class="flex h-screen ml-64">
         <Sidebar :page="page.props.auth.user" />
 
         <!-- Main Content -->
-        <div class="flex-1 p-6">
+        <div class="flex-1 p-6 ml-64">
             <!-- Header -->
             <div class="flex justify-between items-center mb-6">
                 <div class="flex items-center">

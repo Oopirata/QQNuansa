@@ -145,7 +145,7 @@ onBeforeUnmount(() => {
 
 <template>
     <Head title="Email Dashboard" />
-    <div class="flex h-screen">
+    <div class="flex h-screen ml-64">
         <Sidebar :user="page.props.auth.user" />
 
         <!-- Main Content -->
