@@ -19,11 +19,11 @@ const closeDropdown = (e) => {
 };
 
 onMounted(() => {
-    document.addEventListener('click', closeDropdown);
+    document.addEventListener("click", closeDropdown);
 });
 
 onBeforeUnmount(() => {
-    document.removeEventListener('click', closeDropdown);
+    document.removeEventListener("click", closeDropdown);
 });
 
 // Search functionality
@@ -82,7 +82,7 @@ const toggleSubMenu = () => {
 
 <template>
     <Head title="Candidates Dashboard" />
-    <div class="flex h-screen">
+    <div class="flex h-screen ml-64">
         <Sidebar :user="$page.props.auth.user" />
 
         <!-- Main Content -->

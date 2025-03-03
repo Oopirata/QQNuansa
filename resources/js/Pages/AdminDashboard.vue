@@ -1,14 +1,14 @@
 <script setup>
 import { Head, Link } from "@inertiajs/vue3";
-import Sidebar from '@/Components/Sidebar/Sidebar.vue'
-import DashboardHeader from '@/Components/Dashboard/DashboardHeader.vue'
-import AnalyticsReport from '@/Components/Dashboard/AnalyticsReport.vue'
-import UpcomingInterviews from '@/Components/Dashboard/UpcomingInterviews.vue'
+import Sidebar from "@/Components/Sidebar/Sidebar.vue";
+import DashboardHeader from "@/Components/Dashboard/DashboardHeader.vue";
+import AnalyticsReport from "@/Components/Dashboard/AnalyticsReport.vue";
+import UpcomingInterviews from "@/Components/Dashboard/UpcomingInterviews.vue";
 </script>
 
 <template>
     <Head title="Admin Dashboard" />
-    <div class="bg-white">
+    <div class="bg-white ml-64">
         <div class="flex min-h-screen">
             <Sidebar :user="$page.props.auth.user" />
 

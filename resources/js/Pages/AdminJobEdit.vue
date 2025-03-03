@@ -7,7 +7,7 @@ const props = defineProps({
     errors: Object,
     auth: Object,
     ziggy: Object,
-    jobs: Object
+    jobs: Object,
 });
 console.log(props.jobs);
 
@@ -16,14 +16,14 @@ const form = useForm({
     title: props.jobs.title || "",
     description: props.jobs.description || "",
     status: props.jobs.status === 1, // true for Open (1), false for Closed (0)
-    additional_questions: props.jobs.questions?.length 
-        ? props.jobs.questions.map(q => q.question_text)
+    additional_questions: props.jobs.questions?.length
+        ? props.jobs.questions.map((q) => q.question_text)
         : [""],
     salary_ranges: props.jobs.salary_ranges?.length
-        ? props.jobs.salary_ranges.map(range => ({
-            min_salary: range.min_salary.toString(),
-            max_salary: range.max_salary.toString()
-        }))
+        ? props.jobs.salary_ranges.map((range) => ({
+              min_salary: range.min_salary.toString(),
+              max_salary: range.max_salary.toString(),
+          }))
         : [{ min_salary: "", max_salary: "" }],
 });
 
@@ -100,13 +100,13 @@ const submitJob = () => {
 };
 
 const goBack = (id) => {
-    router.visit(route('adminJobDetail', id));
+    router.visit(route("adminJobDetail", id));
 };
 </script>
 
 <template>
     <Head title="Edit Job" />
-    <div class="flex h-screen">
+    <div class="flex h-screen ml-64">
         <Sidebar :user="$page.props.auth.user" />
 
         <!-- Main Content -->
@@ -117,7 +117,10 @@ const goBack = (id) => {
                 </button>
                 <h2 class="text-xl font-bold">Edit Job</h2>
                 <div class="flex gap-4">
-                    <button @click="goBack(jobs.id)" class="bg-gray-500 text-white px-4 py-2 rounded">
+                    <button
+                        @click="goBack(jobs.id)"
+                        class="bg-gray-500 text-white px-4 py-2 rounded"
+                    >
                         Cancel
                     </button>
                     <button
@@ -129,7 +132,7 @@ const goBack = (id) => {
                     </button>
                 </div>
             </div>
-            
+
             <div class="flex">
                 <!-- Left Column -->
                 <div class="w-1/2 pr-4">
@@ -138,9 +141,9 @@ const goBack = (id) => {
                             <label class="block">Job Title</label>
                             <div class="flex items-center gap-2">
                                 <span class="text-sm">Status:</span>
-                                <select 
+                                <select
                                     v-model="form.status"
-                                    class="p-2 border rounded bg-white"
+                                    class="p-2 border rounded bg-white appearance-none pr-5"
                                 >
                                     <option :value="true">Open</option>
                                     <option :value="false">Closed</option>
@@ -183,7 +186,9 @@ const goBack = (id) => {
                     <div class="mb-8">
                         <h3 class="font-bold mb-4">Additional Question</h3>
                         <div
-                            v-for="(question, index) in form.additional_questions"
+                            v-for="(
+                                question, index
+                            ) in form.additional_questions"
                             :key="index"
                             class="mb-4"
                         >
@@ -204,10 +209,14 @@ const goBack = (id) => {
                                 </button>
                             </div>
                             <div
-                                v-if="form.errors[`additional_questions.${index}`]"
+                                v-if="
+                                    form.errors[`additional_questions.${index}`]
+                                "
                                 class="text-red-500 text-sm mt-1"
                             >
-                                {{ form.errors[`additional_questions.${index}`] }}
+                                {{
+                                    form.errors[`additional_questions.${index}`]
+                                }}
                             </div>
                         </div>
 
@@ -228,10 +237,15 @@ const goBack = (id) => {
                         >
                             <div class="flex items-center gap-4">
                                 <div class="relative flex-1">
-                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                    <span
+                                        class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                        >Rp</span
+                                    >
                                     <input
                                         :value="formatSalary(range.min_salary)"
-                                        @input="(e) => updateSalary(index, 'min', e)"
+                                        @input="
+                                            (e) => updateSalary(index, 'min', e)
+                                        "
                                         type="text"
                                         placeholder="5.000.000"
                                         class="w-full p-2 pl-12 border rounded"
@@ -239,10 +253,15 @@ const goBack = (id) => {
                                 </div>
                                 <span class="text-gray-500">-</span>
                                 <div class="relative flex-1">
-                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">Rp</span>
+                                    <span
+                                        class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                        >Rp</span
+                                    >
                                     <input
                                         :value="formatSalary(range.max_salary)"
-                                        @input="(e) => updateSalary(index, 'max', e)"
+                                        @input="
+                                            (e) => updateSalary(index, 'max', e)
+                                        "
                                         type="text"
                                         placeholder="8.000.000"
                                         class="w-full p-2 pl-12 border rounded"
@@ -258,22 +277,38 @@ const goBack = (id) => {
                                 </button>
                             </div>
                             <div
-                                v-if="form.errors[`salary_ranges.${index}.min_salary`]"
+                                v-if="
+                                    form.errors[
+                                        `salary_ranges.${index}.min_salary`
+                                    ]
+                                "
                                 class="text-red-500 text-sm mt-1"
                             >
-                                {{ form.errors[`salary_ranges.${index}.min_salary`] }}
+                                {{
+                                    form.errors[
+                                        `salary_ranges.${index}.min_salary`
+                                    ]
+                                }}
                             </div>
                             <div
-                                v-if="form.errors[`salary_ranges.${index}.max_salary`]"
+                                v-if="
+                                    form.errors[
+                                        `salary_ranges.${index}.max_salary`
+                                    ]
+                                "
                                 class="text-red-500 text-sm mt-1"
                             >
-                                {{ form.errors[`salary_ranges.${index}.max_salary`] }}
+                                {{
+                                    form.errors[
+                                        `salary_ranges.${index}.max_salary`
+                                    ]
+                                }}
                             </div>
                         </div>
                         <button
                             type="button"
                             @click="addSalaryRange"
-                            class="bg-purple-500 text-white px-4 py-2 rounded w-full hover:bg-purple-600 transition-colors"
+                            class="bg-purple-500 text-white px-4 py-2 rounded w-full hover:bg-purple-600 transition-colors mb-5"
                         >
                             + Add Salary Range
                         </button>
