@@ -143,7 +143,7 @@ const goBack = (id) => {
                                 <span class="text-sm">Status:</span>
                                 <select
                                     v-model="form.status"
-                                    class="p-2 border rounded bg-white appearance-none pr-5"
+                                    class="p-2 border rounded bg-white appearance-none pr-10"
                                 >
                                     <option :value="true">Open</option>
                                     <option :value="false">Closed</option>

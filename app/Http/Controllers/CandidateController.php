@@ -6,6 +6,7 @@ use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\JobVacancy;
+use Carbon\Carbon;
 
 class CandidateController extends Controller
 {
@@ -297,6 +298,26 @@ class CandidateController extends Controller
     {
         return Inertia::render('resources/js/Pages/AdminRejectedCandidates');
     }
+    public function dashboard()
+{
+    // Hitung kandidat baru dalam 7 hari terakhir
+    $sevenDaysAgo = Carbon::now()->subDays(7);
+    
+    $newCandidatesLast7Days = Applicant::where('status', 0)
+        ->where('created_at', '>=', $sevenDaysAgo)
+        ->count();
+        
+    // Hitung total karyawan (sesuaikan dengan logika aplikasi Anda)
+    $totalEmployees = Applicant::where('status', 3) // Asumsi status 3 adalah hired/employee
+        ->count();
+        
+    return Inertia::render('AdminDashboard', [
+        'analyticsData' => [
+            'newCandidatesLast7Days' => $newCandidatesLast7Days,
+            'totalEmployees' => $totalEmployees
+        ]
+    ]);
+}
 
 
 }
