@@ -168,10 +168,6 @@ const applyFilters = () => {
     );
 };
 
-const goToDetail = (id) => {
-    router.visit(route("adminDetailNewCandidates", id));
-};
-
 // Ensure tags and filters are synced on mount
 onMounted(() => {
     syncTagsWithFilters();
@@ -191,6 +187,7 @@ onMounted(() => {
                     :activeTags="activeTags"
                     :jobTitles="jobTitles"
                     :allDegrees="combinedDegrees"
+                    searchRoute="adminNewCandidates"
                     @update:searchQuery="handleSearch"
                     @addTag="handleAddTag"
                     @removeTag="handleRemoveTag"
@@ -215,7 +212,7 @@ onMounted(() => {
 
                     <CandidatesTable
                         :candidates="candidates"
-                        @rowClick="goToDetail"
+                        detailRoute="adminDetailNewCandidates"
                     />
                 </div>
             </div>
