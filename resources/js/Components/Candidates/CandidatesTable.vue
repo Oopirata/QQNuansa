@@ -5,11 +5,15 @@ const props = defineProps({
     candidates: {
         type: Object,
         required: true
+    },
+    detailRoute: {
+        type: String,
+        required: true
     }
 })
 
 const goToDetail = (id) => {
-    router.visit(`/adminDetailNewCandidates/${id}`)
+    router.visit(route(props.detailRoute, id))
 }
 
 // Format salary untuk tampilan

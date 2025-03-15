@@ -10,6 +10,10 @@ const props = defineProps({
     initSearch: {
         type: String,
         default: ''
+    },
+    searchRoute: {
+        type: String,
+        required: true // Pastikan setiap instance menentukan route tujuan
     }
 })
 
@@ -23,7 +27,7 @@ watch(search, (newValue) => {
     
     timeout = setTimeout(() => {
         router.visit(
-            route('adminNewCandidates'),
+            route(props.searchRoute), // Menggunakan prop sebagai route tujuan
             {
                 data: { search: newValue },
                 preserveState: true,
