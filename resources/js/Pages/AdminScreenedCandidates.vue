@@ -187,6 +187,7 @@ onMounted(() => {
                     :activeTags="activeTags"
                     :jobTitles="jobTitles"
                     :allDegrees="combinedDegrees"
+                    title="Screened Candidates"
                     searchRoute="adminScreenedCandidates"
                     @update:searchQuery="handleSearch"
                     @addTag="handleAddTag"
