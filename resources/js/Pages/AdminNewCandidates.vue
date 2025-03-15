@@ -46,25 +46,32 @@ const combinedDegrees = computed(() => {
     return [...props.allDegrees, ...customDegrees.value];
 });
 
-// Sync tags with other filters
+// Sync tags with other filters (PERBAIKAN BARU)
 const syncTagsWithFilters = () => {
-    // Check for degree tags
-    const degreeTags = activeTags.value.filter((tag) => tag.type === "Degree");
+    // Untuk degree, yang diambil dari tags
+    if (activeTags.value.some(tag => tag.type === "Degree")) {
+        // Hapus semua selectedDegrees yang mungkin sudah tidak valid
+        selectedDegrees.value = [];
+        
+        // Check for degree tags
+        const degreeTags = activeTags.value.filter((tag) => tag.type === "Degree");
 
-    // Sync with degree filter
-    degreeTags.forEach((tag) => {
-        // Find degree ID that corresponds to the tag text
-        const degree = combinedDegrees.value.find((d) => d.name === tag.text);
+        // Sync with degree filter
+        degreeTags.forEach((tag) => {
+            // Find degree ID that corresponds to the tag value
+            const degree = combinedDegrees.value.find((d) => d.name === tag.value);
 
-        if (degree && !selectedDegrees.value.includes(degree.id)) {
-            selectedDegrees.value.push(degree.id);
-        }
-    });
-
+            if (degree && !selectedDegrees.value.includes(degree.id)) {
+                selectedDegrees.value.push(degree.id);
+            }
+        });
+    }
+    
+    // Untuk job titles, HANYA tambahkan dari tags tanpa mengosongkan terlebih dahulu
     // Check for job title tags
     const jobTags = activeTags.value.filter((tag) => tag.type === "Job Title");
 
-    // Sync with job titles filter
+    // Sync with job titles filter (tapi jangan reset)
     jobTags.forEach((tag) => {
         if (
             typeof tag.value === "number" &&
@@ -91,37 +98,29 @@ const handleSearch = (query) => {
     applyFilters();
 };
 
-// Handle adding a tag from search suggestions
-const handleAddTag = (tag) => {
-    // Check if tag already exists
-    const tagExists = activeTags.value.some(
-        (t) => t.type === tag.type && t.text === tag.text
-    );
-
-    if (!tagExists) {
-        activeTags.value = [...activeTags.value, tag];
-
-        // If it's a search tag, update search query
-        if (tag.type === "Search") {
-            searchQuery.value = tag.text;
-        }
-
-        // Sync with other filters
-        syncTagsWithFilters();
-        applyFilters();
-    }
+// Handle updating tags
+const handleUpdateTag = (newTags) => {
+    activeTags.value = newTags;
+    
+    // Sync tags with filters before applying
+    syncTagsWithFilters();
+    
+    applyFilters();
 };
 
 // Handle removing a tag
 const handleRemoveTag = (tag) => {
     activeTags.value = activeTags.value.filter(
-        (t) => !(t.type === tag.type && t.text === tag.text)
+        (t) => !(t.type === tag.type && t.value === tag.value)
     );
 
     // If it's a search tag being removed, clear search
     if (tag.type === "Search") {
         searchQuery.value = "";
     }
+    
+    // Sync tags with filters before applying
+    syncTagsWithFilters();
 
     applyFilters();
 };
@@ -205,11 +204,13 @@ onMounted(() => {
                         :salaryRange="salaryRange"
                         :jobTitles="jobTitles"
                         :allDegrees="combinedDegrees"
+                        :activeTags="activeTags"
                         @updateJobTitles="handleJobTitlesUpdate"
                         @updateDegrees="handleDegreesUpdate"
                         @updateIPKRange="handleIPKRangeUpdate"
                         @updateSalaryRange="handleSalaryRangeUpdate"
                         @addNewDegree="handleAddNewDegree"
+                        @updateTags="handleUpdateTag"
                     />
 
                     <CandidatesTable

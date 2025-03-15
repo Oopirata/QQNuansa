@@ -15,7 +15,8 @@ class CandidateController extends Controller
         $search = $request->input('search');
         $selectedJobTitles = $request->input('jobTitles', []);
         $selectedDegrees = $request->input('degrees', []);
-        $tags = json_decode($request->input('tags', '[]'), true);
+        $tagsInput = $request->input('tags', '[]');
+        $tags = is_string($tagsInput) ? json_decode($tagsInput, true) : $tagsInput;
         
         // Get IPK range
         $ipkMin = $request->input('ipkMin');
@@ -24,10 +25,19 @@ class CandidateController extends Controller
         // Get Salary range
         $salaryMin = $request->input('salaryMin');
         $salaryMax = $request->input('salaryMax');
-    
+
         $query = Applicant::with(['user', 'jobVacancy', 'salaryRange'])
             ->where('status', 0);
-    
+
+        // Validasi tags
+        $validTags = [];
+        foreach ($tags as $tag) {
+            if (isset($tag['type']) && isset($tag['value'])) {
+                $validTags[] = $tag;
+            }
+        }
+        $tags = $validTags;
+
         // Process tags first (they might contain additional filters)
         foreach ($tags as $tag) {
             if ($tag['type'] === 'Degree') {
@@ -41,16 +51,15 @@ class CandidateController extends Controller
                     $selectedJobTitles[] = $tag['value'];
                 }
             }
-            // Search tags will be handled by the regular search parameter
         }
-    
+
         // Filter berdasarkan job titles jika ada yang dipilih
         if (!empty($selectedJobTitles)) {
             $query->whereHas('jobVacancy', function($q) use ($selectedJobTitles) {
                 $q->whereIn('id', $selectedJobTitles);
             });
         }
-    
+
         // Filter berdasarkan degree dengan pendekatan yang lebih fleksibel
         if (!empty($selectedDegrees)) {
             // Check if we have legacy degree IDs or actual degree strings
@@ -74,18 +83,31 @@ class CandidateController extends Controller
                 }
             }
             
-            // Handle direct degree values (from tags/autocomplete)
-            $directValues = array_filter($selectedDegrees, function($value) {
-                return !is_numeric($value) || (is_numeric($value) && !in_array($value, [1, 2]));
-            });
+            // PERBAIKAN: Ambil langsung nilai dari tag degree
+            foreach ($tags as $tag) {
+                if (isset($tag['type']) && isset($tag['value']) && $tag['type'] === 'Degree') {
+                    $degreeValues[] = $tag['value'];
+                }
+            }
             
-            // For direct values, we need to decode the IDs if they're in md5 format
-            // In a real implementation, you would store and retrieve these from the database
-            // Here we'll assume any non-numeric ID is a direct degree string
-            foreach ($directValues as $value) {
-                foreach ($tags as $tag) {
-                    if ($tag['type'] === 'Degree') {
-                        $degreeValues[] = $tag['value'];
+            // Untuk ID yang tidak ada dalam tags (misalnya dari availableDegrees)
+            $allDegrees = Applicant::select('degree')
+                ->distinct()
+                ->orderBy('degree')
+                ->get()
+                ->map(function($item, $index) {
+                    return [
+                        'id' => 'degree-' . ($index + 1),  // Simple ID generation
+                        'name' => $item->degree,
+                        'color' => 'blue'
+                    ];
+                });
+                
+            foreach ($selectedDegrees as $degreeId) {
+                if (strpos($degreeId, 'degree-') === 0 && !strpos($degreeId, 'degree-new-') === 0) {
+                    $degree = $allDegrees->firstWhere('id', $degreeId);
+                    if ($degree && !in_array($degree['name'], $degreeValues)) {
+                        $degreeValues[] = $degree['name'];
                     }
                 }
             }
@@ -100,7 +122,7 @@ class CandidateController extends Controller
                 });
             }
         }
-    
+
         // Filter berdasarkan IPK range
         if ($ipkMin !== null) {
             $query->where('ipk', '>=', $ipkMin);
@@ -109,7 +131,7 @@ class CandidateController extends Controller
         if ($ipkMax !== null) {
             $query->where('ipk', '<=', $ipkMax);
         }
-    
+
         // Filter berdasarkan salary range
         if ($salaryMin !== null || $salaryMax !== null) {
             $query->whereHas('salaryRange', function($q) use ($salaryMin, $salaryMax) {
@@ -122,7 +144,7 @@ class CandidateController extends Controller
                 }
             });
         }
-    
+
         // Menambahkan kondisi pencarian
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -133,7 +155,7 @@ class CandidateController extends Controller
                 ->orWhere('degree', 'like', "%{$search}%");
             });
         }
-    
+
         $newCandidates = $query->paginate(10);
         
         // Get all unique degrees from the database for autocomplete
@@ -148,7 +170,7 @@ class CandidateController extends Controller
                     'color' => 'blue'
                 ];
             });
-    
+
         $jobTitles = JobVacancy::select('id', 'title')
             ->where('status', 1)
             ->get()
@@ -159,7 +181,7 @@ class CandidateController extends Controller
                     'color' => 'blue'
                 ];
             });
-    
+
         // Transform the data manually
         $transformedCandidates = new \Illuminate\Pagination\LengthAwarePaginator(
             collect($newCandidates->items())->map(function ($candidate) {
@@ -184,7 +206,7 @@ class CandidateController extends Controller
                 'query' => request()->query(),
             ]
         );
-    
+
         return Inertia::render('AdminNewCandidates', [
             'candidates' => $transformedCandidates,
             'filters' => [

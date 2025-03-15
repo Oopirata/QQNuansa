@@ -30,6 +30,11 @@ const props = defineProps({
     allDegrees: {
         type: Array,
         default: () => []
+    },
+    // Tambahkan prop untuk tags
+    activeTags: {
+        type: Array,
+        default: () => []
     }
 })
 
@@ -38,7 +43,8 @@ const emit = defineEmits([
     'updateDegrees', 
     'updateIPKRange',
     'updateSalaryRange',
-    'addNewDegree'
+    'addNewDegree',
+    'updateTags'
 ])
 
 const customDegrees = ref([])
@@ -85,8 +91,13 @@ const handleAddNewDegree = (degree) => {
                 title="Degree"
                 :selectedDegrees="selectedDegrees"
                 :availableDegrees="availableDegrees"
+                :selectedJobTitles="selectedJobTitles"  
+                :ipkRange="ipkRange"                 
+                :salaryRange="salaryRange"
+                :tags="activeTags"
                 @update="$emit('updateDegrees', $event)"
                 @addNewDegree="handleAddNewDegree"
+                @updateTags="$emit('updateTags', $event)"
             />
             
             <RangeFilter
