@@ -3,6 +3,10 @@ import { ref, watch } from 'vue'
 import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
+    title: {
+        type: String,
+        required: true
+    },
     totalCandidates: {
         type: Number,
         required: true
@@ -45,7 +49,7 @@ watch(search, (newValue) => {
 <template>
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-semibold text-gray-900">
-            New Candidates
+            {{ title }}
             <span class="text-gray-500 ml-2">{{ totalCandidates }}</span>
         </h2>
         <div class="relative">
