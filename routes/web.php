@@ -127,31 +127,26 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
 
     Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
 
-    Route::get('/adminScreenedCandidates', function () {
-        return Inertia::render('AdminScreenedCandidates');
-    })->name('adminScreenedCandidates');
+    Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
+    
+    Route::get('/adminScreenedCandidates', [CandidateController::class, 'screenedCandidates'])->name('adminScreenedCandidates');
 
-    Route::get('/adminInterviewCandidates', function () {
-        return Inertia::render('AdminInterviewCandidates');
-    })->name('adminInterviewCandidates');
+    Route::get('/adminDetailScreenedCandidates/{id}', [CandidateController::class, 'screenCandidateDetail'])->name('adminDetailScreenedCandidates');
 
-    Route::get('/adminRejectedCandidates', function () {
-        return Inertia::render('AdminRejectedCandidates');
-    })->name('adminRejectedCandidates');
+    Route::get('/adminInterviewCandidates', [CandidateController::class, 'interviewCandidates'])->name('adminInterviewCandidates');
+    
+    Route::get('/adminDetailInterviewCandidates/{id}', [CandidateController::class, 'interviewCandidatesDetail'])->name('adminDetailInterviewCandidates');
+
+    Route::get('/adminRejectedCandidates', [CandidateController::class, 'rejectedCandidates'])->name('adminRejectedCandidates');
+
+    Route::get('/adminDetailRejectedCandidates', [CandidateController::class, 'rejectedCandidatesDetail'])->name('adminDetailRejectedCandidates');
 
     Route::get('/adminEmail', [EmailController::class, 'page'])->name('adminEmail');
 
-    Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
 
     Route::post('/moveToScreened/{user_id}', [CandidateController::class, 'moveToScreened'])->name('moveToScreened');
 
-    Route::get('/adminDetailInterviewCandidates', function () {
-        return Inertia::render('AdminDetailInterviewCandidates');
-    });
 
-    Route::get('/adminDetailRejectedCandidates', function () {
-        return Inertia::render('AdminDetailRejectedCandidates');
-    });
     Route::get('/adminJobList', [JobVacancyController::class, 'jobList'])->name('adminJobList');
     Route::get('/adminJobDetail/{id}', [JobVacancyController::class, 'jobDetail'])->name('adminJobDetail');
     Route::get('/adminJobDetail/{id}/edit', [JobVacancyController::class, 'jobEdit'])->name('jobs.edit');

@@ -1,190 +1,219 @@
-# CandidatesDashboard.vue
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { ref, onMounted, computed } from "vue";
+import { Head, router } from "@inertiajs/vue3";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
+import SearchBar from "@/Components/Candidates/SearchBar.vue";
+import FilterPanel from "@/Components/Candidates/Filters/FilterPanel.vue";
+import CandidatesTable from "@/Components/Candidates/CandidatesTable.vue";
 
-const dropdownOpen = ref(false);
-const dropdownRef = ref(null);
+const props = defineProps({
+    candidates: {
+        type: Object,
+        required: true,
+    },
+    filters: {
+        type: Object,
+        default: () => ({
+            search: "",
+            jobTitles: [],
+            degrees: [],
+            tags: [],
+            ipkRange: { min: null, max: null },
+            salaryRange: { min: null, max: null },
+        }),
+    },
+    jobTitles: {
+        type: Array,
+        required: true,
+    },
+    allDegrees: {
+        type: Array,
+        default: () => [],
+    },
+});
 
-const toggleDropdown = () => {
-    dropdownOpen.value = !dropdownOpen.value;
+// Initialize state with values from backend
+const searchQuery = ref(props.filters.search || "");
+const selectedJobTitles = ref(props.filters.jobTitles || []);
+const selectedDegrees = ref(props.filters.degrees || []);
+const ipkRange = ref(props.filters.ipkRange || { min: null, max: null });
+const salaryRange = ref(props.filters.salaryRange || { min: null, max: null });
+const activeTags = ref(props.filters.tags || []);
+const customDegrees = ref([]);
+
+// Combine backend degrees with any custom degrees
+const combinedDegrees = computed(() => {
+    return [...props.allDegrees, ...customDegrees.value];
+});
+
+// Sync tags with other filters (PERBAIKAN BARU)
+const syncTagsWithFilters = () => {
+    // Untuk degree, yang diambil dari tags
+    if (activeTags.value.some(tag => tag.type === "Degree")) {
+        // Hapus semua selectedDegrees yang mungkin sudah tidak valid
+        selectedDegrees.value = [];
+        
+        // Check for degree tags
+        const degreeTags = activeTags.value.filter((tag) => tag.type === "Degree");
+
+        // Sync with degree filter
+        degreeTags.forEach((tag) => {
+            // Find degree ID that corresponds to the tag value
+            const degree = combinedDegrees.value.find((d) => d.name === tag.value);
+
+            if (degree && !selectedDegrees.value.includes(degree.id)) {
+                selectedDegrees.value.push(degree.id);
+            }
+        });
+    }
+    
+    // Untuk job titles, HANYA tambahkan dari tags tanpa mengosongkan terlebih dahulu
+    // Check for job title tags
+    const jobTags = activeTags.value.filter((tag) => tag.type === "Job Title");
+
+    // Sync with job titles filter (tapi jangan reset)
+    jobTags.forEach((tag) => {
+        if (
+            typeof tag.value === "number" &&
+            !selectedJobTitles.value.includes(tag.value)
+        ) {
+            selectedJobTitles.value.push(tag.value);
+        }
+    });
 };
 
-// Menutup dropdown ketika klik di luar
-const closeDropdown = (e) => {
-    if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
-        dropdownOpen.value = false;
+// Handle adding a new degree
+const handleAddNewDegree = (degree) => {
+    customDegrees.value.push(degree);
+
+    // Also add to selected degrees if not already there
+    if (!selectedDegrees.value.includes(degree.id)) {
+        selectedDegrees.value.push(degree.id);
     }
 };
 
+// Handle search queries
+const handleSearch = (query) => {
+    searchQuery.value = query;
+    applyFilters();
+};
+
+// Handle updating tags
+const handleUpdateTag = (newTags) => {
+    activeTags.value = newTags;
+    
+    // Sync tags with filters before applying
+    syncTagsWithFilters();
+    
+    applyFilters();
+};
+
+// Handle removing a tag
+const handleRemoveTag = (tag) => {
+    activeTags.value = activeTags.value.filter(
+        (t) => !(t.type === tag.type && t.value === tag.value)
+    );
+
+    // If it's a search tag being removed, clear search
+    if (tag.type === "Search") {
+        searchQuery.value = "";
+    }
+    
+    // Sync tags with filters before applying
+    syncTagsWithFilters();
+
+    applyFilters();
+};
+
+// Standard filter handlers
+const handleJobTitlesUpdate = (jobTitles) => {
+    selectedJobTitles.value = jobTitles;
+    applyFilters();
+};
+
+const handleDegreesUpdate = (degrees) => {
+    selectedDegrees.value = degrees;
+    applyFilters();
+};
+
+const handleIPKRangeUpdate = (range) => {
+    ipkRange.value = range;
+    applyFilters();
+};
+
+const handleSalaryRangeUpdate = (range) => {
+    salaryRange.value = range;
+    applyFilters();
+};
+
+// Apply all filters
+const applyFilters = () => {
+    router.get(
+        route("adminRejectedCandidates"),
+        {
+            jobTitles: selectedJobTitles.value,
+            degrees: selectedDegrees.value,
+            ipkMin: ipkRange.value.min,
+            ipkMax: ipkRange.value.max,
+            salaryMin: salaryRange.value.min,
+            salaryMax: salaryRange.value.max,
+            search: searchQuery.value,
+            tags: JSON.stringify(activeTags.value),
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        }
+    );
+};
+
+// Ensure tags and filters are synced on mount
 onMounted(() => {
-    document.addEventListener("click", closeDropdown);
+    syncTagsWithFilters();
 });
-
-onBeforeUnmount(() => {
-    document.removeEventListener("click", closeDropdown);
-});
-
-// Search functionality
-const searchQuery = ref("");
-
-// Filters data
-const filters = {
-    jobTitles: ref([
-        { id: 1, name: "Psychologist Assistant", color: "green" },
-        { id: 2, name: "HRD", color: "blue" },
-    ]),
-    degrees: ref([
-        { id: 1, name: "Bachelor", color: "pink" },
-        { id: 2, name: "Master", color: "purple" },
-    ]),
-};
-
-// Candidates data
-const candidates = ref([
-    {
-        id: 1,
-        name: "Muhammad Mirza Faiz Rabbani",
-        location: "Semarang",
-        jobTitle: "HRD",
-    },
-    {
-        id: 2,
-        name: "Bintang Syafrian Rizal",
-        location: "Pekalongan",
-        jobTitle: "Psychologist Assistant",
-    },
-    { id: 3, name: "Hanif Herofa", location: "Jakarta", jobTitle: "HRD" },
-    { id: 4, name: "Raka Maulana Yusuf", location: "Rembang", jobTitle: "HRD" },
-    {
-        id: 5,
-        name: "Awang Pratama Putra Mulya",
-        location: "Pekalongan",
-        jobTitle: "HRD",
-    },
-    { id: 6, name: "Dul Samsi", location: "Pekalongan", jobTitle: "HRD" },
-]);
-
-// Navigation state
-const isSubMenuOpen = ref(true);
-
-const candidateItems = [
-    { name: "New", path: "/adminNewCandidates" },
-    { name: "Screened", path: "/adminScreenedCandidates" },
-    { name: "Interview", path: "/adminInterviewCandidates" },
-    { name: "Rejected", path: "/adminRejectedCandidates" },
-];
-const toggleSubMenu = () => {
-    isSubMenuOpen.value = !isSubMenuOpen.value;
-};
 </script>
 
 <template>
     <Head title="Candidates Dashboard" />
-    <div class="flex h-screen ml-64">
+    <div class="flex h-screen bg-white">
         <Sidebar :user="$page.props.auth.user" />
 
-        <!-- Main Content -->
-        <div class="flex-1 p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-semibold">
-                    Rejected Candidates
-                    <span class="text-gray-500">{{ candidates.length }}</span>
-                </h2>
-                <div class="relative">
-                    <input
-                        v-model="searchQuery"
-                        type="text"
-                        placeholder="Search"
-                        class="border rounded p-2 pl-8"
+        <div class="flex-1 overflow-hidden ml-64">
+            <div class="p-6 h-full flex flex-col">
+                <SearchBar
+                    :totalCandidates="candidates.total"
+                    :initialSearch="searchQuery"
+                    :activeTags="activeTags"
+                    :jobTitles="jobTitles"
+                    :allDegrees="combinedDegrees"
+                    searchRoute="adminRejectedCandidates"
+                    @update:searchQuery="handleSearch"
+                    @addTag="handleAddTag"
+                    @removeTag="handleRemoveTag"
+                />
+
+                <div class="flex flex-1 gap-6 min-h-0">
+                    <FilterPanel
+                        :selectedJobTitles="selectedJobTitles"
+                        :selectedDegrees="selectedDegrees"
+                        :ipkRange="ipkRange"
+                        :salaryRange="salaryRange"
+                        :jobTitles="jobTitles"
+                        :allDegrees="combinedDegrees"
+                        :activeTags="activeTags"
+                        @updateJobTitles="handleJobTitlesUpdate"
+                        @updateDegrees="handleDegreesUpdate"
+                        @updateIPKRange="handleIPKRangeUpdate"
+                        @updateSalaryRange="handleSalaryRangeUpdate"
+                        @addNewDegree="handleAddNewDegree"
+                        @updateTags="handleUpdateTag"
                     />
-                    <i
-                        class="fas fa-search absolute left-2 top-3 text-gray-500"
-                    ></i>
-                </div>
-            </div>
 
-            <div class="flex">
-                <!-- Filters -->
-                <div class="w-1/4 pr-4 bg-white rounded-lg shadow p-4 mr-20">
-                    <div class="">
-                        <h3 class="text-xl font-semibold mb-4">Filters</h3>
-                    </div>
-
-                    <!-- Job Title Filters -->
-
-                    <div class="mb-6">
-                        <div
-                            class="w-3/4 bg-white rounded-lg shadow p-4 -mr-20"
-                        >
-                            <h4 class="font-semibold mb-2">Job Title</h4>
-                            <div class="flex items-center mb-2">
-                                <span
-                                    v-for="job in filters.jobTitles"
-                                    :key="job.id"
-                                    :class="`bg-${job.color}-200 text-${job.color}-800 px-2 py-1 rounded-full text-sm mr-2`"
-                                >
-                                    {{ job.name }}
-                                </span>
-                            </div>
-                            <button class="text-gray-500">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Degree Filters -->
-                    <div
-                        class="mb-6 w-3/4 bg-white rounded-lg shadow p-4 -mr-20"
-                    >
-                        <h4 class="font-semibold mb-2">Degree</h4>
-                        <div class="flex items-center mb-2">
-                            <span
-                                v-for="degree in filters.degrees"
-                                :key="degree.id"
-                                :class="`bg-${degree.color}-200 text-${degree.color}-800 px-2 py-1 rounded-full text-sm mr-2`"
-                            >
-                                {{ degree.name }}
-                            </span>
-                        </div>
-                        <button class="text-gray-500">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Candidates List -->
-                <div class="w-3/4 bg-white rounded-lg shadow p-4">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="text-left border-b">
-                                <th class="py-2">Name</th>
-                                <th class="py-2">Location</th>
-                                <th class="py-2">Job Title</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="candidate in candidates"
-                                :key="candidate.id"
-                                class="border-b"
-                            >
-                                <td class="py-2">{{ candidate.name }}</td>
-                                <td class="py-2">{{ candidate.location }}</td>
-                                <td
-                                    class="py-2"
-                                    :class="{
-                                        'font-semibold':
-                                            candidate.jobTitle ===
-                                            'Psychologist Assistant',
-                                    }"
-                                >
-                                    {{ candidate.jobTitle }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <CandidatesTable
+                        :candidates="candidates"
+                        detailRoute="adminDetailRejectedCandidates"
+                    />
                 </div>
             </div>
         </div>

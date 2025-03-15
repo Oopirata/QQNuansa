@@ -1,405 +1,219 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
-import { Head, Link, usePage, router } from "@inertiajs/vue3";
-import axios from "axios";
+import { ref, onMounted, computed } from "vue";
+import { Head, router } from "@inertiajs/vue3";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
+import SearchBar from "@/Components/Candidates/SearchBar.vue";
+import FilterPanel from "@/Components/Candidates/Filters/FilterPanel.vue";
+import CandidatesTable from "@/Components/Candidates/CandidatesTable.vue";
 
-// Props definition dengan default value
 const props = defineProps({
     candidates: {
         type: Object,
         required: true,
+    },
+    filters: {
+        type: Object,
         default: () => ({
-            id: null,
-            job_vacancy: "",
-            user: "",
-            email: "",
-            status: "",
-            location: "",
+            search: "",
+            jobTitles: [],
+            degrees: [],
+            tags: [],
+            ipkRange: { min: null, max: null },
+            salaryRange: { min: null, max: null },
         }),
     },
-});
-
-// Watch untuk debug props
-watch(
-    () => props.candidates,
-    (newVal) => {
-        console.log("Candidates updated:", newVal);
+    jobTitles: {
+        type: Array,
+        required: true,
     },
-    { immediate: true }
-);
-
-const emailForm = ref({
-    applicant_id: props.candidates?.id,
-    subject: "",
-    messages: "",
-    status: String(props.candidates?.status || ""),
-    interviewSchedule: null,
-    email: props.candidates?.email,
+    allDegrees: {
+        type: Array,
+        default: () => [],
+    },
 });
 
-const showPreview = ref(false);
-const previewContent = ref("");
+// Initialize state with values from backend
+const searchQuery = ref(props.filters.search || "");
+const selectedJobTitles = ref(props.filters.jobTitles || []);
+const selectedDegrees = ref(props.filters.degrees || []);
+const ipkRange = ref(props.filters.ipkRange || { min: null, max: null });
+const salaryRange = ref(props.filters.salaryRange || { min: null, max: null });
+const activeTags = ref(props.filters.tags || []);
+const customDegrees = ref([]);
 
-const previewEmail = async () => {
-    try {
-        console.log("Sending data:", emailForm.value);
-        const response = await axios.post(
-            route("preview.email"),
-            emailForm.value
-        );
-        previewContent.value = response.data;
-        showPreview.value = true;
-    } catch (error) {
-        console.error("Error detail:", error.response?.data);
-        alert("Failed to generate preview: " + error.message);
+// Combine backend degrees with any custom degrees
+const combinedDegrees = computed(() => {
+    return [...props.allDegrees, ...customDegrees.value];
+});
+
+// Sync tags with other filters (PERBAIKAN BARU)
+const syncTagsWithFilters = () => {
+    // Untuk degree, yang diambil dari tags
+    if (activeTags.value.some(tag => tag.type === "Degree")) {
+        // Hapus semua selectedDegrees yang mungkin sudah tidak valid
+        selectedDegrees.value = [];
+        
+        // Check for degree tags
+        const degreeTags = activeTags.value.filter((tag) => tag.type === "Degree");
+
+        // Sync with degree filter
+        degreeTags.forEach((tag) => {
+            // Find degree ID that corresponds to the tag value
+            const degree = combinedDegrees.value.find((d) => d.name === tag.value);
+
+            if (degree && !selectedDegrees.value.includes(degree.id)) {
+                selectedDegrees.value.push(degree.id);
+            }
+        });
     }
-};
+    
+    // Untuk job titles, HANYA tambahkan dari tags tanpa mengosongkan terlebih dahulu
+    // Check for job title tags
+    const jobTags = activeTags.value.filter((tag) => tag.type === "Job Title");
 
-const sendEmail = async () => {
-    try {
-        const response = await axios.post(route("send.email"), emailForm.value);
-        if (response.data.success) {
-            alert("Email sent successfully!");
-            emailForm.value = {
-                applicant_id: props.candidates?.id,
-                subject: "",
-                messages: "",
-                status: props.candidates?.status || "",
-                interviewSchedule: null,
-            };
+    // Sync with job titles filter (tapi jangan reset)
+    jobTags.forEach((tag) => {
+        if (
+            typeof tag.value === "number" &&
+            !selectedJobTitles.value.includes(tag.value)
+        ) {
+            selectedJobTitles.value.push(tag.value);
         }
-    } catch (error) {
-        alert("Failed to send email: " + error.message);
+    });
+};
+
+// Handle adding a new degree
+const handleAddNewDegree = (degree) => {
+    customDegrees.value.push(degree);
+
+    // Also add to selected degrees if not already there
+    if (!selectedDegrees.value.includes(degree.id)) {
+        selectedDegrees.value.push(degree.id);
     }
 };
 
-const dropdownOpen = ref(false);
-const dropdownRef = ref(null);
-
-const toggleDropdown = () => {
-    dropdownOpen.value = !dropdownOpen.value;
+// Handle search queries
+const handleSearch = (query) => {
+    searchQuery.value = query;
+    applyFilters();
 };
 
-const closeDropdown = (e) => {
-    if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
-        dropdownOpen.value = false;
+// Handle updating tags
+const handleUpdateTag = (newTags) => {
+    activeTags.value = newTags;
+    
+    // Sync tags with filters before applying
+    syncTagsWithFilters();
+    
+    applyFilters();
+};
+
+// Handle removing a tag
+const handleRemoveTag = (tag) => {
+    activeTags.value = activeTags.value.filter(
+        (t) => !(t.type === tag.type && t.value === tag.value)
+    );
+
+    // If it's a search tag being removed, clear search
+    if (tag.type === "Search") {
+        searchQuery.value = "";
     }
+    
+    // Sync tags with filters before applying
+    syncTagsWithFilters();
+
+    applyFilters();
 };
 
+// Standard filter handlers
+const handleJobTitlesUpdate = (jobTitles) => {
+    selectedJobTitles.value = jobTitles;
+    applyFilters();
+};
+
+const handleDegreesUpdate = (degrees) => {
+    selectedDegrees.value = degrees;
+    applyFilters();
+};
+
+const handleIPKRangeUpdate = (range) => {
+    ipkRange.value = range;
+    applyFilters();
+};
+
+const handleSalaryRangeUpdate = (range) => {
+    salaryRange.value = range;
+    applyFilters();
+};
+
+// Apply all filters
+const applyFilters = () => {
+    router.get(
+        route("adminInterviewCandidates"),
+        {
+            jobTitles: selectedJobTitles.value,
+            degrees: selectedDegrees.value,
+            ipkMin: ipkRange.value.min,
+            ipkMax: ipkRange.value.max,
+            salaryMin: salaryRange.value.min,
+            salaryMax: salaryRange.value.max,
+            search: searchQuery.value,
+            tags: JSON.stringify(activeTags.value),
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        }
+    );
+};
+
+// Ensure tags and filters are synced on mount
 onMounted(() => {
-    try {
-        console.log("Component mounted");
-        console.log("Props:", props);
-        console.log("Page:", usePage()?.props);
-        document.addEventListener("click", closeDropdown);
-    } catch (error) {
-        console.error("Mounting error:", error);
-    }
+    syncTagsWithFilters();
 });
-
-onBeforeUnmount(() => {
-    document.removeEventListener("click", closeDropdown);
-});
-
-const isSubMenuOpen = ref(true);
-
-const candidateItems = [
-    { name: "New", path: "/adminNewCandidates" },
-    { name: "Screened", path: "/adminScreenedCandidates" },
-    { name: "Interview", path: "/adminInterviewCandidates" },
-    { name: "Rejected", path: "/adminRejectedCandidates" },
-];
-
-const toggleSubMenu = () => {
-    isSubMenuOpen.value = !isSubMenuOpen.value;
-};
-
-const screeningQuestions = ref([
-    {
-        question: "What is your expected monthly compensation?",
-        answer: "32.000 hrn per month",
-    },
-    {
-        question: "What is your current proficiency in German?",
-        answer: "A1",
-    },
-    {
-        question: "What's an interface?",
-        answer: "To kick off the employee onboarding checklist, you need to prepare the relevant paperwork and information prior to the employee's first day. Start by recording the employee's basic information in the form fields below.",
-    },
-]);
-
-const emails = ref([
-    {
-        sender: "Kathryn Murphy",
-        subject: "Interview Results",
-        time: "1 day ago",
-        content:
-            "Dear Cody,\n\nI am delighted to inform you that we would like to arrange an interview. Please let us know when you are available to come to our offices.\n\nSincerely,\nKathryn Murphy",
-    },
-    {
-        sender: "Kathryn Murphy",
-        subject: "Interview Results",
-        time: "1 day ago",
-        content:
-            "Dear Cody,\n\nPlease let us know when you are available to come to our offices.",
-    },
-]);
-
-const currentPage = ref(1);
-const totalPages = ref(6);
-
-const disqualifyCandidate = () => {
-    console.log("Disqualify candidate");
-};
-
-const moveToScreened = (user_id) => {
-    router.visit(route("adminDetailNewCandidates", user_id));
-};
 </script>
 
 <template>
-    <Head title="Candidate Detail" />
-    <div class="flex h-screen ml-64">
-        <Sidebar :user="$page?.props?.auth?.user || {}" />
+    <Head title="Candidates Dashboard" />
+    <div class="flex h-screen bg-white">
+        <Sidebar :user="$page.props.auth.user" />
 
-        <!-- Main Content -->
-        <div class="flex-1 p-6">
-            <!-- Header -->
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center">
-                    <button class="mr-4">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <div>
-                        <h1 class="text-2xl font-semibold">
-                            {{
-                                props.candidates?.job_vacancy || "No Job Title"
-                            }}
-                        </h1>
-                        <p class="text-gray-600">
-                            {{ props.candidates?.status || "No Status" }}
-                        </p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <span class="mr-4"
-                        >{{ currentPage }} of {{ totalPages }}</span
-                    >
-                    <button class="mr-2">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button>
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+        <div class="flex-1 overflow-hidden ml-64">
+            <div class="p-6 h-full flex flex-col">
+                <SearchBar
+                    :totalCandidates="candidates.total"
+                    :initialSearch="searchQuery"
+                    :activeTags="activeTags"
+                    :jobTitles="jobTitles"
+                    :allDegrees="combinedDegrees"
+                    searchRoute="adminInterviewCandidates"
+                    @update:searchQuery="handleSearch"
+                    @addTag="handleAddTag"
+                    @removeTag="handleRemoveTag"
+                />
 
-            <!-- Candidate Profile -->
-            <div class="flex mb-6">
-                <div class="w-1/2 pr-4">
-                    <!-- Profile Info -->
-                    <div class="bg-white rounded-lg shadow p-6 mb-6">
-                        <div class="flex items-center mb-4">
-                            <div
-                                class="w-16 h-16 bg-blue-200 rounded-full mr-4"
-                            ></div>
-                            <div>
-                                <h2 class="text-xl font-semibold">
-                                    {{ props.candidates?.user || "No Name" }}
-                                </h2>
-                                <p class="text-gray-600">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{
-                                        props.candidates?.location ||
-                                        "No Location"
-                                    }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex items-center">
-                                <i
-                                    class="fas fa-envelope mr-2 text-gray-400"
-                                ></i>
-                                <span>{{
-                                    props.candidates?.email || "No Email"
-                                }}</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-phone mr-2 text-gray-400"></i>
-                                <span>{{
-                                    props.candidates?.phone || "No Phone"
-                                }}</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-link mr-2 text-gray-400"></i>
-                                <a href="#" class="text-blue-500">{{
-                                    props.candidates?.portfolio ||
-                                    "No Portfolio"
-                                }}</a>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex flex-1 gap-6 min-h-0">
+                    <FilterPanel
+                        :selectedJobTitles="selectedJobTitles"
+                        :selectedDegrees="selectedDegrees"
+                        :ipkRange="ipkRange"
+                        :salaryRange="salaryRange"
+                        :jobTitles="jobTitles"
+                        :allDegrees="combinedDegrees"
+                        :activeTags="activeTags"
+                        @updateJobTitles="handleJobTitlesUpdate"
+                        @updateDegrees="handleDegreesUpdate"
+                        @updateIPKRange="handleIPKRangeUpdate"
+                        @updateSalaryRange="handleSalaryRangeUpdate"
+                        @addNewDegree="handleAddNewDegree"
+                        @updateTags="handleUpdateTag"
+                    />
 
-                    <!-- Screening Questions -->
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-lg font-semibold mb-4">
-                            Screening questions
-                        </h3>
-                        <div class="space-y-4">
-                            <div
-                                v-for="(qa, index) in screeningQuestions"
-                                :key="index"
-                            >
-                                <p class="text-gray-600 mb-1">
-                                    {{ qa.question }}
-                                </p>
-                                <p>{{ qa.answer }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Email Form Section -->
-                <div class="w-1/2 pl-4">
-                    <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-lg font-semibold mb-4">Send Email</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label for="subject" class="block text-gray-600"
-                                    >Subject</label
-                                >
-                                <input
-                                    v-model="emailForm.subject"
-                                    id="subject"
-                                    type="text"
-                                    placeholder="Email Subject"
-                                    class="w-full border rounded p-2"
-                                />
-                            </div>
-                            <div>
-                                <label
-                                    for="messages"
-                                    class="block text-gray-600"
-                                    >Message</label
-                                >
-                                <textarea
-                                    v-model="emailForm.messages"
-                                    id="messages"
-                                    placeholder="Type your message..."
-                                    rows="4"
-                                    class="w-full border rounded p-2"
-                                ></textarea>
-                            </div>
-                            <div>
-                                <label
-                                    for="interviewSchedule"
-                                    class="block text-gray-600"
-                                >
-                                    Interview Schedule (optional)
-                                </label>
-                                <input
-                                    v-model="emailForm.interviewSchedule"
-                                    id="interviewSchedule"
-                                    type="datetime-local"
-                                    class="w-full border rounded p-2"
-                                />
-                            </div>
-                            <div class="flex space-x-4">
-                                <button
-                                    @click="previewEmail"
-                                    class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                                >
-                                    Preview
-                                </button>
-                                <button
-                                    @click="sendEmail"
-                                    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                >
-                                    Send Email
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Email History -->
-                    <div class="bg-white rounded-lg shadow p-6 mt-6">
-                        <h3 class="text-lg font-semibold mb-4">
-                            Email History
-                        </h3>
-                        <div class="space-y-4">
-                            <div
-                                v-for="(email, index) in emails"
-                                :key="index"
-                                class="border-b pb-4"
-                            >
-                                <div
-                                    class="flex items-center justify-between mb-2"
-                                >
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center"
-                                        >
-                                            CF
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold">
-                                                {{ email.sender }}
-                                            </p>
-                                            <p class="text-gray-600">
-                                                {{ email.subject }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="text-gray-400">{{
-                                        email.time
-                                    }}</span>
-                                </div>
-                                <p class="text-gray-600">{{ email.content }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preview Modal -->
-            <div
-                v-if="showPreview"
-                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-            >
-                <div
-                    class="bg-white p-6 rounded-lg w-3/4 max-h-[80vh] overflow-y-auto"
-                >
-                    <div class="flex justify-between mb-4">
-                        <h3 class="text-lg font-semibold">Email Preview</h3>
-                        <button
-                            @click="showPreview = false"
-                            class="text-gray-500"
-                        >
-                            &times;
-                        </button>
-                    </div>
-                    <div v-html="previewContent"></div>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="container pb-2">
-                <div class="flex justify-end space-x-4 mb-5">
-                    <button
-                        @click="disqualifyCandidate"
-                        class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    >
-                        Disqualify
-                    </button>
-                    <button
-                        @click="moveToScreened"
-                        class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-                    >
-                        Move to screened
-                    </button>
+                    <CandidatesTable
+                        :candidates="candidates"
+                        detailRoute="adminDetailInterviewCandidates"
+                    />
                 </div>
             </div>
         </div>
