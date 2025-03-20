@@ -3,6 +3,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import { Head, Link, usePage, router } from "@inertiajs/vue3";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
+import DetailHeader from "@/Components/Candidates/DetailHeader.vue";
 import axios from "axios";
 
 const dropdownOpen = ref(false);
@@ -159,43 +160,20 @@ const moveToScreened = (user_id) => {
 
         <!-- Main Content -->
         <div class="w-full p-6 ml-64">
-            <!-- Header -->
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center">
-                    <button class="mr-4">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-                    <div>
-                        <h1 class="text-2xl font-semibold">
-                            {{ candidates.job_vacancy }}
-                        </h1>
-                        <p class="text-gray-600">New</p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <div class="flex justify-end space-x-4 mr-10">
-                        <button
-                            @click="disqualifyCandidate"
-                            class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        >
-                            Disqualify
-                        </button>
-                        <button
-                            @click="moveToScreened"
-                            class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-                        >
-                            Move to screened
-                        </button>
-                    </div>
-                    <span class="mr-4"
-                        >{{ currentPage }} of {{ totalPages }}</span
-                    >
-                    <button class="mr-2">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
+            <DetailHeader
+                :jobVacancy="candidates.job_vacancy"
+                status="New"
+                :currentPage="currentPage"
+                :totalPages="totalPages"
+                :showDisqualify="true"
+                :showMoveToScreened="true"
+                :showMoveToInterview="false"
+                :showMoveToHired="false"
+                @disqualify="disqualifyCandidate"
+                @moveToScreened="moveToScreened"
+                @prevPage="handlePrevPage"
+                @nextPage="handleNextPage"
+            />
 
             <!-- Candidate Profile -->
             <div class="flex mb-6">
