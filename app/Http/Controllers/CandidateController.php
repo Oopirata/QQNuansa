@@ -257,7 +257,7 @@ class CandidateController extends Controller
         $candidate->status = 1;
         $candidate->save();
 
-        return redirect()->route('adminNewCandidates');
+        return redirect()->route('adminInterviewCandidates');
     }
 
     public function screenedCandidates(Request $request)
@@ -495,7 +495,7 @@ class CandidateController extends Controller
         ];
         // dd($newCandidate);
 
-        return Inertia::render('AdminDetailNewCandidates', [
+        return Inertia::render('AdminDetailScreenedCandidates', [
             'candidates' => $candidate
         ]);
     }
@@ -736,7 +736,7 @@ class CandidateController extends Controller
         ];
         // dd($interviewCandidate);
 
-        return Inertia::render('AdminDetailNewCandidates', [
+        return Inertia::render('AdminDetailInterviewCandidates', [
             'candidates' => $candidate
         ]);
     }
@@ -977,7 +977,7 @@ class CandidateController extends Controller
         ];
         // dd($rejectedCandidate);
 
-        return Inertia::render('AdminDetailNewCandidates', [
+        return Inertia::render('AdminDetailRejectedCandidates', [
             'candidates' => $candidate
         ]);
     }
