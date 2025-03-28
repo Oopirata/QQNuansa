@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Applicant;
+use App\Models\JobVacancy;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\JobVacancy;
 use Carbon\Carbon;
 
 class CandidateController extends Controller
@@ -984,6 +985,23 @@ class CandidateController extends Controller
 
     public function dashboard()
     {
+        // Fetch upcoming interviews (next 6)
+        $upcomingInterviews = Schedule::whereDate('tanggal', '>=', now())
+            ->orderBy('tanggal')
+            ->orderBy('jam_mulai')
+            ->take(6)
+            ->get()
+            ->map(function($schedule) {
+                return [
+                    'id' => $schedule->id,
+                    'judul' => $schedule->judul,
+                    'tanggal' => $schedule->tanggal,
+                    'time' => date('H:i', strtotime($schedule->jam_mulai)) . " - " . 
+                            date('H:i', strtotime($schedule->jam_selesai)),
+                    'deskripsi' => $schedule->deskripsi,
+                ];
+            });
+        
         // Hitung kandidat baru dalam 7 hari terakhir
         $sevenDaysAgo = Carbon::now()->subDays(7);
         
@@ -996,6 +1014,7 @@ class CandidateController extends Controller
             ->count();
             
         return Inertia::render('AdminDashboard', [
+            'upcomingInterviews' => $upcomingInterviews,
             'analyticsData' => [
                 'newCandidatesLast7Days' => $newCandidatesLast7Days,
                 'totalEmployees' => $totalEmployees

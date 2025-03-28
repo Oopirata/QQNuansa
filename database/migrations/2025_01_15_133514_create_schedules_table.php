@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users_id')->constrained()->onDelete('cascade');
             $table->string('hari');
             $table->dateTime('jam_mulai');
             $table->dateTime('jam_selesai');
             $table->dateTime('tanggal');
+            $table->string('judul');
             $table->string('deskripsi');
             $table->timestamps();
         });

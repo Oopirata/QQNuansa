@@ -12,6 +12,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'judul' => 'required|string',
             'deskripsi' => 'required|string',
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:Y-m-d H:i:s',
@@ -20,7 +21,7 @@ class ScheduleController extends Controller
         ]);
         
         $schedule = Schedule::create([
-            'users_id' => Auth::id(),
+            'judul' => $validated['judul'],
             'deskripsi' => $validated['deskripsi'],
             'tanggal' => $validated['tanggal'],
             'jam_mulai' => $validated['jam_mulai'],

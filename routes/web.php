@@ -114,9 +114,9 @@ Route::get('/statuscv', function () {
 
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(function () {
     // ADMIN ROUTES
-    Route::get('/adminDashboard', function () {
-        return Inertia::render('AdminDashboard');
-    })->name('admin.dashboard');
+    // Route::get('/adminDashboard', function () {
+    //     return Inertia::render('AdminDashboard');
+    // })->name('admin.dashboard');
     Route::get('/admin/dashboard', [CandidateController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/adminDashboardSchedule', [DashboardController::class, 'schedule'])->name('admin.dashboard.schedule');

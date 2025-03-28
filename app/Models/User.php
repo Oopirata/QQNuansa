@@ -66,11 +66,6 @@ class User extends Authenticatable
         return $this->hasMany(Answer::class);
     }
 
-    public function schedules(): HasMany
-    {
-        return $this->hasMany(Schedule::class, 'users_id');
-    }
-
     public function sentEmails(): HasMany
     {
         return $this->hasMany(Email::class, 'sender_id');
