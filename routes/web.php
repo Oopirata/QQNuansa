@@ -129,23 +129,27 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
 
     Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
     
+    Route::post('/moveToScreened/{user_id}', [CandidateController::class, 'moveToScreened'])->name('moveToScreened');
+
     Route::get('/adminScreenedCandidates', [CandidateController::class, 'screenedCandidates'])->name('adminScreenedCandidates');
 
     Route::get('/adminDetailScreenedCandidates/{id}', [CandidateController::class, 'screenCandidateDetail'])->name('adminDetailScreenedCandidates');
+
+    Route::post('/moveToInterview/{user_id}', [CandidateController::class, 'moveToInterview'])->name('moveToInterview');
 
     Route::get('/adminInterviewCandidates', [CandidateController::class, 'interviewCandidates'])->name('adminInterviewCandidates');
     
     Route::get('/adminDetailInterviewCandidates/{id}', [CandidateController::class, 'interviewCandidatesDetail'])->name('adminDetailInterviewCandidates');
 
+    Route::post('/moveToHired/{user_id}', [CandidateController::class, 'moveToHired'])->name('moveToHired');
+
     Route::get('/adminRejectedCandidates', [CandidateController::class, 'rejectedCandidates'])->name('adminRejectedCandidates');
 
     Route::get('/adminDetailRejectedCandidates', [CandidateController::class, 'rejectedCandidatesDetail'])->name('adminDetailRejectedCandidates');
 
+    Route::post('/disqualify/{user_id}', [CandidateController::class, 'disqualify'])->name('disqualify');
+
     Route::get('/adminEmail', [EmailController::class, 'page'])->name('adminEmail');
-
-
-    Route::post('/moveToScreened/{user_id}', [CandidateController::class, 'moveToScreened'])->name('moveToScreened');
-
 
     Route::get('/adminJobList', [JobVacancyController::class, 'jobList'])->name('adminJobList');
     Route::get('/adminJobDetail/{id}', [JobVacancyController::class, 'jobDetail'])->name('adminJobDetail');

@@ -254,11 +254,13 @@ class CandidateController extends Controller
 
     public function moveToScreened($user_id)
     {
-        $candidate = Applicant::find($user_id);
+        // dd($user_id);
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        // dd($candidate);
         $candidate->status = 1;
         $candidate->save();
 
-        return redirect()->route('adminInterviewCandidates');
+        return redirect()->route('adminScreenedCandidates');
     }
 
     public function screenedCandidates(Request $request)
@@ -499,6 +501,15 @@ class CandidateController extends Controller
         return Inertia::render('AdminDetailScreenedCandidates', [
             'candidates' => $candidate
         ]);
+    }
+
+    public function moveToInterview($user_id)
+    {
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        $candidate->status = 2;
+        $candidate->save();
+
+        return redirect()->route('adminInterviewCandidates');
     }
 
     public function interviewCandidates(Request $request)
@@ -742,6 +753,16 @@ class CandidateController extends Controller
         ]);
     }
 
+    public function moveToHired($user_id)
+    {
+        dd($user_id);
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        $candidate->status = 3;
+        $candidate->save();
+
+        return redirect()->route('adminInterviewCandidates');
+    }
+
     public function rejectedCandidates(Request $request)
     {
         $search = $request->input('search');
@@ -759,7 +780,7 @@ class CandidateController extends Controller
         $salaryMax = $request->input('salaryMax');
 
         $query = Applicant::with(['user', 'jobVacancy', 'salaryRange'])
-            ->where('status', 3);
+            ->where('status', 4);
 
         // Validasi tags
         $validTags = [];
@@ -981,6 +1002,15 @@ class CandidateController extends Controller
         return Inertia::render('AdminDetailRejectedCandidates', [
             'candidates' => $candidate
         ]);
+    }
+
+    public function disqualify($user_id)
+    {
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        $candidate->status = 4; // Disqualified
+        $candidate->save();
+
+        return redirect()->route('adminRejectedCandidates');
     }
 
     public function dashboard()

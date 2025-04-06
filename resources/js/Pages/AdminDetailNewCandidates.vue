@@ -35,7 +35,7 @@ const props = defineProps({
         required: true,
     },
 });
-
+console.log(props.candidates);
 const showPreview = ref(false);
 const previewContent = ref("");
 
@@ -102,13 +102,13 @@ const currentPage = ref(1);
 const totalPages = ref(6);
 
 // Action methods
-const disqualifyCandidate = () => {
+const disqualifyCandidate = (user_id) => {
     // Implementation for disqualifying candidate
-    console.log("Disqualify candidate");
+    router.post(route("disqualify", props.candidates.user_id))
 };
 
-const moveToScreened = (user_id) => {
-    router.visit(route("adminDetailNewCandidates", id));
+const moveToScreened = () => {
+    router.post(route("moveToScreened", props.candidates.user_id));
 };
 </script>
 

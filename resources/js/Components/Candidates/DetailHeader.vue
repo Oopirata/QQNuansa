@@ -83,19 +83,15 @@ const handleCustomAction = () => {
   emit('customAction');
 };
 
-const goToPrevPage = () => {
-  emit('prevPage');
-};
-
-const goToNextPage = () => {
-  emit('nextPage');
+const goBack = () => {
+  window.history.back();
 };
 </script>
 
 <template>
   <div class="flex justify-between items-center mb-6">
     <div class="flex items-center">
-      <button class="mr-4">
+      <button class="mr-4" @click="goBack">
         <i class="fas fa-arrow-left"></i>
       </button>
       <div>
@@ -120,7 +116,7 @@ const goToNextPage = () => {
         <button
           v-if="showMoveToScreened"
           @click="handleMoveToScreened"
-          class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+          class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
         >
           {{ moveToScreenedLabel }}
         </button>
@@ -138,7 +134,7 @@ const goToNextPage = () => {
         <button
           v-if="showMoveToHired"
           @click="handleMoveToHired"
-          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
         >
           {{ moveToHiredLabel }}
         </button>
