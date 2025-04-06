@@ -4,6 +4,10 @@ import Sidebar from "@/Components/Sidebar/Sidebar.vue";
 import DashboardHeader from "@/Components/Dashboard/DashboardHeader.vue";
 import AnalyticsReport from "@/Components/Dashboard/AnalyticsReport.vue";
 import UpcomingInterviews from "@/Components/Dashboard/UpcomingInterviews.vue";
+
+const props = defineProps({
+    upcomingInterviews: Array
+});
 </script>
 
 <template>
@@ -30,14 +34,8 @@ import UpcomingInterviews from "@/Components/Dashboard/UpcomingInterviews.vue";
                 </div>
 
                 <AnalyticsReport />
-                <UpcomingInterviews />
+                <UpcomingInterviews :interviews="upcomingInterviews" />
             </div>
         </div>
     </div>
 </template>
-
-<style scoped>
-:deep(*) {
-    font-family: "Kaisei Opti", sans-serif;
-}
-</style>

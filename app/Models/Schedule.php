@@ -10,11 +10,11 @@ class Schedule extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'users_id',
         'hari',
         'jam_mulai',
         'jam_selesai',
         'tanggal',
+        'judul',
         'deskripsi'
     ];
 
@@ -23,9 +23,4 @@ class Schedule extends Model
         'jam_selesai' => 'datetime',
         'tanggal' => 'datetime'
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'users_id');
-    }
 }

@@ -185,7 +185,7 @@ const deleteJob = (id) => {
                                             @click="goToDetail(job.id)"
                                             class="text-indigo-600 hover:text-indigo-900 mr-3"
                                         >
-                                            Edit
+                                            Details
                                         </button>
                                         <button
                                             @click="deleteJob(job.id)"

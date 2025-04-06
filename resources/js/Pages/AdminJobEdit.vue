@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { Head, useForm, router } from "@inertiajs/vue3";
+import toastr from "toastr";
+import 'toastr/build/toastr.min.css';
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
 
 const props = defineProps({
@@ -9,7 +11,15 @@ const props = defineProps({
     ziggy: Object,
     jobs: Object,
 });
-console.log(props.jobs);
+// console.log(props.jobs);
+
+onMounted(() => {
+  toastr.options = {
+    timeOut: 3000,
+    closeButton: true,
+    progressBar: true
+  };
+});
 
 // Initialize form with existing job data
 const form = useForm({
@@ -62,41 +72,26 @@ const updateSalary = (index, type, event) => {
     }
 };
 
+const showConfirmModal = ref(false);
+
+const confirmSubmit = () => {
+  showConfirmModal.value = true;
+};
+
+const cancelSubmit = () => {
+  showConfirmModal.value = false;
+};
+
 const submitJob = () => {
-    form.put(route("jobs.update", props.jobs.id), {
-        onSuccess: () => {
-            // Create and show alert dialog
-            const alertDialog = document.createElement("div");
-            alertDialog.className =
-                "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
-
-            alertDialog.innerHTML = `
-                <div class="bg-white p-8 rounded-lg shadow-xl max-w-sm mx-4" onclick="event.stopPropagation()">
-                    <div class="flex items-center justify-center mb-6">
-                        <div class="bg-green-100 rounded-full p-4">
-                            <svg class="h-10 w-10 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-semibold text-center text-gray-800 mb-3">Berhasil!</h3>
-                    <p class="text-center text-gray-700 text-base mb-6">Job telah berhasil diperbarui</p>
-                    <p class="text-center text-gray-600 text-sm">Klik di luar kotak untuk menutup</p>
-                </div>
-            `;
-
-            alertDialog.addEventListener("click", function (event) {
-                if (event.target === alertDialog) {
-                    document.body.removeChild(alertDialog);
-                }
-            });
-
-            document.body.appendChild(alertDialog);
-        },
-        onError: (errors) => {
-            console.error(errors);
-        },
-    });
+  showConfirmModal.value = false;
+  form.put(route("jobs.update", props.jobs.id), {
+    onSuccess: () => {
+      toastr.success("Job updated successfully!");
+    },
+    onError: (errors) => {
+      console.error(errors);
+    },
+  });
 };
 
 const goBack = (id) => {
@@ -124,7 +119,7 @@ const goBack = (id) => {
                         Cancel
                     </button>
                     <button
-                        @click="submitJob"
+                        @click="confirmSubmit"
                         :disabled="form.processing"
                         class="bg-purple-500 text-white px-4 py-2 rounded disabled:opacity-75 disabled:cursor-not-allowed"
                     >
@@ -313,6 +308,27 @@ const goBack = (id) => {
                             + Add Salary Range
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Konfirmasi -->
+        <div v-if="showConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+                <h3 class="text-lg font-bold mb-4">Konfirmasi Perubahan</h3>
+                <p class="mb-6">Apakah Anda yakin ingin menyimpan perubahan pada job ini?</p>
+                <div class="flex justify-end gap-4">
+                <button 
+                    @click="cancelSubmit" 
+                    class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                    Batal
+                </button>
+                <button 
+                    @click="submitJob" 
+                    class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+                >
+                    Simpan
+                </button>
                 </div>
             </div>
         </div>

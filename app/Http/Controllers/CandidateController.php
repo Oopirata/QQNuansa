@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Applicant;
+use App\Models\JobVacancy;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\JobVacancy;
 use Carbon\Carbon;
 
 class CandidateController extends Controller
@@ -253,11 +254,13 @@ class CandidateController extends Controller
 
     public function moveToScreened($user_id)
     {
-        $candidate = Applicant::find($user_id);
+        // dd($user_id);
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        // dd($candidate);
         $candidate->status = 1;
         $candidate->save();
 
-        return redirect()->route('adminInterviewCandidates');
+        return redirect()->route('adminScreenedCandidates');
     }
 
     public function screenedCandidates(Request $request)
@@ -498,6 +501,15 @@ class CandidateController extends Controller
         return Inertia::render('AdminDetailScreenedCandidates', [
             'candidates' => $candidate
         ]);
+    }
+
+    public function moveToInterview($user_id)
+    {
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        $candidate->status = 2;
+        $candidate->save();
+
+        return redirect()->route('adminInterviewCandidates');
     }
 
     public function interviewCandidates(Request $request)
@@ -741,6 +753,16 @@ class CandidateController extends Controller
         ]);
     }
 
+    public function moveToHired($user_id)
+    {
+        dd($user_id);
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        $candidate->status = 3;
+        $candidate->save();
+
+        return redirect()->route('adminInterviewCandidates');
+    }
+
     public function rejectedCandidates(Request $request)
     {
         $search = $request->input('search');
@@ -758,7 +780,7 @@ class CandidateController extends Controller
         $salaryMax = $request->input('salaryMax');
 
         $query = Applicant::with(['user', 'jobVacancy', 'salaryRange'])
-            ->where('status', 3);
+            ->where('status', 4);
 
         // Validasi tags
         $validTags = [];
@@ -982,8 +1004,34 @@ class CandidateController extends Controller
         ]);
     }
 
+    public function disqualify($user_id)
+    {
+        $candidate = Applicant::where('users_id', $user_id)->first();
+        $candidate->status = 4; // Disqualified
+        $candidate->save();
+
+        return redirect()->route('adminRejectedCandidates');
+    }
+
     public function dashboard()
     {
+        // Fetch upcoming interviews (next 6)
+        $upcomingInterviews = Schedule::whereDate('tanggal', '>=', now())
+            ->orderBy('tanggal')
+            ->orderBy('jam_mulai')
+            ->take(6)
+            ->get()
+            ->map(function($schedule) {
+                return [
+                    'id' => $schedule->id,
+                    'judul' => $schedule->judul,
+                    'tanggal' => $schedule->tanggal,
+                    'time' => date('H:i', strtotime($schedule->jam_mulai)) . " - " . 
+                            date('H:i', strtotime($schedule->jam_selesai)),
+                    'deskripsi' => $schedule->deskripsi,
+                ];
+            });
+        
         // Hitung kandidat baru dalam 7 hari terakhir
         $sevenDaysAgo = Carbon::now()->subDays(7);
         
@@ -996,6 +1044,7 @@ class CandidateController extends Controller
             ->count();
             
         return Inertia::render('AdminDashboard', [
+            'upcomingInterviews' => $upcomingInterviews,
             'analyticsData' => [
                 'newCandidatesLast7Days' => $newCandidatesLast7Days,
                 'totalEmployees' => $totalEmployees

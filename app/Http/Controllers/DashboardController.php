@@ -11,18 +11,17 @@ class DashboardController extends Controller
 {
     public function schedule()
     {        
-        // Fetch all schedules for the user
         $schedules = Schedule::all()
             ->map(function($schedule) {
                 // Transform the data to match the format expected by the frontend
+                // Using judul for title now instead of deskripsi
                 return [
                     'id' => $schedule->id,
-                    'title' => $schedule->deskripsi,
+                    'title' => $schedule->judul, // Changed from deskripsi to judul
                     'date' => date('Y-m-d', strtotime($schedule->tanggal)),
-                    'time' => date('H:i', strtotime($schedule->jam_mulai)),
-                    'description' => "From " . date('H:i', strtotime($schedule->jam_mulai)) . 
-                                    " to " . date('H:i', strtotime($schedule->jam_selesai)) . 
-                                    " (" . $schedule->hari . ")"
+                    'time' => date('H:i', strtotime($schedule->jam_mulai)) . " - " . 
+                              date('H:i', strtotime($schedule->jam_selesai)),
+                    'description' => $schedule->deskripsi // Using deskripsi for the description field
                 ];
             });
         
