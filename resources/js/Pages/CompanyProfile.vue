@@ -99,12 +99,11 @@ const menuItems = [
                 data-aos-delay="600"
             >
                 <Link
-                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
+                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7] hiring-pulse"
                     href="/hiring"
                 >
                     We are hiring!!
                 </Link>
-
                 <div class="flex items-center relative z-50" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
                         <button
@@ -164,7 +163,7 @@ const menuItems = [
             </div>
         </header>
 
-        <section class="ml-40 mr-40 -z-10">
+        <section class="ml-40 mr-40 -z-10 mt-10">
             <h1
                 class="text-center text-2xl font- mt-5 font-bold"
                 data-aos="fade-up"
@@ -224,5 +223,20 @@ const menuItems = [
 
 .nav-link-active {
     color: #0e74b8;
+}
+.hiring-pulse {
+    animation: colorPulse 2s infinite;
+}
+
+@keyframes colorPulse {
+    0% {
+        color: #5932ea;
+    }
+    50% {
+        color: #ff5733;
+    }
+    100% {
+        color: #5932ea;
+    }
 }
 </style>
