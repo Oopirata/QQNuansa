@@ -358,43 +358,69 @@ class DatabaseSeeder extends Seeder
 
     private function seedSchedules($faker)
     {
-        // Get all user IDs
-        $userIds = DB::table('users')->pluck('id')->toArray();
-        
         // Days of the week in Indonesian
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
         
+        // Sample titles for schedules
+        $titles = [
+            'Meeting Tim',
+            'Interview Kandidat',
+            'Review Project',
+            'Training Karyawan',
+            'Diskusi Client',
+            'Presentasi Proyek',
+            'Brainstorming Session',
+            'Evaluasi Kinerja',
+            'Webinar HR',
+            'Workshop Teknis',
+            'Screening CV',
+            'Orientasi Karyawan',
+            'Rapat Manajemen',
+            'Technical Interview',
+            'HR Interview',
+            'Final Interview',
+            'Rapat Internal',
+            'Koordinasi Departemen',
+            'Follow-up Kandidat',
+            'Review Aplikasi'
+        ];
+        
         // Sample descriptions for schedules
         $descriptions = [
-            'Meeting dengan tim',
-            'Interview calon karyawan',
-            'Review project',
-            'Training karyawan baru',
-            'Diskusi dengan client',
-            'Presentasi project',
-            'Brainstorming',
-            'Evaluasi kinerja',
-            'Webinar',
-            'Workshop',
-            'Screening kandidat',
-            'Orientasi karyawan baru',
-            'Rapat dengan manajemen',
-            'Technical interview',
-            'HR interview',
-            'Final interview',
-            'Diskusi internal team',
-            'Koordinasi dengan departemen lain',
-            'Follow-up kandidat potensial',
-            'Review aplikasi pelamar'
+            'Pertemuan rutin untuk membahas progress mingguan dan kendala yang dihadapi.',
+            'Mewawancarai kandidat untuk posisi yang sedang dibuka.',
+            'Meninjau progress dan hasil proyek yang sedang berjalan.',
+            'Pelatihan untuk karyawan baru mengenai sistem dan prosedur perusahaan.',
+            'Berdiskusi dengan client tentang kebutuhan dan feedback mereka.',
+            'Mempresentasikan hasil proyek kepada stakeholders.',
+            'Sesi untuk menghasilkan ide-ide baru untuk proyek mendatang.',
+            'Mengevaluasi kinerja tim dan individu selama periode tertentu.',
+            'Webinar tentang perkembangan terbaru di bidang HR.',
+            'Workshop untuk meningkatkan keterampilan teknis tim.',
+            'Proses screening CV para pelamar kerja.',
+            'Orientasi untuk karyawan yang baru bergabung.',
+            'Rapat dengan jajaran manajemen untuk membahas strategi perusahaan.',
+            'Wawancara teknis untuk menguji kemampuan teknis kandidat.',
+            'Wawancara dengan tim HR untuk menilai kecocokan kandidat dengan budaya perusahaan.',
+            'Tahap wawancara final dengan calon karyawan potensial.',
+            'Diskusi internal antar anggota tim.',
+            'Koordinasi dengan departemen lain untuk memastikan kelancaran proyek.',
+            'Tindak lanjut dengan kandidat potensial yang telah melewati tahap screening.',
+            'Meninjau aplikasi pelamar kerja yang masuk.'
         ];
+
+        // Define the date range (March to May 2024)
+        $startDate = new \DateTime('2025-03-01');
+        $endDate = new \DateTime('2025-05-31');
+        $dateInterval = $startDate->diff($endDate);
+        $dateRange = $dateInterval->days;
 
         // Generate 50 random schedules
         for ($i = 0; $i < 50; $i++) {
-            // Select random user
-            $userId = $userIds[array_rand($userIds)];
             
-            // Generate random date within next 30 days
-            $date = now()->addDays(rand(1, 30))->format('Y-m-d');
+            // Generate random date within March to May range
+            $randomDay = rand(0, $dateRange);
+            $date = (clone $startDate)->modify("+{$randomDay} days")->format('Y-m-d');
             
             // Generate random start time between 8:00 and 16:00
             $startHour = rand(8, 16);
@@ -412,14 +438,17 @@ class DatabaseSeeder extends Seeder
             // Get day of week in Indonesian
             $dayOfWeek = $days[date('N', strtotime($date)) - 1];
             
-            // Insert the schedule
+            // Select random title and description
+            $titleIndex = array_rand($titles);
+            
+            // Insert the schedule with the new 'judul' field
             DB::table('schedules')->insert([
-                'users_id' => $userId,
                 'hari' => $dayOfWeek,
                 'jam_mulai' => $startDateTime,
                 'jam_selesai' => $endDateTime,
                 'tanggal' => $date,
-                'deskripsi' => $descriptions[array_rand($descriptions)],
+                'judul' => $titles[$titleIndex],
+                'deskripsi' => $descriptions[$titleIndex], // Match description with title
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

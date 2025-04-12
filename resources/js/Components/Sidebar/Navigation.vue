@@ -35,7 +35,7 @@ const candidateItems = [
         <ul>
             <li class="mb-4">
                 <Link
-                    href="/adminDashboard"
+                    href="/admin/dashboard"
                     class="flex items-center hover:text-gray-900"
                     :class="[
                         $page.url === '/adminDashboard' ||

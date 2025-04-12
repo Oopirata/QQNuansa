@@ -31,6 +31,7 @@ const isLoading = ref(true);
 // Fetch date-related data from API
 onMounted(async () => {
     try {
+        // First fetch calendar data
         const response = await axios.get("/calendar-data");
 
         // Set months from API
@@ -44,6 +45,27 @@ onMounted(async () => {
             month: response.data.currentMonth,
             year: response.data.currentYear,
         };
+
+        // Fetch events
+        try {
+            const eventsResponse = await axios.get("/schedules");
+            // Check the actual response structure with console.log
+            console.log('Raw event data:', eventsResponse.data);
+            
+            // Map the events to the format expected by the frontend
+            events.value = eventsResponse.data.map(event => ({
+                id: event.id,
+                title: event.judul,
+                date: event.tanggal.split('T')[0],
+                time: formatTimeRange(event.jam_mulai, event.jam_selesai),
+                description: event.deskripsi,
+            }));
+            
+            // Debug the transformed events
+            console.log('Transformed events:', events.value);
+        } catch (error) {
+            console.error("Failed to load events:", error);
+        }
 
         // Check for events on today's date
         if (response.data.today) {
@@ -67,6 +89,14 @@ onMounted(async () => {
         isLoading.value = false;
     }
 });
+
+// Helper function to format time range
+const formatTimeRange = (start, end) => {
+    // Extract just the time part (HH:MM) from datetime strings
+    const startTime = start.split('T')[1]?.substring(0, 5) || start.split(' ')[1]?.substring(0, 5);
+    const endTime = end.split('T')[1]?.substring(0, 5) || end.split(' ')[1]?.substring(0, 5);
+    return `${startTime} - ${endTime}`;
+};
 
 // Fallback function in case API fails
 const setDefaultDateValues = () => {
@@ -145,11 +175,15 @@ const calendarDays = computed(() => {
     return days;
 });
 
-// Rest of your existing functions...
 const getEventsForDate = (date) => {
     if (!date) return [];
+    
+    console.log('Checking events for date:', date.toDateString());
+    console.log('Available events:', events.value);
+    
     return events.value.filter((event) => {
         const eventDate = new Date(event.date);
+        console.log('Event date:', eventDate.toDateString(), 'Comparing with:', date.toDateString());
         return eventDate.toDateString() === date.toDateString();
     });
 };
@@ -225,32 +259,46 @@ const endTime = computed(
     () => `${newEvent.value.date} ${newEvent.value.end_time}:00`
 );
 
+// Update the addEvent function to match the new schema
 const addEvent = async () => {
-    // Cek apakah jam selesai lebih awal dari jam mulai
+    // Check if end time is earlier than start time
     if (new Date(endTime.value) < new Date(startTime.value)) {
         alert("Jam selesai tidak boleh lebih awal dari jam mulai!");
-        return; // Stop execution hanya di dalam fungsi
+        return; // Stop execution
     }
 
-    // Kirim data ke server jika valid
+    // Send data to server with correct field names
     try {
         const response = await axios.post("/schedules", {
-            deskripsi: newEvent.value.title,
+            judul: newEvent.value.title, // Now using 'judul' for the title
             tanggal: newEvent.value.date,
             jam_mulai: startTime.value,
             jam_selesai: endTime.value,
             hari: new Date(newEvent.value.date).toLocaleDateString("id-ID", {
                 weekday: "long",
             }),
-            description: newEvent.value.description,
+            deskripsi: newEvent.value.description, // Now using 'deskripsi' for the description
         });
 
-        // Tambahkan event ke daftar lokal
-        const newEventWithId = {
-            ...newEvent.value,
+        // Create the formatted event object (this stays the same for the UI)
+        const formattedEvent = {
             id: response.data.id,
+            title: newEvent.value.title,
+            date: newEvent.value.date,
+            time: `${newEvent.value.start_time} - ${newEvent.value.end_time}`,
+            description: newEvent.value.description,
         };
-        events.value.push(newEventWithId);
+
+        // Add to global events array
+        events.value.push(formattedEvent);
+
+        // If the event is for the selected date, update the selectedDate.events array
+        if (selectedDate.value && 
+            new Date(newEvent.value.date).toDateString() === selectedDate.value.date.toDateString()) {
+            // Create a new array with the existing events plus the new one
+            selectedDate.value.events = [...selectedDate.value.events, formattedEvent];
+        }
+
         closeEventModal();
     } catch (error) {
         console.error("Failed to add event:", error);
@@ -259,14 +307,34 @@ const addEvent = async () => {
 };
 
 const deleteEvent = async (eventId) => {
-    // Send delete request to the server
     try {
+        // Send delete request to the server
         await axios.delete(`/schedules/${eventId}`);
-        // Remove from local array
+        
+        // Find the event to be deleted
+        const eventToDelete = events.value.find(event => event.id === eventId);
+        
+        // Remove from global events array
         events.value = events.value.filter((event) => event.id !== eventId);
+        
+        // If there's a selected date and the event belongs to that date, remove it from selectedDate.events
+        if (selectedDate.value && eventToDelete) {
+            const eventDate = new Date(eventToDelete.date);
+            const selectedDateObj = new Date(selectedDate.value.date);
+            
+            if (eventDate.toDateString() === selectedDateObj.toDateString()) {
+                // Create a new array excluding the deleted event
+                selectedDate.value.events = selectedDate.value.events.filter(event => event.id !== eventId);
+            }
+        }
+        
+        // Optional: Add a success notification or toast
+        // For example: toast.success('Event deleted successfully');
     } catch (error) {
         console.error("Failed to delete event:", error);
-        // Handle error
+        
+        // Optional: Show error message to user
+        // For example: toast.error('Failed to delete event');
     }
 };
 </script>
@@ -302,7 +370,7 @@ const deleteEvent = async (eventId) => {
                 <div>
                     <div class="flex border-b mb-4">
                         <Link
-                            href="/adminDashboard"
+                            href="/admin/dashboard"
                             class="text-gray-700 mr-4 pb-2 border-b-2 border-transparent hover:border-purple-500"
                             >Overview</Link
                         >
