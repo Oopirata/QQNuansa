@@ -770,6 +770,876 @@ export default {
                             },
                         ],
                     },
+                    {
+                        imageUrl: "images/gambar soal form/C2.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C2-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C2-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C2-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C2-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C2-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C2-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C2-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C2-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C3.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C3-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C3-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C3-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C3-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C3-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C3-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C3-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C3-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C4.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C4-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C4-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C4-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C4-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C4-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C4-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C4-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C4-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C5.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C5-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C5-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C5-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C5-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C5-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C5-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C5-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C5-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C6.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C6-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C6-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C6-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C6-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C6-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C6-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C6-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C6-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C7.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C7-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C7-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C7-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C7-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C7-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C7-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C7-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C7-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C8.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C8-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C8-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C8-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C8-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C8-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C8-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C8-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C8-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C9.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C9-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C9-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C9-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C9-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C9-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C9-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C9-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C9-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C10.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C10-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C10-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C10-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C10-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C10-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C10-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C10-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C10-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C11.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C11-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C11-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C11-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/11-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C11-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C11-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C11-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C11-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/C12.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/C12-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C12-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C12-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C12-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C12-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C12-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C12-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/C12-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D1.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D1-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D1-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D1-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D1-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D1-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D1-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D1-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D1-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D2.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D2-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D2-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D2-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D2-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D2-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D2-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D2-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D2-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D3.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D3-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D3-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D3-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D3-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D3-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D3-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D3-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D3-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D4.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D4-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D4-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D4-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D4-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D4-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D4-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D4-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D4-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D5.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D5-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D5-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D5-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D5-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D5-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D5-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D5-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D5-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D6.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D6-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D6-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D6-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D6-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D6-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D6-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D6-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D6-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D7.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D7-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D7-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D7-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D7-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D7-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D7-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D7-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D7-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D8.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D8-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D8-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D8-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D8-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D8-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D8-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D8-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D8-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D9.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D9-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D9-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D9-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D9-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D9-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D9-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D9-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D9-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D10.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D10-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D10-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D10-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D10-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D10-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D10-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D10-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D10-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D11.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D11-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D11-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D11-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D11-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D11-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D11-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D11-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D11-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/D12.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/D12-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D12-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D12-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D12-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D12-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D12-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D12-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/D12-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E1.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E1-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E2.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E2-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E2-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E2-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E2-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E2-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E2-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E2-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E2-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E3.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E3-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E3-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E3-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E3-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E3-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E3-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E3-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E3-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E4.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E4-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E4-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E4-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E4-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E4-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E4-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E4-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E4-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E5.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E5-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E5-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E5-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E5-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E5-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E5-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E5-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E5-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E6.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E6-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E6-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E6-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E6-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E6-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E6-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E6-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E6-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E7.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E7-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E7-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E7-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E7-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E7-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E7-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E7-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E7-8.png",
+                            },
+                        ],
+                    },
                 ],
             },
             answers: {
