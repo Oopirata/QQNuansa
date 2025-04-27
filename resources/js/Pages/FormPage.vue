@@ -1,6 +1,6 @@
 <template>
     <div class="test-container">
-        <h1 class="test-title">Formulir Test</h1>
+        <h1 class="test-title">Psiko Test</h1>
 
         <div v-if="!isSubmitted">
             <form @submit.prevent="submitTest">
@@ -120,38 +120,39 @@
                             />
                         </div>
 
-                        <div
-                            v-for="(option, optIndex) in question.options"
-                            :key="'opt' + optIndex"
-                            class="option"
-                        >
-                            <label>
-                                <input
-                                    type="radio"
-                                    :name="'question' + index"
-                                    :value="option.text || option"
-                                    v-model="answers.multipleChoice[index]"
-                                    required
-                                />
-                                <!-- Menampilkan teks opsi atau gambar opsi jika ada -->
-                                <span v-if="typeof option === 'string'">{{
-                                    option
-                                }}</span>
-                                <template v-else>
-                                    <span>{{ option.text }}</span>
-                                    <img
-                                        v-if="option.imageUrl"
-                                        :src="option.imageUrl"
-                                        :alt="'Opsi ' + option.text"
-                                        class="option-image"
+                        <!-- Options in 2-row layout -->
+                        <div class="options-grid">
+                            <div
+                                v-for="(option, optIndex) in question.options"
+                                :key="'opt' + optIndex"
+                                class="option"
+                            >
+                                <label>
+                                    <input
+                                        type="radio"
+                                        :name="'question' + index"
+                                        :value="option.text || option"
+                                        v-model="answers.multipleChoice[index]"
+                                        required
                                     />
-                                </template>
-                            </label>
+                                    <!-- Menampilkan teks opsi atau gambar opsi jika ada -->
+                                    <span v-if="typeof option === 'string'">{{
+                                        option
+                                    }}</span>
+                                    <template v-else>
+                                        <span>{{ option.text }}</span>
+                                        <img
+                                            v-if="option.imageUrl"
+                                            :src="option.imageUrl"
+                                            :alt="'Opsi ' + option.text"
+                                            class="option-image"
+                                        />
+                                    </template>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Section Pertanyaan Essay dengan Gambar -->
 
                 <div class="form-actions">
                     <button type="submit" class="submit-btn">
@@ -1640,6 +1641,151 @@ export default {
                             },
                         ],
                     },
+                    {
+                        imageUrl: "images/gambar soal form/E8.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E8-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E8-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E8-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E8-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E8-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E8-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E8-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E8-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E9.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E9-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E9-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E9-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E9-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E9-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E9-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E9-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E9-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E10.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E10-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E10-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E10-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E10-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E10-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E10-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E10-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E10-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E11.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E11-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E11-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E11-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E11-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E11-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E11-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E11-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E11-8.png",
+                            },
+                        ],
+                    },
+                    {
+                        imageUrl: "images/gambar soal form/E12.png",
+                        options: [
+                            {
+                                imageUrl: "/images/gambar soal form/E12-1.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E12-2.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E12-3.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E12-4.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E12-5.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E12-6.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E12-7.png",
+                            },
+                            {
+                                imageUrl: "/images/gambar soal form/E1-8.png",
+                            },
+                        ],
+                    },
                 ],
             },
             answers: {
@@ -1851,5 +1997,30 @@ textarea {
         flex-direction: column;
         gap: 10px;
     }
+}
+/* Add this to your existing CSS */
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.option {
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+/* You might also want to adjust image sizing in this layout */
+.option-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 5px;
+}
+
+.question-image {
+    max-width: 300px;
+    margin: 10px 0;
 }
 </style>
