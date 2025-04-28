@@ -160,44 +160,44 @@ const menuItems = [
 
 // Add new reactive refs for IPK validation
 const ipkError = ref(false);
-const ipkErrorMessage = ref('');
+const ipkErrorMessage = ref("");
 
 // Add IPK validation function
 const validateIPK = () => {
     // Replace any dot with comma
-    form.IPK = form.IPK.replace('.', ',');
-    
+    form.IPK = form.IPK.replace(".", ",");
+
     // Only allow numbers and one comma
-    form.IPK = form.IPK.replace(/[^0-9,]/g, '');
-    
+    form.IPK = form.IPK.replace(/[^0-9,]/g, "");
+
     // Ensure only one comma
     const commaCount = (form.IPK.match(/,/g) || []).length;
     if (commaCount > 1) {
-        form.IPK = form.IPK.replace(/,/g, (match, index) => 
-            index === form.IPK.indexOf(',') ? ',' : ''
+        form.IPK = form.IPK.replace(/,/g, (match, index) =>
+            index === form.IPK.indexOf(",") ? "," : ""
         );
     }
-    
+
     // Ensure max one decimal place
-    const parts = form.IPK.split(',');
+    const parts = form.IPK.split(",");
     if (parts[1] && parts[1].length > 1) {
         parts[1] = parts[1].slice(0, 1);
-        form.IPK = parts.join(',');
+        form.IPK = parts.join(",");
     }
-    
+
     // Validate the numeric value
-    const numericValue = parseFloat(form.IPK.replace(',', '.'));
-    
+    const numericValue = parseFloat(form.IPK.replace(",", "."));
+
     if (numericValue > 4) {
-        form.IPK = '4,0';
+        form.IPK = "4,0";
         ipkError.value = true;
-        ipkErrorMessage.value = 'IPK maksimal adalah 4,0';
+        ipkErrorMessage.value = "IPK maksimal adalah 4,0";
     } else if (numericValue < 0) {
         ipkError.value = true;
-        ipkErrorMessage.value = 'IPK minimal adalah 0,0';
+        ipkErrorMessage.value = "IPK minimal adalah 0,0";
     } else {
         ipkError.value = false;
-        ipkErrorMessage.value = '';
+        ipkErrorMessage.value = "";
     }
 };
 </script>
@@ -362,7 +362,7 @@ const validateIPK = () => {
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="nama-lengkap"
                         >
-                            Nama Lengkap
+                            Nama Lengkap <span class="text-red-500">*</span>
                         </label>
                         <input
                             v-model="form.nama_lengkap"
@@ -383,7 +383,7 @@ const validateIPK = () => {
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="email"
                         >
-                            Email
+                            Email <span class="text-red-500">*</span>
                         </label>
                         <input
                             v-model="form.email"
@@ -401,7 +401,7 @@ const validateIPK = () => {
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="lokasi"
                         >
-                            Lokasi
+                            Lokasi <span class="text-red-500">*</span>
                         </label>
                         <div class="space-y-2">
                             <Multiselect
@@ -432,7 +432,7 @@ const validateIPK = () => {
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="ipk"
                         >
-                            IPK
+                            IPK <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input
@@ -444,11 +444,16 @@ const validateIPK = () => {
                                 type="text"
                                 placeholder="Masukkan IPK"
                             />
-                            <div class="absolute right-3 top-3 text-sm text-gray-500">
+                            <div
+                                class="absolute right-3 top-3 text-sm text-gray-500"
+                            >
                                 Format: x,x
                             </div>
                         </div>
-                        <div v-if="ipkError" class="text-red-500 text-xs italic">
+                        <div
+                            v-if="ipkError"
+                            class="text-red-500 text-xs italic"
+                        >
                             {{ ipkErrorMessage }}
                         </div>
                     </div>
@@ -461,6 +466,7 @@ const validateIPK = () => {
                             for="nomer-telepon"
                         >
                             Jenjang pendidikan terakhir
+                            <span class="text-red-500">*</span>
                         </label>
                         <input
                             v-model="form.degree"
@@ -478,7 +484,7 @@ const validateIPK = () => {
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="nomer-telepon"
                         >
-                            Nomer Telepon
+                            Nomer Telepon <span class="text-red-500">*</span>
                         </label>
                         <input
                             v-model="form.nomer_telepon"
@@ -514,7 +520,7 @@ const validateIPK = () => {
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="salary_range"
                         >
-                            Pilih Range Gaji
+                            Pilih Range Gaji <span class="text-red-500">*</span>
                         </label>
                         <Multiselect
                             v-model="form.salary_range_id"
@@ -544,6 +550,7 @@ const validateIPK = () => {
                             class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                         >
                             {{ question.question_text }}
+                            <span class="text-red-500">*</span>
                         </label>
                         <textarea
                             v-model="form.answers[question.id]"
