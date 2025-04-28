@@ -112,6 +112,12 @@ Route::get('/statuscv', function () {
     return Inertia::render('StatusCV');
 })->middleware(['auth', 'verified']);
 
+//Form 
+
+Route::get('/formtest', function(){
+    return Inertia::render('FormPage');
+})->name('/formtest');
+
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(function () {
     // ADMIN ROUTES
     // Route::get('/adminDashboard', function () {

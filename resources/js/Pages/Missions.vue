@@ -103,7 +103,7 @@ const menuItems = [
             <div class="flex items-center space-x-6">
                 <!-- Hiring Link -->
                 <Link
-                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
+                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7] hiring-pulse"
                     href="/hiring"
                 >
                     We are hiring!!
@@ -392,5 +392,21 @@ const menuItems = [
 
 .animate-zoomIn {
     animation: zoomIn 1s ease-out;
+}
+
+.hiring-pulse {
+    animation: colorPulse 2s infinite;
+}
+
+@keyframes colorPulse {
+    0% {
+        color: #5932EA;
+    }
+    50% {
+        color: #FF5733;
+    }
+    100% {
+        color: #5932EA;
+    }
 }
 </style>

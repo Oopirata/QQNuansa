@@ -108,7 +108,7 @@ const candidateItems = [
                             : 'text-gray-600',
                     ]"
                 >
-                    <i class="fas fa-envelope mr-2"></i>
+                    <i class="fas fa-briefcase mr-2"></i>
                     Job
                 </Link>
             </li>

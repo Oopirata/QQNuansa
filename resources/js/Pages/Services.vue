@@ -117,7 +117,7 @@ const bottomRowTags = [
             <div class="flex items-center space-x-6">
                 <!-- Hiring Link -->
                 <Link
-                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
+                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7] hiring-pulse"
                     href="/hiring"
                 >
                     We are hiring!!
@@ -346,6 +346,21 @@ const bottomRowTags = [
     .tag-link {
         font-size: 12px;
         padding: 6px 12px;
+    }
+}
+.hiring-pulse {
+    animation: colorPulse 2s infinite;
+}
+
+@keyframes colorPulse {
+    0% {
+        color: #5932ea;
+    }
+    50% {
+        color: #ff5733;
+    }
+    100% {
+        color: #5932ea;
     }
 }
 </style>
