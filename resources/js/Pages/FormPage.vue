@@ -112,6 +112,7 @@
                         <div
                             v-if="question.imageUrl"
                             class="question-image-container"
+                            style="display: flex; justify-content: center"
                         >
                             <img
                                 :src="question.imageUrl"
@@ -120,14 +121,14 @@
                             />
                         </div>
 
-                        <!-- Options in 2-row layout -->
-                        <div class="options-grid">
+                        <!-- Options in 3-column layout -->
+                        <div class="options-grid-three-columns">
                             <div
                                 v-for="(option, optIndex) in question.options"
                                 :key="'opt' + optIndex"
-                                class="option"
+                                class="option-card"
                             >
-                                <label>
+                                <label class="option-content">
                                     <input
                                         type="radio"
                                         :name="'question' + index"
@@ -135,19 +136,28 @@
                                         v-model="answers.multipleChoice[index]"
                                         required
                                     />
-                                    <!-- Menampilkan teks opsi atau gambar opsi jika ada -->
-                                    <span v-if="typeof option === 'string'">{{
-                                        option
-                                    }}</span>
-                                    <template v-else>
-                                        <span>{{ option.text }}</span>
-                                        <img
-                                            v-if="option.imageUrl"
-                                            :src="option.imageUrl"
-                                            :alt="'Opsi ' + option.text"
-                                            class="option-image"
-                                        />
-                                    </template>
+                                    <div class="option-inner">
+                                        <!-- Menampilkan teks opsi atau gambar opsi -->
+                                        <span
+                                            v-if="typeof option === 'string'"
+                                            class="option-text"
+                                        >
+                                            {{ option }}
+                                        </span>
+                                        <template v-else>
+                                            <span class="option-text">{{
+                                                option.text
+                                            }}</span>
+                                            <div class="option-image-container">
+                                                <img
+                                                    v-if="option.imageUrl"
+                                                    :src="option.imageUrl"
+                                                    :alt="'Opsi ' + option.text"
+                                                    class="option-image"
+                                                />
+                                            </div>
+                                        </template>
+                                    </div>
                                 </label>
                             </div>
                         </div>
@@ -1822,6 +1832,7 @@ export default {
 </script>
 
 <style scoped>
+/* CSS styling for the form */
 .test-container {
     max-width: 800px;
     margin: 0 auto;
@@ -1830,31 +1841,24 @@ export default {
 }
 
 .test-title {
+    color: #333;
     text-align: center;
-    color: #2c3e50;
     margin-bottom: 30px;
 }
 
 .form-section {
-    background-color: #f8f9fa;
-    border-radius: 8px;
+    background-color: #f9f9f9;
     padding: 20px;
     margin-bottom: 20px;
+    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-section h2 {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    color: #2c3e50;
 }
 
 .form-group {
     margin-bottom: 15px;
 }
 
-.form-group label {
+label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
@@ -1863,18 +1867,12 @@ export default {
 input[type="text"],
 input[type="email"],
 input[type="date"],
-textarea,
 select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
-}
-
-select {
-    height: 40px;
-    background-color: white;
 }
 
 .radio-group {
@@ -1886,7 +1884,6 @@ select {
     display: flex;
     align-items: center;
     font-weight: normal;
-    cursor: pointer;
 }
 
 .radio-label input {
@@ -1894,53 +1891,95 @@ select {
 }
 
 .question {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
 }
 
 .question-text {
     font-weight: bold;
-    margin-bottom: 10px;
-}
-
-/* Gaya untuk kontainer gambar pertanyaan */
-.question-image-container {
-    margin: 10px 0;
-    text-align: center;
+    margin-bottom: 15px;
 }
 
 .question-image {
-    max-width: 150%;
-    max-height: 400px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.option {
-    margin: 8px 0;
-}
-
-.option label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.option input {
-    margin-right: 8px;
-}
-
-/* Gaya untuk gambar opsi */
-.option-image {
-    max-width: 180px;
-    max-height: 120px;
-    margin-left: 10px;
-    border-radius: 4px;
+    max-width: 100%;
+    height: auto;
+    margin: 15px 0;
     border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-textarea {
+/* This is the important part - 3 column grid for options */
+.options-grid-three-columns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Creates 3 columns */
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.option-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.option-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.option-content {
+    display: block;
     width: 100%;
-    resize: vertical;
+    height: 100%;
+    cursor: pointer;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+}
+
+.option-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 12px;
+    min-height: 120px;
+}
+
+.option-text {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+}
+
+.option-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.option-image {
+    max-width: 90%;
+    max-height: 120px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+/* Style for selected option */
+.option-card input[type="radio"]:checked + .option-inner {
+    background-color: #e6f7ff;
+}
+
+.option-card input[type="radio"] {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .form-actions {
@@ -1950,10 +1989,10 @@ textarea {
 
 .submit-btn,
 .reset-btn {
-    background-color: #42b983;
+    background-color: #4caf50;
     color: white;
-    border: none;
     padding: 12px 24px;
+    border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
@@ -1962,65 +2001,33 @@ textarea {
 
 .submit-btn:hover,
 .reset-btn:hover {
-    background-color: #3aa876;
+    background-color: #45a049;
 }
 
 .success-message {
     text-align: center;
     padding: 30px;
-    background-color: #f0f7f4;
+    background-color: #f0f7f0;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.success-message h2 {
-    color: #42b983;
-    margin-bottom: 20px;
-}
-
-.reset-btn {
-    margin-top: 20px;
-}
-
-/* Media queries untuk responsif pada layar kecil */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .option-image {
-        max-width: 100px;
-        max-height: 70px;
+    /* Switch to 2 columns on medium screens */
+    .options-grid-three-columns {
+        grid-template-columns: repeat(2, 1fr);
     }
+}
 
-    .question-image {
-        max-height: 200px;
+@media (max-width: 480px) {
+    /* Switch to 1 column on small screens */
+    .options-grid-three-columns {
+        grid-template-columns: 1fr;
     }
 
     .radio-group {
         flex-direction: column;
         gap: 10px;
     }
-}
-/* Add this to your existing CSS */
-.options-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.option {
-    padding: 8px;
-    border: 1px solid #eee;
-    border-radius: 4px;
-}
-
-/* You might also want to adjust image sizing in this layout */
-.option-image {
-    max-width: 100%;
-    height: auto;
-    margin-top: 5px;
-}
-
-.question-image {
-    max-width: 300px;
-    margin: 10px 0;
 }
 </style>
