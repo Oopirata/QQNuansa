@@ -6,6 +6,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Multiselect from "@vueform/multiselect";
 import "@vueform/multiselect/themes/default.css";
+// Import SweetAlert library
+import Swal from "sweetalert2";
 
 const isActive = (href) => {
     return currentRoute.value === href;
@@ -136,10 +138,68 @@ const handleFileChange = (event) => {
     }
 };
 
+// Function to validate the form before submission
+const validateForm = () => {
+    const requiredFields = {
+        "CV File": form.cv_file,
+        "Nama Lengkap": form.nama_lengkap,
+        Email: form.email,
+        Lokasi: form.lokasi,
+        IPK: form.IPK,
+        "Jenjang Pendidikan": form.degree,
+        "Nomor Telepon": form.nomer_telepon,
+        "Range Gaji": form.salary_range_id,
+    };
+
+    // Check for required answers to job questions
+    const missingAnswers = props.job.questions.filter(
+        (question) => !form.answers[question.id]
+    );
+
+    // Check for missing required fields
+    const missingFields = Object.entries(requiredFields)
+        .filter(([_, value]) => !value)
+        .map(([field]) => field);
+
+    if (missingFields.length > 0 || missingAnswers.length > 0) {
+        let errorMessage = "Harap lengkapi kolom berikut:";
+
+        if (missingFields.length > 0) {
+            errorMessage += `<br>- ${missingFields.join("<br>- ")}`;
+        }
+
+        if (missingAnswers.length > 0) {
+            if (missingFields.length > 0) errorMessage += "<br>";
+            errorMessage += `<br>- ${missingAnswers.length} pertanyaan belum dijawab`;
+        }
+
+        Swal.fire({
+            title: "Form belum lengkap!",
+            html: errorMessage,
+            icon: "error",
+            confirmButtonText: "Mengerti",
+        });
+
+        return false;
+    }
+
+    return true;
+};
+
 const submit = () => {
+    // Validate form before submission
+    if (!validateForm()) return;
+
     form.post(route("cv.upload", { id: props.job.id }), {
         preserveScroll: true,
         onSuccess: () => {
+            Swal.fire({
+                title: "Berhasil!",
+                text: "Formulir Anda telah berhasil terkirim. Kami akan menghubungi Anda jika ada perkembangan lebih lanjut.",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+
             form.reset();
             fileName.value = "";
             selectedProvince.value = null;
@@ -147,6 +207,16 @@ const submit = () => {
         },
         onError: (errors) => {
             console.error(errors);
+
+            // Show validation errors from server
+            const errorMessages = Object.values(errors).join("<br>");
+
+            Swal.fire({
+                title: "Terjadi Kesalahan!",
+                html: errorMessages,
+                icon: "error",
+                confirmButtonText: "Coba Lagi",
+            });
         },
     });
 };
