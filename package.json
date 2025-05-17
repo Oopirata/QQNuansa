@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@braid/vue-formulate": "^2.5.3",
+        "@inertiajs/inertia": "^0.11.1",
         "@vueform/multiselect": "^2.6.11",
         "aos": "^2.3.4",
         "datatables.net-dt": "^2.2.1",
