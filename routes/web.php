@@ -8,6 +8,8 @@ use App\Http\Controllers\JobVacancyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UploadCVController;
 use App\Http\Controllers\API\ScheduleController;
+use App\Http\Controllers\PsychotestController;
+use App\Http\Controllers\TestResultController;
 use App\Models\Email;
 use App\Http\Controllers\API\CalendarController;
 use Illuminate\Contracts\Queue\Job;
@@ -39,11 +41,17 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/uploadCV/Applicant/{id}', [UploadCVController::class, 'upload'])->name('cv.upload');
+
+    // Psychotest Routes for Users
+    Route::get('/psychotest/entry', [PsychotestController::class, 'showEntryForm'])->name('psychotest.entry');
+    Route::get('/psychotest/test', [PsychotestController::class, 'showTestForm'])->name('psychotest.test');
+    Route::get('/psychotest/results/{participant}', [PsychotestController::class, 'showResults'])->name('psychotest.result');
+    Route::get('/test-result/{id}/download', [TestResultController::class, 'downloadTestResult']);
 });
 
 //GGOOOGLE LOGIN
 Route::middleware('guest')->group(function () {
-    Route::get('oauth/google', [\App\Http\Controllers\OauthController::class, 'redirectToProvider'])->name('oauth.google');  
+    Route::get('oauth/google', [\App\Http\Controllers\OauthController::class, 'redirectToProvider'])->name('oauth.google');
     Route::get('oauth/google/callback', [\App\Http\Controllers\OauthController::class, 'handleProviderCallback'])->name('oauth.google.callback');
 });
 
@@ -114,9 +122,28 @@ Route::get('/statuscv', function () {
 
 //Form 
 
-Route::get('/formtest', function(){
+Route::get('/formtest', function () {
     return Inertia::render('FormPage');
 })->name('/formtest');
+
+
+// API untuk operasi psikotest
+Route::prefix('api/psychotest')->group(function () {
+    // Verifikasi kode akses
+    Route::post('/verify-code', [PsychotestController::class, 'verifyCode']);
+
+    // Memulai test dengan data pengguna
+    Route::post('/start', [PsychotestController::class, 'startTest']);
+
+    // Menyimpan progres jawaban
+    Route::post('/save-progress', [PsychotestController::class, 'saveProgress']);
+
+    // Mendapatkan jawaban yang tersimpan
+    Route::get('/answers/{participant}', [PsychotestController::class, 'getAnswers']);
+
+    // Menyelesaikan test
+    Route::post('/complete', [PsychotestController::class, 'completeTest']);
+});
 
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(function () {
     // ADMIN ROUTES
@@ -134,7 +161,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::get('/adminNewCandidates', [CandidateController::class, 'newCandidates'])->name('adminNewCandidates');
 
     Route::get('/adminDetailNewCandidates/{id}', [CandidateController::class, 'newCandidatesDetail'])->name('adminDetailNewCandidates');
-    
+
     Route::post('/moveToScreened/{user_id}', [CandidateController::class, 'moveToScreened'])->name('moveToScreened');
 
     Route::get('/adminScreenedCandidates', [CandidateController::class, 'screenedCandidates'])->name('adminScreenedCandidates');
@@ -144,7 +171,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::post('/moveToInterview/{user_id}', [CandidateController::class, 'moveToInterview'])->name('moveToInterview');
 
     Route::get('/adminInterviewCandidates', [CandidateController::class, 'interviewCandidates'])->name('adminInterviewCandidates');
-    
+
     Route::get('/adminDetailInterviewCandidates/{id}', [CandidateController::class, 'interviewCandidatesDetail'])->name('adminDetailInterviewCandidates');
 
     Route::post('/moveToHired/{user_id}', [CandidateController::class, 'moveToHired'])->name('moveToHired');
@@ -173,6 +200,23 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::get('/jobs/create', [JobVacancyController::class, 'create'])->name('jobs.create');
     Route::post('/jobs', [JobVacancyController::class, 'store'])->name('jobs.store');
     Route::get('/jobs', [JobVacancyController::class, 'index'])->name('jobs.index');
+
+    //PYCHOTEST
+    Route::get('/admin/psychotest', [PsychotestController::class, 'index'])->name('admin.psychotest.index');
+    Route::get('/admin/psychotest/create', [PsychotestController::class, 'create'])->name('admin.psychotest.create');
+    Route::post('/admin/psychotest', [PsychotestController::class, 'store'])->name('admin.psychotest.store');
+    Route::get('/admin/psychotest/{id}', [PsychotestController::class, 'show'])->name('admin.psychotest.show');
+    Route::get('/admin/psychotest/{sessionId}/results', [PsychotestController::class, 'viewResults'])->name('admin.psychotest.viewResults');
+    Route::get('/admin/psychotest/{id}/download-result', [TestResultController::class, 'downloadTestResult']);
+
+
+
+    // PYSCHOTEST API Routes for Admin
+    Route::prefix('api/psychotest')->group(function () {
+        Route::patch('/sessions/{id}/toggle', [PsychotestController::class, 'toggleStatus']);
+        Route::get('/sessions/{id}/export', [PsychotestController::class, 'exportResults']);
+        Route::post('/codes/{id}/reset', [PsychotestController::class, 'resetCode']);
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
