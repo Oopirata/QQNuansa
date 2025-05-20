@@ -145,6 +145,10 @@ Route::prefix('api/psychotest')->group(function () {
     Route::post('/complete', [PsychotestController::class, 'completeTest']);
 });
 
+Route::get('/laporan-psikotes', function () {
+    return view('test-result');
+});
+
 Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(function () {
     // ADMIN ROUTES
     // Route::get('/adminDashboard', function () {
@@ -178,7 +182,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
 
     Route::get('/adminRejectedCandidates', [CandidateController::class, 'rejectedCandidates'])->name('adminRejectedCandidates');
 
-    Route::get('/adminDetailRejectedCandidates', [CandidateController::class, 'rejectedCandidatesDetail'])->name('adminDetailRejectedCandidates');
+    Route::get('/adminDetailRejectedCandidates/{id}', [CandidateController::class, 'rejectedCandidatesDetail'])->name('adminDetailRejectedCandidates');
 
     Route::post('/disqualify/{user_id}', [CandidateController::class, 'disqualify'])->name('disqualify');
 
@@ -207,7 +211,6 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
     Route::post('/admin/psychotest', [PsychotestController::class, 'store'])->name('admin.psychotest.store');
     Route::get('/admin/psychotest/{id}', [PsychotestController::class, 'show'])->name('admin.psychotest.show');
     Route::get('/admin/psychotest/{sessionId}/results', [PsychotestController::class, 'viewResults'])->name('admin.psychotest.viewResults');
-    Route::get('/admin/psychotest/{id}/download-result', [TestResultController::class, 'downloadTestResult']);
 
 
 
