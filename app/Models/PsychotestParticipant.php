@@ -15,6 +15,7 @@ class PsychotestParticipant extends Model
         'access_code_id',
         'name',
         'email',
+        'place_of_birth',
         'birthdate',
         'gender',
         'education',
@@ -32,5 +33,10 @@ class PsychotestParticipant extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(PsychotestAnswer::class, 'participant_id');
+    }
+
+    public function testResults()
+    {
+        return $this->hasOne(TestResult::class, 'participant_id');
     }
 }

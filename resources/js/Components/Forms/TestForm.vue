@@ -33,8 +33,65 @@
                     />
                 </div>
 
+                <!-- Tambahan field provinsi -->
                 <div class="form-group">
-                    <label for="birthdate">Tanggal Lahir</label>
+                    <label for="province"
+                        >Provinsi <span class="text-red-500">*</span></label
+                    >
+                    <select
+                        id="province"
+                        v-model="selectedProvince"
+                        @change="onProvinceChange"
+                        :disabled="isLoadingProvinces"
+                        class="form-select"
+                    >
+                        <option value="">Pilih Provinsi</option>
+                        <option
+                            v-for="province in provinces"
+                            :key="province.value"
+                            :value="province"
+                        >
+                            {{ province.label }}
+                        </option>
+                    </select>
+                    <div v-if="isLoadingProvinces" class="loading-text">
+                        Memuat provinsi...
+                    </div>
+                </div>
+
+                <!-- Tambahan field kota/kabupaten untuk tempat lahir -->
+                <div class="form-group">
+                    <label for="city">
+                        Tempat Lahir (Kota/Kabupaten)
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <select
+                        id="city"
+                        v-model="selectedCity"
+                        @change="onCityChange"
+                        :disabled="!selectedProvince || isLoadingCities"
+                        required
+                        class="form-select"
+                    >
+                        <option value="">Pilih Kota/Kabupaten</option>
+                        <option
+                            v-for="city in cities"
+                            :key="city.value"
+                            :value="city"
+                        >
+                            {{ city.label }}
+                        </option>
+                    </select>
+                    <div v-if="isLoadingCities" class="loading-text">
+                        Memuat kota/kabupaten...
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthdate"
+                        >Tanggal Lahir
+                        <span class="text-red-500">*</span></label
+                    >
                     <input
                         type="date"
                         id="birthdate"
@@ -44,7 +101,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="gender">Jenis Kelamin</label>
+                    <label for="gender"
+                        >Jenis Kelamin
+                        <span class="text-red-500">*</span></label
+                    >
                     <select
                         id="gender"
                         v-model="participantData.gender"
@@ -57,7 +117,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="education">Pendidikan Terakhir</label>
+                    <label for="education"
+                        >Pendidikan Terakhir
+                        <span class="text-red-500">*</span></label
+                    >
                     <input
                         type="text"
                         id="education"
@@ -68,7 +131,13 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="submit-btn">Mulai Test</button>
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                        :disabled="!selectedCity"
+                    >
+                        Mulai Test
+                    </button>
                 </div>
             </form>
         </div>
@@ -77,10 +146,14 @@
         <div v-else-if="!isSubmitted">
             <form @submit.prevent="submitTest">
                 <!-- Tampilkan data user -->
+                {{ console.log("Data peserta:", participantData) }}
                 <div class="participant-info">
                     <p>Nama: {{ participantData?.name }}</p>
                     <p>Email: {{ participantData?.email }}</p>
-                    <p>Tanggal Lahir: {{ participantData?.birthdate }}</p>
+                    <p>
+                        Tempat/Tanggal Lahir: {{ normalizedPlaceOfBirth }},
+                        {{ formattedBirthdate }}
+                    </p>
                     <p>Jenis Kelamin: {{ participantData?.gender }}</p>
                     <p>Pendidikan Terakhir: {{ participantData?.education }}</p>
                     <p>Jawaban saat ini: {{ answers }}</p>
@@ -226,14 +299,21 @@ export default {
             participantData: {
                 name: "",
                 email: "",
+                placeOfBirth: "",
                 birthdate: "",
                 gender: "",
                 education: "",
                 testDate: new Date().toISOString().split("T")[0],
             },
+            provinces: [],
+            cities: [],
+            selectedProvince: null,
+            selectedCity: null,
+            isLoadingProvinces: false,
+            isLoadingCities: false,
             sessionToken: null,
             questions: [],
-            answers: {}, // Standar object { questionId: answer }
+            answers: {},
             resultUrl: null,
             saveInProgress: false,
             lastSaveData: null,
@@ -251,23 +331,34 @@ export default {
                 (this.answeredCount / this.questions.length) * 100
             );
         },
+        formattedBirthdate() {
+            if (!this.participantData.birthdate) return "-";
+            const date = new Date(this.participantData.birthdate);
+            return new Intl.DateTimeFormat("id-ID", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+            }).format(date);
+        },
+        normalizedPlaceOfBirth() {
+            return this.normalizeCityName(this.participantData.placeOfBirth);
+        },
     },
-    created() {
-        if (this.userData.name) {
-            this.participantData.name = this.userData.name;
-        }
-        if (this.userData.email) {
+    async created() {
+        await this.fetchProvinces();
+
+        if (this.userData.name) this.participantData.name = this.userData.name;
+        if (this.userData.email)
             this.participantData.email = this.userData.email;
-        }
-        if (this.userData.birthdate) {
+        if (this.userData.birthdate)
             this.participantData.birthdate = this.userData.birthdate;
-        }
-        if (this.userData.gender) {
+        if (this.userData.gender)
             this.participantData.gender = this.userData.gender;
-        }
-        if (this.userData.education) {
+        if (this.userData.education)
             this.participantData.education = this.userData.education;
-        }
+        if (this.userData.placeOfBirth)
+            this.participantData.placeOfBirth = this.userData.placeOfBirth;
+
         try {
             this.questions = questionData;
 
@@ -279,6 +370,8 @@ export default {
 
                 if (participantJson && this.sessionToken) {
                     this.participantData = JSON.parse(participantJson);
+
+                    await this.syncLocationFromPlaceOfBirth();
                     this.loadSavedAnswers();
                     this.isInitializing = false;
                 } else {
@@ -298,7 +391,7 @@ export default {
             console.error("Error initializing TestForm:", error);
             localStorage.setItem(
                 "entry_error",
-                "Terjadi kesalahan saat memuat test. Silakan mulai kembali."
+                "Terjadi kesalahan saat memuat test. Silakan muat ulang halaman dan mulai kembali."
             );
             window.location.href = "/psychotest/entry";
         }
@@ -307,11 +400,114 @@ export default {
         window.removeEventListener("beforeunload", this.handleBeforeUnload);
     },
     methods: {
-        startNewTest() {
-            if (!this.accessCode) {
-                console.error("Missing access code");
+        normalizeCityName(rawName) {
+            if (!rawName) return "";
+            return rawName
+                .toLowerCase()
+                .replace(/^kota\s+/i, "")
+                .replace(/^kabupaten\s+/i, "")
+                .split(" ")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+        },
+
+        async onProvinceChange() {
+            this.selectedCity = null;
+            this.participantData.placeOfBirth = "";
+            if (this.selectedProvince) {
+                await this.fetchCities(this.selectedProvince.value);
+            } else {
+                this.cities = [];
+            }
+        },
+
+        onCityChange() {
+            if (this.selectedCity) {
+                this.participantData.placeOfBirth = this.selectedCity.label;
+            } else {
+                this.participantData.placeOfBirth = "";
+            }
+        },
+
+        async fetchProvinces() {
+            this.isLoadingProvinces = true;
+            try {
+                const res = await fetch(
+                    "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"
+                );
+                if (!res.ok) throw new Error("Gagal fetch provinsi");
+                const data = await res.json();
+                this.provinces = data.map((prov) => ({
+                    value: prov.id,
+                    label: prov.name,
+                }));
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLoadingProvinces = false;
+            }
+        },
+
+        async fetchCities(provinceId) {
+            if (!provinceId) {
+                this.cities = [];
                 return;
             }
+            this.isLoadingCities = true;
+            try {
+                const response = await fetch(
+                    `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`
+                );
+                if (!response.ok) throw new Error("Gagal fetch kota");
+                const data = await response.json();
+                this.cities = data.map((city) => ({
+                    value: city.id,
+                    label: city.name,
+                }));
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLoadingCities = false;
+            }
+        },
+
+        async syncLocationFromPlaceOfBirth() {
+            if (!this.participantData.placeOfBirth) return;
+            try {
+                for (const province of this.provinces) {
+                    const res = await fetch(
+                        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${province.value}.json`
+                    );
+                    if (!res.ok) continue;
+                    const data = await res.json();
+
+                    const citiesOfProvince = data.map((city) => ({
+                        value: city.id,
+                        label: city.name,
+                    }));
+
+                    const foundCity = citiesOfProvince.find(
+                        (c) => c.label === this.participantData.placeOfBirth
+                    );
+                    if (foundCity) {
+                        this.selectedProvince = province;
+                        this.cities = citiesOfProvince;
+                        this.selectedCity = foundCity;
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error("Error sync lokasi tempat lahir:", error);
+            }
+        },
+
+        startNewTest() {
+            if (!this.accessCode || !this.selectedCity) {
+                alert("Harap isi data dan pilih kota.");
+                return;
+            }
+
+            this.participantData.placeOfBirth = this.selectedCity.label;
 
             axios
                 .post("/api/psychotest/start", {
@@ -321,6 +517,7 @@ export default {
                     birthdate: this.participantData.birthdate,
                     gender: this.participantData.gender,
                     education: this.participantData.education,
+                    placeOfBirth: this.participantData.placeOfBirth,
                     testDate: this.participantData.testDate,
                 })
                 .then((response) => {
@@ -338,9 +535,7 @@ export default {
                 })
                 .catch((error) => {
                     console.error("Error starting test:", error);
-                    alert(
-                        "Terjadi kesalahan saat memulai test. Silakan coba lagi."
-                    );
+                    alert("Terjadi kesalahan saat memulai test.");
                 });
         },
 
@@ -375,32 +570,28 @@ export default {
         },
 
         saveProgress: throttle(function () {
-            if (this.saveInProgress) return;
-            if (Object.keys(this.answers).length === 0) return;
-
-            const currentAnswers = JSON.stringify(this.answers);
-            if (this.lastSaveData === currentAnswers) return;
-
-            if (!this.participantData?.id || !this.sessionToken) {
-                this.saveInProgress = false;
+            if (
+                this.saveInProgress ||
+                !this.participantData?.id ||
+                !this.sessionToken
+            )
                 return;
-            }
+            const currentAnswers = JSON.stringify(this.answers);
+            if (
+                this.lastSaveData === currentAnswers ||
+                Object.keys(this.answers).length === 0
+            )
+                return;
 
             this.saveInProgress = true;
             this.lastSaveData = currentAnswers;
             localStorage.setItem("psychotest_answers", currentAnswers);
 
-            const plainAnswers = JSON.parse(JSON.stringify(this.answers));
-
             axios
                 .post("/api/psychotest/save-progress", {
                     participant_id: this.participantData.id,
                     sessionToken: this.sessionToken,
-                    answers: plainAnswers,
-                })
-                .then(() => {})
-                .catch((error) => {
-                    console.error("Error saving progress:", error);
+                    answers: JSON.parse(currentAnswers),
                 })
                 .finally(() => {
                     this.saveInProgress = false;
@@ -408,25 +599,25 @@ export default {
         }, 1500),
 
         submitTest() {
-            if (this.submitting) return;
-
-            if (Object.keys(this.answers).length !== this.questions.length) {
-                alert("Harap isi semua jawaban sebelum submit.");
+            if (
+                this.submitting ||
+                Object.keys(this.answers).length !== this.questions.length
+            ) {
+                alert("Harap isi semua jawaban.");
                 return;
             }
 
             this.submitting = true;
 
-            const plainAnswers = toRaw(this.answers);
-
             axios
                 .post("/api/psychotest/complete", {
                     participant_id: this.participantData.id,
                     sessionToken: this.sessionToken,
-                    answers: plainAnswers,
+                    answers: toRaw(this.answers),
                     birthdate: this.participantData.birthdate,
                     gender: this.participantData.gender,
                     education: this.participantData.education,
+                    placeOfBirth: this.participantData.placeOfBirth,
                 })
                 .then((response) => {
                     this.isSubmitted = true;
@@ -438,9 +629,7 @@ export default {
                     localStorage.removeItem("psychotest_answers");
                 })
                 .catch((error) => {
-                    alert(
-                        "Terjadi kesalahan saat mengirim jawaban. Silakan coba lagi."
-                    );
+                    alert("Terjadi kesalahan saat mengirim jawaban.");
                     console.error("Error submitting test:", error);
                 })
                 .finally(() => {
@@ -456,10 +645,7 @@ export default {
                         JSON.stringify(this.answers)
                     );
                 }
-            } catch (e) {
-                // ignore error
-            }
-
+            } catch (e) {}
             const confirmationMessage =
                 "Apakah Anda yakin ingin meninggalkan halaman? Progres Anda sudah tersimpan.";
             event.returnValue = confirmationMessage;
@@ -467,17 +653,38 @@ export default {
         },
 
         getOptionsGridClass(optionCount) {
-            if (optionCount > 6) return "options-grid-four-columns";
-            return "options-grid-three-columns";
+            return optionCount > 6
+                ? "options-grid-four-columns"
+                : "options-grid-three-columns";
         },
     },
-
     watch: {
         answers: {
             handler() {
                 this.saveProgress();
             },
             deep: true,
+        },
+        cities(newCities) {
+            if (
+                this.participantData.placeOfBirth &&
+                (!this.selectedCity ||
+                    this.selectedCity.label !==
+                        this.participantData.placeOfBirth)
+            ) {
+                const city = newCities.find(
+                    (c) => c.label === this.participantData.placeOfBirth
+                );
+                this.selectedCity = city || null;
+            }
+        },
+        selectedCity: {
+            handler(newCity) {
+                if (newCity) {
+                    this.participantData.placeOfBirth = newCity.label;
+                }
+            },
+            immediate: true,
         },
     },
 };
@@ -701,11 +908,27 @@ input[disabled] {
     background-color: #45a049;
 }
 
+.submit-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
 .success-message {
     text-align: center;
     padding: 30px;
     background-color: #f0f7f0;
     border-radius: 8px;
+}
+
+.loading-text {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.text-red-500 {
+    color: #f56565;
 }
 
 /* Responsive */

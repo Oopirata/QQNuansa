@@ -183,13 +183,15 @@ class PsychotestController extends Controller
     // Method untuk menampilkan hasil psikotest (user)
     public function showResults($participantId)
     {
-        $participant = PsychotestParticipant::with(['answers.question', 'accessCode.session'])
+        $participant = PsychotestParticipant::with(['answers.question', 'accessCode.session', 'testResults'])
             ->findOrFail($participantId);
+        // dd($participant->testResults);
 
-        return Inertia::render('Psychotest/Results', [
+        return Inertia::render('Results', [
             'participant' => $participant
         ]);
     }
+
 
     // Method untuk verifikasi kode akses (user API)
 
@@ -199,9 +201,13 @@ class PsychotestController extends Controller
             'code' => 'required|string|exists:access_codes,code'
         ]);
 
+
         $accessCode = AccessCode::where('code', $request->code)
             ->with(['session', 'participant'])
             ->first();
+
+        // Log::info('Access Code:', ['accessCode' => $accessCode]);
+        // Log::info('Current User:', ['user' => Auth::user()]);
 
         if (!$accessCode) {
             return response()->json([
@@ -255,7 +261,7 @@ class PsychotestController extends Controller
 
         if ($accessCode->status === 'active' && $accessCode->participant) {
             // Cek apakah peserta terkait kode ini sama dengan user login sekarang
-            if ($accessCode->participant->user_id !== $currentUser->id) {
+            if ($accessCode->participant->email !== $currentUser->email) {
                 return response()->json([
                     'valid' => false,
                     'message' => 'Kode akses ini sudah dipakai oleh peserta lain.'
@@ -341,6 +347,7 @@ class PsychotestController extends Controller
             'birthdate' => 'required|date',
             'gender' => 'required|string',
             'education' => 'required|string',
+            'placeOfBirth' => 'required|string',
             'testDate' => 'required|date',
         ]);
 
@@ -392,13 +399,26 @@ class PsychotestController extends Controller
                     'gender' => $request->gender,
                     'education' => $request->education,
                     'test_date' => $request->testDate,
+                    'place_of_birth' => $request->placeOfBirth,
                     'start_time' => now(),
                     'session_token' => $sessionToken,
+                ]);
+                Log::info('Participant created', [
+                    'placeOfBirth' => $request->placeOfBirth,
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'participant' => $participant,
+                    'participant' => [
+                        'id' => $participant->id,
+                        'name' => $participant->name,
+                        'email' => $participant->email,
+                        'birthdate' => $participant->birthdate,
+                        'gender' => $participant->gender,
+                        'education' => $participant->education,
+                        'testDate' => $participant->test_date,
+                        'placeOfBirth' => $participant->place_of_birth, // mapping manual
+                    ],
                     'sessionToken' => $sessionToken,
                 ]);
             });
@@ -497,10 +517,10 @@ class PsychotestController extends Controller
             ->where('session_token', $request->sessionToken)
             ->firstOrFail();
 
-        // Save answers
+        // Simpan jawaban
         $this->saveProgress($request);
 
-        // Update missing participant info if provided
+        // Update info peserta
         $participant->update([
             'birthdate' => $request->birthdate ?? $participant->birthdate,
             'gender' => $request->gender ?? $participant->gender,
@@ -509,6 +529,9 @@ class PsychotestController extends Controller
         ]);
 
         $participant->accessCode->update(['status' => 'completed']);
+
+        // 🧾 Cetak PDF hasil tes
+        app(\App\Http\Controllers\TestResultController::class)->generateTestResult($participant->id);
 
         return response()->json([
             'success' => true,

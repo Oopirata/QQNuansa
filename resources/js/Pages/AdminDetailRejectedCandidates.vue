@@ -1,11 +1,8 @@
-# CandidateDetail.vue
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { Head, Link, usePage, router } from "@inertiajs/vue3";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import { Head, usePage, router } from "@inertiajs/vue3";
 import Sidebar from "@/Components/Sidebar/Sidebar.vue";
 import DetailHeader from "@/Components/Candidates/DetailHeader.vue";
-import EmailForm from '@/Components/Candidates/EmailForm.vue';
-import axios from "axios";
 
 const dropdownOpen = ref(false);
 const dropdownRef = ref(null);
@@ -34,24 +31,14 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    screenings: {
+        type: Array,
+        required: true,
+    },
 });
 
 const showPreview = ref(false);
 const previewContent = ref("");
-
-// Candidate data
-const candidate = ref({
-    id: 1,
-    name: "Cain Chana",
-    location: "Semarang",
-    jobTitle: "Psychologist Assistant",
-    email: "john.doe@gmail.com",
-    phone: "+ 380 66 779 71 00",
-    portfolio: "dribbble.com/johndoe",
-    status: "New",
-});
-
-console.log(usePage().props.candidates);
 
 const isSubMenuOpen = ref(true);
 
@@ -64,39 +51,6 @@ const candidateItems = [
 const toggleSubMenu = () => {
     isSubMenuOpen.value = !isSubMenuOpen.value;
 };
-// Screening questions and answers
-const screeningQuestions = ref([
-    {
-        question: "What is your expected monthly compensation?",
-        answer: "32.000 hrn per month",
-    },
-    {
-        question: "What is your current proficiency in German?",
-        answer: "A1",
-    },
-    {
-        question: "What's an interface?",
-        answer: "To kick off the employee onboarding checklist, you need to prepare the relevant paperwork and information prior to the employee's first day. Start by recording the employee's basic information in the form fields below.",
-    },
-]);
-
-// Email data
-const emails = ref([
-    {
-        sender: "Kathryn Murphy",
-        subject: "Interview Results",
-        time: "1 day ago",
-        content:
-            "Dear Cody,\n\nI am delighted to inform you that we would like to arrange an interview. Please let us know when you are available to come to our offices.\n\nSincerely,\nKathryn Murphy",
-    },
-    {
-        sender: "Kathryn Murphy",
-        subject: "Interview Results",
-        time: "1 day ago",
-        content:
-            "Dear Cody,\n\nPlease let us know when you are available to come to our offices.",
-    },
-]);
 
 const currentPage = ref(1);
 const totalPages = ref(6);
@@ -104,11 +58,60 @@ const totalPages = ref(6);
 // Action methods
 const disqualifyCandidate = (user_id) => {
     // Implementation for disqualifying candidate
-    router.post(route("disqualify", props.candidates.user_id))
+    router.post(route("disqualify", props.candidates.user_id));
 };
 
 const moveToScreened = (user_id) => {
     router.visit(route("adminDetailNewCandidates", id));
+};
+
+const normalizeCityName = (rawName) => {
+    if (!rawName) return "";
+    return rawName
+        .toLowerCase()
+        .replace(/^kota\s+/i, "")
+        .replace(/^kabupaten\s+/i, "")
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+};
+
+// Fix for CV preview URL
+const cvUrl = computed(() => {
+    if (!props.candidates.cv_path) return null;
+
+    // Extract just the filename from the path
+    const pathParts = props.candidates.cv_path.split("/");
+    const filename = pathParts[pathParts.length - 1];
+
+    // Try different path formats
+    return `/storage/cv_files/${filename}`;
+});
+
+// Fallback viewer using Google Docs Viewer as an alternative
+const googleDocsViewerUrl = computed(() => {
+    if (!cvUrl.value) return null;
+
+    const baseUrl = window.location.origin;
+    const fullPdfUrl = `${baseUrl}${cvUrl.value}`;
+
+    return `https://docs.google.com/viewer?url=${encodeURIComponent(
+        fullPdfUrl
+    )}&embedded=true`;
+});
+
+// Track PDF loading state
+const isPdfLoading = ref(true);
+const hasPdfError = ref(false);
+
+const handlePdfLoad = () => {
+    isPdfLoading.value = false;
+    hasPdfError.value = false;
+};
+
+const handlePdfError = () => {
+    isPdfLoading.value = false;
+    hasPdfError.value = true;
 };
 </script>
 
@@ -145,11 +148,20 @@ const moveToScreened = (user_id) => {
                             ></div>
                             <div>
                                 <h2 class="text-xl font-semibold">
-                                    {{ candidates.user }}
+                                    {{
+                                        candidates.user ||
+                                        candidates.name ||
+                                        "Unknown Candidate"
+                                    }}
                                 </h2>
                                 <p class="text-gray-600">
                                     <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ candidate.location }}
+                                    {{
+                                        normalizeCityName(
+                                            candidates.city ||
+                                                "Unknown Location"
+                                        )
+                                    }}
                                 </p>
                             </div>
                         </div>
@@ -162,13 +174,23 @@ const moveToScreened = (user_id) => {
                             </div>
                             <div class="flex items-center">
                                 <i class="fas fa-phone mr-2 text-gray-400"></i>
-                                <span>{{ candidate.phone }}</span>
+                                <span>{{
+                                    candidates.phone || "no phone number"
+                                }}</span>
                             </div>
-                            <div class="flex items-center">
+                            <div
+                                class="flex items-center"
+                                v-if="candidates.linkedin"
+                            >
                                 <i class="fas fa-link mr-2 text-gray-400"></i>
-                                <a href="#" class="text-blue-500">{{
-                                    candidate.portfolio
-                                }}</a>
+                                <a
+                                    :href="candidates.linkedin"
+                                    class="text-blue-500"
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    {{ candidates.linkedin }}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -178,64 +200,61 @@ const moveToScreened = (user_id) => {
                         <h3 class="text-lg font-semibold mb-4">
                             Screening questions
                         </h3>
-                        <div class="space-y-4">
-                            <div
-                                v-for="(qa, index) in screeningQuestions"
-                                :key="index"
-                            >
+                        <div v-if="screenings.length > 0" class="space-y-4">
+                            <div v-for="(qa, index) in screenings" :key="index">
                                 <p class="text-gray-600 mb-1">
                                     {{ qa.question }}
                                 </p>
                                 <p>{{ qa.answer }}</p>
                             </div>
                         </div>
+                        <div v-else class="text-gray-500 italic">
+                            No screening answers provided.
+                        </div>
                     </div>
                 </div>
-
-                <!-- Email Form Section -->
-                <EmailForm 
-                    :candidates="candidates"
-                />
+                <!-- CV Preview Section -->
                 <div class="w-1/2 pl-4">
                     <div class="bg-white rounded-lg shadow p-6">
-                        <h3 class="text-lg font-semibold mb-4">Emails</h3>
-                        <div class="mb-4">
-                            <input
-                                type="text"
-                                placeholder="Click to start composing a new email..."
-                                class="w-full border rounded p-2 text-gray-400"
-                            />
-                        </div>
-                        <div class="space-y-4">
+                        <!-- Primary PDF Viewer with fallback options -->
+                        <div v-if="cvUrl" class="w-full">
+                            <!-- Loading indicator -->
                             <div
-                                v-for="(email, index) in emails"
-                                :key="index"
-                                class="border-b pb-4"
+                                v-if="isPdfLoading"
+                                class="w-full h-16 flex items-center justify-center"
                             >
-                                <div
-                                    class="flex items-center justify-between mb-2"
+                                <span class="text-gray-500"
+                                    >Loading PDF...</span
                                 >
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center"
-                                        >
-                                            CF
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold">
-                                                {{ email.sender }}
-                                            </p>
-                                            <p class="text-gray-600">
-                                                {{ email.subject }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span class="text-gray-400">{{
-                                        email.time
-                                    }}</span>
-                                </div>
-                                <p class="text-gray-600">{{ email.content }}</p>
                             </div>
+
+                            <!-- First attempt: Direct iframe -->
+                            <iframe
+                                v-show="!hasPdfError"
+                                :src="cvUrl"
+                                class="w-full"
+                                style="height: 650px"
+                                frameborder="0"
+                                @load="handlePdfLoad"
+                                @error="handlePdfError"
+                            ></iframe>
+
+                            <!-- Fallback: Google Docs Viewer -->
+                            <iframe
+                                v-if="hasPdfError && googleDocsViewerUrl"
+                                :src="googleDocsViewerUrl"
+                                class="w-full"
+                                style="height: 650px"
+                                frameborder="0"
+                            ></iframe>
+                        </div>
+
+                        <!-- No PDF available message -->
+                        <div
+                            v-else
+                            class="w-full h-96 flex items-center justify-center bg-gray-100 text-gray-500"
+                        >
+                            CV file not available or access restricted
                         </div>
                     </div>
                 </div>

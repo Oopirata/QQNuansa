@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('access_code_id');
             $table->string('name');
             $table->string('email');
+            $table->string('place_of_birth');
             $table->date('birthdate');
             $table->string('gender');
             $table->string('education');
