@@ -66,10 +66,43 @@ export default {
         },
     },
     methods: {
-        lihatHasil(sessionID) {
-            this.$inertia.visit(
-                this.route("admin.psychotest.viewResults", sessionID)
-            );
+        copyAllCodes() {
+            // Cek apakah navigator.clipboard tersedia
+            if (navigator.clipboard) {
+                const allCodes = this.filteredCodes
+                    .map((code) => code.code)
+                    .join("\n");
+
+                navigator.clipboard
+                    .writeText(allCodes)
+                    .then(() => {
+                        alert("Semua kode akses berhasil disalin ke clipboard");
+                    })
+                    .catch((error) => {
+                        console.error("Gagal menyalin kode:", error);
+                        alert("Gagal menyalin kode");
+                    });
+            } else {
+                // Jika clipboard tidak tersedia, fallback ke execCommand
+                const allCodes = this.filteredCodes
+                    .map((code) => code.code)
+                    .join("\n");
+
+                // Buat textarea sementara untuk menyalin
+                const textArea = document.createElement("textarea");
+                textArea.value = allCodes;
+                document.body.appendChild(textArea);
+                textArea.select();
+                textArea.setSelectionRange(0, 99999); // Untuk mobile
+                try {
+                    document.execCommand("copy"); // Salin menggunakan execCommand
+                    alert("Semua kode akses berhasil disalin ke clipboard");
+                } catch (err) {
+                    console.error("Gagal menyalin kode:", err);
+                    alert("Gagal menyalin kode");
+                }
+                document.body.removeChild(textArea);
+            }
         },
         formatDateRange(start, end) {
             const startDate = dayjs(start);
@@ -198,8 +231,8 @@ export default {
                                     : "Aktifkan Sesi"
                             }}
                         </button>
-                        <button @click="lihatHasil(session.id)" class="btn">
-                            Lihat Hasil
+                        <button @click="copyAllCodes" class="btn">
+                            Salin Semua Kode
                         </button>
                     </div>
                 </div>

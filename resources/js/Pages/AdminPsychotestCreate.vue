@@ -152,6 +152,9 @@ export default {
 </script>
 
 <style scoped>
+:deep(*) {
+    font-family: "Kaisei Opti", sans-serif;
+}
 /* Container utama yang berisi sidebar dan konten */
 .app-container {
     display: flex;
