@@ -137,7 +137,6 @@ const dropdownOpen = ref(false);
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
             data-aos="fade-down"
         >
-            <div></div>
             <!-- Logo Section -->
             <div class="flex items-center">
                 <img
@@ -155,14 +154,14 @@ const dropdownOpen = ref(false);
             <!-- Navigation Menu Section -->
             <nav class="flex-grow px-20">
                 <div
-                    class="pb-2 border-b-4 border-[#5099D5] w-fit mx-auto rounded-lg"
+                    class="pb-2 border-b-4 border-[#5099D5] w-fit mx-auto rounded-lg shadow-md"
                 >
                     <div class="flex space-x-8 px-4">
                         <Link
                             v-for="(item, index) in menuItems"
                             :key="index"
                             :href="item.href"
-                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#0E74B8]"
+                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#0E74B8] font-semibold"
                             :class="{ 'nav-link-active': isActive(item.href) }"
                         >
                             {{ item.text }}
@@ -175,7 +174,7 @@ const dropdownOpen = ref(false);
             <div class="flex items-center space-x-6">
                 <!-- Hiring Link -->
                 <Link
-                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7]"
+                    class="text-[#5932EA] font-bold transition-colors duration-200 hover:text-[#4D62D7] hiring-pulse"
                     href="/hiring"
                 >
                     We are hiring!!
@@ -186,7 +185,7 @@ const dropdownOpen = ref(false);
                     <template v-if="$page.props.auth.user">
                         <button
                             @click="dropdownOpen = !dropdownOpen"
-                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 shadow-sm hover:shadow-md"
                         >
                             {{ $page.props.auth.user.name }}
                             <i
@@ -214,7 +213,7 @@ const dropdownOpen = ref(false);
                                 :href="route('admin.dashboard')"
                                 class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
-                                Admin Dashboard
+                                Admin Dashboad
                             </Link>
                             <Link
                                 :href="route('logout')"
@@ -228,7 +227,7 @@ const dropdownOpen = ref(false);
                     <template v-else>
                         <Link href="/login">
                             <button
-                                class="bg-green-200 text-green-800 px-4 py-2 rounded"
+                                class="bg-green-200 text-green-800 px-4 py-2 rounded shadow hover:shadow-md transition-all hover:bg-green-300"
                             >
                                 Log In
                             </button>
