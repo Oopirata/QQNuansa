@@ -57,28 +57,74 @@ const menuItems = [
 
 // Service tags
 const topRowTags = [
-    { text: "Assessment", href: "/serviceassesment" },
-    { text: "Psikotes", href: "/servicepsikotest" },
-    { text: "Konseling", href: "/servicekonseling" },
-    { text: "Coaching", href: "/servicecoaching" },
-    { text: "Outbond", href: "/servicesoutbond" },
+    {
+        text: "Assessment",
+        href: "/serviceassesment",
+        icon: "fas fa-clipboard-check",
+    },
+    { text: "Psikotes", href: "/servicepsikotest", icon: "fas fa-brain" },
+    { text: "Konseling", href: "/servicekonseling", icon: "fas fa-comments" },
+    {
+        text: "Coaching",
+        href: "/servicecoaching",
+        icon: "fas fa-user-graduate",
+    },
+    { text: "Outbond", href: "/servicesoutbond", icon: "fas fa-mountain" },
 ];
 
 const bottomRowTags = [
-    { text: "Seminar", href: "/servicesseminar" },
-    { text: "Training", href: "/servicestraining" },
-    { text: "Hypnotheraphy", href: "/serviceshypnotheraphy" },
-    { text: "Finger Test STIFIN", href: "/servicesSTIFIN" },
+    {
+        text: "Seminar",
+        href: "/servicesseminar",
+        icon: "fas fa-chalkboard-teacher",
+    },
+    { text: "Training", href: "/servicestraining", icon: "fas fa-dumbbell" },
+    {
+        text: "Hypnotheraphy",
+        href: "/serviceshypnotheraphy",
+        icon: "fas fa-spa",
+    },
+    {
+        text: "Finger Test STIFIN",
+        href: "/servicesSTIFIN",
+        icon: "fas fa-fingerprint",
+    },
+];
+
+// Service categories
+const serviceCategories = [
+    {
+        title: "CONSULTING",
+        description:
+            "Jasa konsultan di bidang manajemen sumber daya manusia, terutama untuk pengembangan organisasi.",
+        icon: "fas fa-comments-dollar",
+        color: "from-blue-600 to-cyan-500",
+    },
+    {
+        title: "LEARNING CENTER",
+        description:
+            "Jasa pelatihan dan pengembangan sumber daya manusia melalui berbagai program seperti inhouse training, public training, dan outbound.",
+        icon: "fas fa-graduation-cap",
+        color: "from-green-600 to-teal-500",
+    },
+    {
+        title: "RECRUITMENT AND ASSESSMENT",
+        description:
+            "Mencari, menyeleksi, dan merekomendasikan talenta terbaik untuk dikembangkan lebih lanjut dalam dunia industri maupun pendidikan.",
+        icon: "fas fa-user-check",
+        color: "from-purple-600 to-indigo-500",
+    },
 ];
 </script>
 
 <template>
     <Head title="Layanan" />
 
-    <div class="bg-white min-h-screen">
+    <div class="bg-gradient-to-b from-white to-blue-50 min-h-screen">
         <!-- Header Section -->
         <header
             class="p-4 flex justify-between items-center mt-2 container mx-auto"
+            data-aos="fade-down"
         >
             <!-- Logo Section -->
             <div class="flex items-center">
@@ -97,14 +143,14 @@ const bottomRowTags = [
             <!-- Navigation Menu Section -->
             <nav class="flex-grow px-20">
                 <div
-                    class="pb-2 border-b-4 border-[#5099D5] w-fit mx-auto rounded-lg"
+                    class="pb-2 border-b-4 border-[#5099D5] w-fit mx-auto rounded-lg shadow-md"
                 >
                     <div class="flex space-x-8 px-4">
                         <Link
                             v-for="(item, index) in menuItems"
                             :key="index"
                             :href="item.href"
-                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#0E74B8]"
+                            class="nav-link relative text-gray-700 text-center whitespace-nowrap transition-colors duration-200 hover:text-[#0E74B8] font-semibold"
                             :class="{ 'nav-link-active': isActive(item.href) }"
                         >
                             {{ item.text }}
@@ -127,8 +173,8 @@ const bottomRowTags = [
                 <div class="flex items-center relative" ref="dropdownRef">
                     <template v-if="$page.props.auth.user">
                         <button
-                            @click.stop="dropdownOpen = !dropdownOpen"
-                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                            @click="dropdownOpen = !dropdownOpen"
+                            class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 shadow-sm hover:shadow-md"
                         >
                             {{ $page.props.auth.user.name }}
                             <i
@@ -143,7 +189,7 @@ const bottomRowTags = [
                         >
                             <Link
                                 :href="route('profile.edit')"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
                                 Profile
                             </Link>
@@ -154,14 +200,14 @@ const bottomRowTags = [
                                     )
                                 "
                                 :href="route('admin.dashboard')"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
-                                Admin Dashboard
+                                Admin Dashboad
                             </Link>
                             <Link
                                 :href="route('logout')"
                                 method="post"
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
                                 Log Out
                             </Link>
@@ -170,7 +216,7 @@ const bottomRowTags = [
                     <template v-else>
                         <Link href="/login">
                             <button
-                                class="bg-green-200 text-green-800 px-4 py-2 rounded cursor-pointer"
+                                class="bg-green-200 text-green-800 px-4 py-2 rounded shadow hover:shadow-md transition-all hover:bg-green-300"
                             >
                                 Log In
                             </button>
@@ -183,93 +229,328 @@ const bottomRowTags = [
             </div>
         </header>
 
+        <h1
+            class="text-center text-3xl font-bold mt-16 relative"
+            data-aos="fade-down"
+        >
+            <span class="relative inline-block">
+                LAYANAN KAMI
+                <span
+                    class="absolute bottom-0 left-0 w-full h-1 bg-blue-500 rounded-full"
+                ></span>
+            </span>
+        </h1>
+
         <!-- Main Content -->
         <main class="p-8">
-            <h1 class="text-center text-2xl font-bold -mt-5">Layanan Kami</h1>
             <div class="max-w-7xl mx-auto mt-8">
-                <!-- Service Tags -->
-                <div class="flex flex-wrap gap-3 justify-center mb-4">
-                    <Link
-                        v-for="tag in topRowTags"
-                        :key="tag.text"
-                        :href="tag.href"
-                        class="tag-link"
+                <!-- Service Categories -->
+                <div class="grid md:grid-cols-3 gap-6 mb-16" data-aos="fade-up">
+                    <div
+                        v-for="(category, index) in serviceCategories"
+                        :key="index"
+                        class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1 duration-300 flex flex-col"
                     >
-                        {{ tag.text }}
-                    </Link>
+                        <div
+                            :class="`bg-gradient-to-r ${category.color} p-6 text-white`"
+                        >
+                            <div class="flex items-center justify-center mb-4">
+                                <i :class="`${category.icon} text-4xl`"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-center">
+                                {{ category.title }}
+                            </h3>
+                        </div>
+                        <div class="p-6 flex-grow">
+                            <p class="text-gray-700">
+                                {{ category.description }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex flex-wrap gap-3 justify-center mb-12">
-                    <Link
-                        v-for="tag in bottomRowTags"
-                        :key="tag.text"
-                        :href="tag.href"
-                        class="tag-link"
-                    >
-                        {{ tag.text }}
-                    </Link>
+                <!-- Service Tags Section -->
+                <div
+                    class="py-8 px-4 mb-12 bg-white rounded-xl shadow-lg"
+                    data-aos="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-8 text-center">
+                        Layanan Spesifik Kami
+                    </h2>
+
+                    <div class="flex flex-wrap gap-4 justify-center mb-6">
+                        <Link
+                            v-for="tag in topRowTags"
+                            :key="tag.text"
+                            :href="tag.href"
+                            class="tag-link group"
+                        >
+                            <i
+                                :class="`${tag.icon} mr-2 group-hover:text-blue-600`"
+                            ></i>
+                            {{ tag.text }}
+                        </Link>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <Link
+                            v-for="tag in bottomRowTags"
+                            :key="tag.text"
+                            :href="tag.href"
+                            class="tag-link group"
+                        >
+                            <i
+                                :class="`${tag.icon} mr-2 group-hover:text-blue-600`"
+                            ></i>
+                            {{ tag.text }}
+                        </Link>
+                    </div>
                 </div>
 
                 <!-- Gallery Grid -->
-                <div class="grid grid-cols-3 gap-4 max-w-6xl mx-auto mt-8">
+                <div data-aos="fade-up">
+                    <h2 class="text-2xl font-bold mb-8 text-center">
+                        Dokumentasi Kegiatan
+                    </h2>
                     <div
-                        class="relative overflow-hidden rounded-lg aspect-square"
+                        class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto"
                     >
-                        <img
-                            src="/images/sakjose.jpeg"
-                            alt="Gallery Image 1"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
-                    <div
-                        class="relative overflow-hidden rounded-lg aspect-square"
-                    >
-                        <img
-                            src="/images/asik.jpg"
-                            alt="Gallery Image 2"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
-                    <div
-                        class="relative overflow-hidden rounded-lg aspect-auto"
-                    >
-                        <img
-                            src="/images/seminar 2.jpeg"
-                            alt="Gallery Image 3"
-                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg group"
+                            data-aos="zoom-in"
+                            data-aos-delay="100"
+                        >
+                            <img
+                                src="/images/sakjose.jpeg"
+                                alt="Gallery Image 1"
+                                class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end"
+                            >
+                                <div class="p-4 text-white">
+                                    <h3 class="font-bold">
+                                        Pelatihan Teamwork
+                                    </h3>
+                                    <p class="text-sm">
+                                        Membangun kolaborasi tim yang efektif
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg group"
+                            data-aos="zoom-in"
+                            data-aos-delay="200"
+                        >
+                            <img
+                                src="/images/asik.jpg"
+                                alt="Gallery Image 2"
+                                class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end"
+                            >
+                                <div class="p-4 text-white">
+                                    <h3 class="font-bold">
+                                        Workshop Pengembangan SDM
+                                    </h3>
+                                    <p class="text-sm">
+                                        Strategi pengembangan potensi karyawan
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="relative overflow-hidden rounded-xl shadow-lg group"
+                            data-aos="zoom-in"
+                            data-aos-delay="300"
+                        >
+                            <img
+                                src="/images/seminar 2.jpeg"
+                                alt="Gallery Image 3"
+                                class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end"
+                            >
+                                <div class="p-4 text-white">
+                                    <h3 class="font-bold">
+                                        Seminar Kepemimpinan
+                                    </h3>
+                                    <p class="text-sm">
+                                        Membangun jiwa kepemimpinan yang tangguh
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Description -->
-                <p class="text-xl mt-10 mr-56 mb-10">
-                    PT. Ara Nuansa Katumbiri menawarkan tiga layanan utama yang
-                    sesuai dengan keahlian dan bidang jasa yang dikelola.
-                    Layanan pertama adalah CONSULTING, yang berfokus pada jasa
-                    konsultan di bidang manajemen sumber daya manusia, terutama
-                    untuk pengembangan organisasi. Layanan kedua adalah LEARNING
-                    CENTER, yang menyediakan jasa pelatihan dan pengembangan
-                    sumber daya manusia melalui berbagai program, seperti
-                    inhouse training, public training, dan outbound, yang
-                    dirancang untuk memenuhi kebutuhan spesifik organisasi atau
-                    perusahaan. Layanan ketiga adalah RECRUITMENT AND
-                    ASSESSMENT, yang bertujuan untuk mencari, menyeleksi, dan
-                    merekomendasikan talenta terbaik untuk dikembangkan lebih
-                    lanjut, baik dalam dunia industri maupun dunia pendidikan.
-                </p>
+                <div
+                    class="bg-white p-8 rounded-xl shadow-lg mt-16"
+                    data-aos="fade-up"
+                >
+                    <h2 class="text-2xl font-bold mb-6 text-center">
+                        Tentang Layanan Kami
+                    </h2>
+                    <p
+                        class="text-lg text-gray-700 leading-relaxed max-w-4xl mx-auto"
+                    >
+                        PT. Ara Nuansa Katumbiri menawarkan tiga layanan utama
+                        yang sesuai dengan keahlian dan bidang jasa yang
+                        dikelola. Layanan pertama adalah
+                        <span class="font-semibold text-blue-700"
+                            >CONSULTING</span
+                        >, yang berfokus pada jasa konsultan di bidang manajemen
+                        sumber daya manusia, terutama untuk pengembangan
+                        organisasi. Layanan kedua adalah
+                        <span class="font-semibold text-green-700"
+                            >LEARNING CENTER</span
+                        >, yang menyediakan jasa pelatihan dan pengembangan
+                        sumber daya manusia melalui berbagai program, seperti
+                        inhouse training, public training, dan outbound, yang
+                        dirancang untuk memenuhi kebutuhan spesifik organisasi
+                        atau perusahaan. Layanan ketiga adalah
+                        <span class="font-semibold text-purple-700"
+                            >RECRUITMENT AND ASSESSMENT</span
+                        >, yang bertujuan untuk mencari, menyeleksi, dan
+                        merekomendasikan talenta terbaik untuk dikembangkan
+                        lebih lanjut, baik dalam dunia industri maupun dunia
+                        pendidikan.
+                    </p>
+                </div>
 
-                <!-- Bottom Image -->
-                <div class="max-w-6xl mx-auto">
-                    <div class="relative overflow-hidden rounded-lg mt-5">
+                <!-- Bottom Image with Overlay -->
+                <div class="max-w-6xl mx-auto mt-16" data-aos="fade-up">
+                    <div class="relative overflow-hidden rounded-xl shadow-xl">
                         <img
                             src="/images/seminar.jpg"
                             alt="seminar"
-                            class="object-cover hover:scale-105 transition-transform duration-300"
+                            class="w-full object-cover h-96"
                         />
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-transparent flex items-center"
+                        >
+                            <div class="text-white p-12">
+                                <h2 class="text-3xl font-bold mb-4">
+                                    Bangun SDM unggul bersama kami.
+                                </h2>
+                                <p class="text-xl mb-6 max-w-md">
+                                    Kami siap mendukung pengembangan SDM
+                                    organisasi Anda bersama tim ahli terpercaya.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonials Section -->
+                <div class="py-16" data-aos="fade-up">
+                    <h2 class="text-2xl font-bold mb-12 text-center">
+                        Apa Kata Klien Kami
+                    </h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 text-xl">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="italic text-gray-600 mb-6">
+                                "Program training yang sangat terstruktur dan
+                                relevan dengan kebutuhan perusahaan kami. Tim
+                                fasilitator sangat profesional dan mampu
+                                menyampaikan materi dengan menarik."
+                            </p>
+                            <div class="flex items-center">
+                                <div
+                                    class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-500"
+                                >
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold">Budi Santoso</h4>
+                                    <p class="text-gray-500 text-sm">
+                                        HR Manager, PT Maju Bersama
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 text-xl">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                            <p class="italic text-gray-600 mb-6">
+                                "Layanan assessment yang sangat membantu kami
+                                dalam proses rekrutmen. Metodologi yang
+                                digunakan sangat akurat dalam mengidentifikasi
+                                talenta yang sesuai dengan kebutuhan kami."
+                            </p>
+                            <div class="flex items-center">
+                                <div
+                                    class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-500"
+                                >
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold">Siti Rahma</h4>
+                                    <p class="text-gray-500 text-sm">
+                                        Direktur SDM, CV Sejahtera
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="text-yellow-400 text-xl">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                            <p class="italic text-gray-600 mb-6">
+                                "Konsultasi pengembangan organisasi yang
+                                diberikan sangat membantu transformasi
+                                perusahaan kami. Pendekatan yang komprehensif
+                                dan solusi yang diberikan benar-benar sesuai
+                                dengan tantangan yang kami hadapi."
+                            </p>
+                            <div class="flex items-center">
+                                <div
+                                    class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-500"
+                                >
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold">Ahmad Fajar</h4>
+                                    <p class="text-gray-500 text-sm">
+                                        CEO, PT Inovasi Indonesia
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
+
+        <!-- Footer CTA -->
     </div>
 </template>
 
@@ -325,29 +606,37 @@ const bottomRowTags = [
 
 /* Tag styles */
 .tag-link {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #f8f8f8;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
     border-radius: 100px;
-    font-size: 14px;
-    color: #333;
-    transition: all 0.2s ease-in-out;
+    font-size: 15px;
+    font-weight: 500;
+    color: #4b5563;
+    transition: all 0.3s ease;
     text-decoration: none;
     white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .tag-link:hover {
-    background-color: #e8e8e8;
-    transform: translateY(-1px);
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #1e40af;
 }
 
 /* Responsive styles */
 @media (max-width: 768px) {
     .tag-link {
-        font-size: 12px;
-        padding: 6px 12px;
+        font-size: 14px;
+        padding: 8px 16px;
     }
 }
+
 .hiring-pulse {
     animation: colorPulse 2s infinite;
 }

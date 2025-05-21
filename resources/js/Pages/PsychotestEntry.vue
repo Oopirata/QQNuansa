@@ -2,6 +2,26 @@
     <Head title="Psikotest Entry" />
 
     <div class="psikotest-entry-container">
+        <a
+            href="/servicepsikotest"
+            class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 mb-4"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                class="w-5 h-5"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                />
+            </svg>
+        </a>
+
         <h1 class="test-title">Psikotest Entry</h1>
 
         <!-- Tampilkan error dari TestForm jika ada -->
