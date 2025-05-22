@@ -56,31 +56,15 @@ const menuItems = [
 const legalitasItems = [
     {
         title: "Akta Pendirian",
-        number: "No. 12/2023",
-        date: "15 Januari 2023",
+        number: "No. 18 Tanggal 23 Desember 2021",
         icon: "fas fa-file-contract",
         color: "#0E74B8",
     },
     {
-        title: "SIUP",
-        number: "No. 8273/SIP/2023",
-        date: "25 Januari 2023",
-        icon: "fas fa-certificate",
-        color: "#5932EA",
-    },
-    {
         title: "NPWP",
-        number: "99.876.543.2-000.000",
-        date: "30 Januari 2023",
+        number: "53.789.333. 1-502.000",
         icon: "fas fa-id-card",
         color: "#FF5733",
-    },
-    {
-        title: "TDP",
-        number: "No. TDP-12345/2023",
-        date: "5 Februari 2023",
-        icon: "fas fa-building",
-        color: "#4CAF50",
     },
 ];
 </script>
@@ -266,9 +250,6 @@ const legalitasItems = [
                                 </h3>
                             </div>
                             <p class="text-gray-700">{{ item.number }}</p>
-                            <p class="text-gray-500 text-sm">
-                                Tanggal: {{ item.date }}
-                            </p>
                         </div>
                     </div>
 
