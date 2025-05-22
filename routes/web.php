@@ -205,8 +205,6 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
 
     Route::post('/moveToHired/{user_id}', [CandidateController::class, 'moveToHired'])->name('moveToHired');
 
-    Route::get('/adminKaryawan', [CandidateController::class, 'showEmployees'])->name('adminKaryawan');
-
     Route::get('/adminRejectedCandidates', [CandidateController::class, 'rejectedCandidates'])->name('adminRejectedCandidates');
 
     Route::get('/adminDetailRejectedCandidates/{id}', [CandidateController::class, 'rejectedCandidatesDetail'])->name('adminDetailRejectedCandidates');

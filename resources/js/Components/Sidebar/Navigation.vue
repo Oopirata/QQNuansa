@@ -104,21 +104,6 @@ const isActive = (paths) => {
             </li>
 
             <li class="mb-4">
-                <Link
-                    href="/adminKaryawan"
-                    class="flex items-center hover:text-gray-900"
-                    :class="
-                        page.url === '/adminKaryawan'
-                            ? 'text-purple-600'
-                            : 'text-gray-600'
-                    "
-                >
-                    <i class="fas fa-user-tie mr-2"></i>
-                    Daftar Karyawan
-                </Link>
-            </li>
-
-            <li class="mb-4">
                 <button
                     @click="togglePsychotest"
                     class="flex items-center w-full text-gray-600 hover:text-gray-900"
@@ -154,6 +139,21 @@ const isActive = (paths) => {
                         </Link>
                     </li>
                 </ul>
+            </li>
+
+            <li class="mb-4">
+                <Link
+                    href="/adminEmail"
+                    class="flex items-center hover:text-gray-900"
+                    :class="
+                        page.url === '/adminEmail'
+                            ? 'text-purple-600'
+                            : 'text-gray-600'
+                    "
+                >
+                    <i class="fas fa-envelope mr-2"></i>
+                    E-mail
+                </Link>
             </li>
 
             <li class="mb-4">
