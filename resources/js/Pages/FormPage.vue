@@ -79,4 +79,29 @@ export default {
     color: #2c3e50;
     margin: 20px auto;
 }
+/* Add this to your existing CSS */
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Creates 2 columns */
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.option {
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+/* You might also want to adjust image sizing in this layout */
+.option-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 5px;
+}
+
+.question-image {
+    max-width: 300px;
+    margin: 10px 0;
+}
 </style>
