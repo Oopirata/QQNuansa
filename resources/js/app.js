@@ -1,6 +1,7 @@
 import "../css/app.css";
 import "./bootstrap";
 
+import { Inertia } from "@inertiajs/inertia";
 import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
@@ -35,4 +36,22 @@ createInertiaApp({
     progress: {
         color: "#4B5563",
     },
+});
+
+function updateCsrfToken() {
+    const token = document.querySelector('meta[name="csrf-token"]');
+    if (token) {
+        axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+        console.log("CSRF token updated:", token.content);
+    } else {
+        console.warn("CSRF token meta tag not found!");
+    }
+}
+
+// Panggil sekali saat app mulai
+updateCsrfToken();
+
+// Setiap kali Inertia selesai navigasi, update ulang token
+Inertia.on("navigate", () => {
+    updateCsrfToken();
 });

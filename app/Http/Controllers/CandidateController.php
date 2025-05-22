@@ -808,8 +808,30 @@ class CandidateController extends Controller
         $candidate->status = 3;
         $candidate->save();
 
-        return redirect()->route('adminInterviewCandidates');
+        return redirect()->route('AdminEmployee');
     }
+
+    public function showEmployees()
+    {
+        $employees = Applicant::with('user') // asumsi ada relasi ke tabel users
+            ->where('status', 3)
+            ->get()
+            ->map(function ($applicant) {
+                return [
+                    'id' => $applicant->id,
+                    'nama' => $applicant->user->name ?? '-', // atau field yang sesuai
+                    'email' => $applicant->user->email ?? '-',
+                    'tanggal_masuk' => $applicant->updated_at, // bisa diganti dengan field lain kalau ada
+                ];
+            });
+
+        // dd($employees)->all();
+
+        return Inertia::render('AdminEmployee', [
+            'employees' => $employees,
+        ]);
+    }
+
 
     public function rejectedCandidates(Request $request)
     {
