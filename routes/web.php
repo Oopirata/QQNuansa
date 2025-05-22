@@ -18,6 +18,31 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
+Route::get('/debug-session', function () {
+    $sessionConfig = config('session');
+
+    return response()->json([
+        'session_config' => [
+            'driver' => $sessionConfig['driver'],
+            'cookie_name' => $sessionConfig['cookie'],
+            'domain' => $sessionConfig['domain'],
+            'secure' => $sessionConfig['secure'],
+            'path' => $sessionConfig['path'],
+            'same_site' => $sessionConfig['same_site'],
+            'http_only' => $sessionConfig['http_only'],
+        ],
+        'session_info' => [
+            'session_id' => session()->getId(),
+            'session_name' => session()->getName(),
+            'csrf_token' => csrf_token(),
+            'session_data' => session()->all(),
+        ],
+        'cookies_sent' => request()->cookies->all(),
+        'app_name' => config('app.name'),
+        'cookie_formula' => \Illuminate\Support\Str::slug(config('app.name'), '_') . '_session',
+    ]);
+});
+
 Route::get('/', function () {
     // return Inertia::render('Welcome', [
     //     'canLogin' => Route::has('login'),

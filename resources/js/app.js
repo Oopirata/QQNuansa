@@ -11,12 +11,31 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-const token = document.querySelector('meta[name="csrf-token"]');
-if (token) {
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
-} else {
-    console.error("CSRF token not found");
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null;
 }
+
+function updateCsrfToken() {
+    const token = getCookie("XSRF-TOKEN");
+    if (token) {
+        axios.defaults.headers.common["X-CSRF-TOKEN"] =
+            decodeURIComponent(token);
+        console.log("CSRF token updated:", token);
+    } else {
+        console.warn("CSRF token cookie not found");
+    }
+}
+
+// Panggil sekali saat app mulai
+updateCsrfToken();
+
+// Update token setiap kali Inertia navigasi (SPA page change)
+Inertia.on("navigate", () => {
+    updateCsrfToken();
+});
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -36,22 +55,4 @@ createInertiaApp({
     progress: {
         color: "#4B5563",
     },
-});
-
-function updateCsrfToken() {
-    const token = document.querySelector('meta[name="csrf-token"]');
-    if (token) {
-        axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
-        console.log("CSRF token updated:", token.content);
-    } else {
-        console.warn("CSRF token meta tag not found!");
-    }
-}
-
-// Panggil sekali saat app mulai
-updateCsrfToken();
-
-// Setiap kali Inertia selesai navigasi, update ulang token
-Inertia.on("navigate", () => {
-    updateCsrfToken();
 });

@@ -71,7 +71,7 @@ const teamMembers = [
     {
         name: "Siti Nurhayati",
         position: "Manajer Pelatihan",
-        image: "/api/placeholder/100/100",
+        image: "https://via.placeholder.com/100",
     },
 ];
 
