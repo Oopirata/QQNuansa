@@ -63,8 +63,8 @@ const disqualifyCandidate = (user_id) => {
     router.post(route("disqualify", props.candidates.user_id));
 };
 
-const moveToHired = (user_id) => {
-    router.post(route("moveToHired", props.candidates.user_id));
+const moveToHired = () => {
+    router.get(route("adminKaryawan"));
 };
 
 const normalizeCityName = (rawName) => {
