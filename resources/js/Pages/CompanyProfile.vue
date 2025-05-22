@@ -49,24 +49,24 @@ const menuItems = [
 
 const teamMembers = [
     {
-        name: "Dr. Bambang Sutrisno",
-        position: "Direktur Utama",
-        image: "/api/placeholder/100/100",
+        name: "Tony Eryanto, ST, C.Ht",
+        position: "Associate Trainer, Hypnotherapist &Facilitator",
+        image: "/images/Profesional1.jpg",
     },
     {
-        name: "Hendra Wijaya",
-        position: "Kepala Konsultan SDM",
-        image: "/api/placeholder/100/100",
+        name: "Prof. Tjetjep Rohendi Rohidi",
+        position: "Associate Trainer, Researcher & Facilitator",
+        image: "/images/Profesional2.jpg",
     },
     {
-        name: "Siti Nurhayati",
-        position: "Manajer Pelatihan",
-        image: "/api/placeholder/100/100",
+        name: "Vika Himawanti Suprapto",
+        position: "SE, C.PS Founder & Director VCTAMA ACADEMY",
+        image: "/images/Profesional3.jpg",
     },
     {
-        name: "Siti Nurhayati",
-        position: "Manajer Pelatihan",
-        image: "/api/placeholder/100/100",
+        name: "Didit Dudi Kusuma, S.Psi, Psikolog",
+        position: "Associate Trainer",
+        image: "/images/Profesional4.jpg",
     },
     {
         name: "Siti Nurhayati",
