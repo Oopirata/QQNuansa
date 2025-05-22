@@ -570,12 +570,15 @@ export default {
         },
 
         saveProgress: throttle(function () {
+            console.log("saveProgress dipanggil dengan jawaban:", this.answers);
+
             if (
                 this.saveInProgress ||
                 !this.participantData?.id ||
                 !this.sessionToken
             )
                 return;
+
             const currentAnswers = JSON.stringify(this.answers);
             if (
                 this.lastSaveData === currentAnswers ||
@@ -592,6 +595,15 @@ export default {
                     participant_id: this.participantData.id,
                     sessionToken: this.sessionToken,
                     answers: JSON.parse(currentAnswers),
+                })
+                .then((response) => {
+                    console.log("Response save-progress:", response.data);
+                })
+                .catch((error) => {
+                    console.error(
+                        "Error save-progress:",
+                        error.response || error
+                    );
                 })
                 .finally(() => {
                     this.saveInProgress = false;

@@ -460,38 +460,40 @@ class PsychotestController extends Controller
     // Method untuk menyimpan progress jawaban (user API)
     public function saveProgress(Request $request)
     {
-        try {
-            // Log untuk debug
-            Log::info('Saving progress', $request->all());
+        Log::info('saveProgress called with:', $request->all());
 
+        try {
             $request->validate([
                 'participant_id' => 'required|exists:psychotest_participants,id',
                 'sessionToken' => 'required|string',
                 'answers' => 'required|array'
             ]);
 
-            // Verify session token
             $participant = PsychotestParticipant::where('id', $request->participant_id)
                 ->where('session_token', $request->sessionToken)
                 ->firstOrFail();
 
-            // Delete existing answers to avoid duplicates
+            // Hapus jawaban lama peserta
             PsychotestAnswer::where('participant_id', $participant->id)->delete();
 
-            // Save or update answers
+            // Simpan jawaban baru satu per satu dengan try-catch untuk deteksi error
             foreach ($request->answers as $questionId => $answer) {
                 if (!empty($answer)) {
-                    PsychotestAnswer::create([
-                        'participant_id' => $participant->id,
-                        'question_id' => $questionId,
-                        'answer' => $answer
-                    ]);
+                    try {
+                        PsychotestAnswer::create([
+                            'participant_id' => $participant->id,
+                            'question_id' => $questionId,
+                            'answer' => $answer
+                        ]);
+                    } catch (\Exception $ex) {
+                        Log::error("Error saving answer: QID {$questionId}, Answer {$answer}, Msg: " . $ex->getMessage());
+                    }
                 }
             }
 
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            Log::error('Error saving progress: ' . $e->getMessage());
+            Log::error('Error in saveProgress: ' . $e->getMessage());
             Log::error($e->getTraceAsString());
 
             return response()->json([
@@ -500,6 +502,7 @@ class PsychotestController extends Controller
             ], 500);
         }
     }
+
 
     // Method untuk menyelesaikan test (user API)
     public function completeTest(Request $request)
