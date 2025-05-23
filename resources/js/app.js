@@ -11,12 +11,34 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-const token = document.querySelector('meta[name="csrf-token"]');
-if (token) {
-    axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
-} else {
-    console.error("CSRF token not found");
-}
+// const token = document.querySelector('meta[name="csrf-token"]');
+// if (token) {
+//     axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+// } else {
+//     console.error("CSRF token not found");
+// }
+
+axios.interceptors.request.use(
+    (config) => {
+        const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+        if (tokenMeta) {
+            config.headers["X-CSRF-TOKEN"] = tokenMeta.content;
+            console.log(
+                "Axios Interceptor: CSRF token set from meta:",
+                tokenMeta.content,
+                "for URL:",
+                config.url
+            ); // TAMBAHKAN INI
+        } else {
+            console.error("Axios Interceptor: CSRF token meta tag NOT FOUND.");
+        }
+        return config;
+    },
+    (error) => {
+        console.error("Axios Interceptor: Error in request setup", error); // TAMBAHKAN INI
+        return Promise.reject(error);
+    }
+);
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
