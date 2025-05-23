@@ -38,20 +38,20 @@ createInertiaApp({
     },
 });
 
-function updateCsrfToken() {
-    const token = document.querySelector('meta[name="csrf-token"]');
-    if (token) {
-        axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
-        console.log("CSRF token updated:", token.content);
-    } else {
-        console.warn("CSRF token meta tag not found!");
-    }
-}
+// function updateCsrfToken() {
+//     const token = document.querySelector('meta[name="csrf-token"]');
+//     if (token) {
+//         axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+//         console.log("CSRF token updated:", token.content);
+//     } else {
+//         console.warn("CSRF token meta tag not found!");
+//     }
+// }
 
-// Panggil sekali saat app mulai
-updateCsrfToken();
+// // Panggil sekali saat app mulai
+// updateCsrfToken();
 
-// Setiap kali Inertia selesai navigasi, update ulang token
-Inertia.on("navigate", () => {
-    updateCsrfToken();
-});
+// // Setiap kali Inertia selesai navigasi, update ulang token
+// Inertia.on("navigate", () => {
+//     updateCsrfToken();
+// });
