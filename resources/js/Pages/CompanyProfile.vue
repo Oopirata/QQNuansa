@@ -69,9 +69,9 @@ const teamMembers = [
         image: "/images/Profesional4.jpg",
     },
     {
-        name: "Siti Nurhayati",
-        position: "Manajer Pelatihan",
-        image: "/api/placeholder/100/100",
+        name: "Nurdin Adyansah, SE,M.IT",
+        position: "Associate Trainer, Programmer & Facilitator",
+        image: "images/Profesional5.jpg",
     },
 ];
 
