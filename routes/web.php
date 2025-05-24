@@ -128,7 +128,7 @@ Route::get('/formtest', function () {
 
 
 // API untuk operasi psikotest
-Route::prefix('api/psychotest')->group(function () {
+Route::prefix('api/psychotest')->middleware('web')->group(function () {
     // Verifikasi kode akses
     Route::post('/verify-code', [PsychotestController::class, 'verifyCode']);
 
