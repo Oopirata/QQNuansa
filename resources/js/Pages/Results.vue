@@ -272,6 +272,7 @@ export default {
     components: { Head, Sidebar },
     props: {
         participant: Object,
+        userRole: String,
     },
     methods: {
         formatDate(date) {
@@ -294,7 +295,11 @@ export default {
             return ((clamped - 70) / 60) * 100;
         },
         goBack() {
-            window.history.back();
+            if (this.userRole === "admin") {
+                window.history.back();
+            } else {
+                this.$inertia.visit("/servicepsikotest"); // Ganti dengan route yang sesuai
+            }
         },
     },
     mounted() {

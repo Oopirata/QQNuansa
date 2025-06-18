@@ -185,10 +185,15 @@ class PsychotestController extends Controller
     {
         $participant = PsychotestParticipant::with(['answers.question', 'accessCode.session', 'testResults'])
             ->findOrFail($participantId);
-        // dd($participant->testResults);
+
+        $user = Auth::user();
+        // dd($user)->all();
+        $role = $user->roles->pluck('role_name')->first(); // Atau sesuaikan kalau multi-role
+        // dd($role)->all();
 
         return Inertia::render('Results', [
-            'participant' => $participant
+            'participant' => $participant,
+            'userRole' => $role
         ]);
     }
 
