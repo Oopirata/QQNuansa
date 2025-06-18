@@ -808,7 +808,7 @@ class CandidateController extends Controller
         $candidate->status = 3;
         $candidate->save();
 
-        return redirect()->route('AdminEmployee');
+        return redirect()->route('adminKaryawan');
     }
 
     public function showEmployees()

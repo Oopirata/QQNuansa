@@ -156,7 +156,7 @@
                     </p>
                     <p>Jenis Kelamin: {{ participantData?.gender }}</p>
                     <p>Pendidikan Terakhir: {{ participantData?.education }}</p>
-                    <p>Jawaban saat ini: {{ answers }}</p>
+                    <!-- <p>Jawaban saat ini: {{ answers }}</p> -->
                 </div>
 
                 <!-- Progress indicator -->
