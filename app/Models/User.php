@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log; // Tambahkan untuk logging
 
 class User extends Authenticatable
 {
@@ -47,13 +48,14 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password' => 'hashed', // Pastikan password di-hash secara otomatis
         ];
     }
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'user_roles');
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->withTimestamps();
     }
 
     public function applicant(): HasOne
@@ -74,5 +76,44 @@ class User extends Authenticatable
     public function receivedEmails(): HasMany
     {
         return $this->hasMany(Email::class, 'receiver_id');
+    }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted(): void // Atau `protected static function boot()` untuk Laravel < 8
+    {
+        parent::booted(); // Atau `parent::boot()`
+
+        static::created(function ($user) {
+            // Log bahwa event terpicu
+            Log::info('User created event triggered.', ['user_id' => $user->id, 'email' => $user->email]);
+
+            // Cek apakah user ini belum memiliki role sama sekali.
+            if ($user->roles()->count() === 0) {
+                $defaultRoleId = 2; // ID untuk role 'user' (sesuai permintaan Anda)
+
+                // Pastikan role dengan ID tersebut ada sebelum mencoba attach
+                $roleExists = Role::where('id', $defaultRoleId)->exists();
+
+                if ($roleExists) {
+                    $user->roles()->attach($defaultRoleId);
+                    Log::info('Default role (ID: ' . $defaultRoleId . ') assigned to new user.', [
+                        'user_id' => $user->id,
+                    ]);
+                } else {
+                    Log::warning('Default role with ID ' . $defaultRoleId . ' not found in database.', [
+                        'user_id' => $user->id,
+                    ]);
+                    // Pertimbangkan tindakan jika role default tidak ditemukan (misalnya, membuat role tersebut jika belum ada,
+                    // atau melempar exception tergantung seberapa kritis ini).
+                    // Untuk saat ini, kita hanya log peringatan.
+                }
+            } else {
+                Log::info('User already has roles, skipping default role assignment.', ['user_id' => $user->id]);
+            }
+        });
     }
 }
