@@ -178,7 +178,7 @@ Route::middleware([\App\Http\Middleware\AdminMiddleware::class . ':1'])->group(f
 
     Route::get('/adminDetailInterviewCandidates/{id}', [CandidateController::class, 'interviewCandidatesDetail'])->name('adminDetailInterviewCandidates');
 
-    Route::post('/moveToHired/{user_id}', [CandidateController::class, 'moveToHired'])->name('moveToHired');
+    Route::get('/moveToHired/{user_id}', [CandidateController::class, 'moveToHired'])->name('moveToHired');
 
     Route::get('/adminKaryawan', [CandidateController::class, 'showEmployees'])->name('adminKaryawan');
 
