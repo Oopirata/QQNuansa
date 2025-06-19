@@ -180,7 +180,7 @@
 <body>
     <!-- Header Section with Wave Background -->
     <div class="header-container">
-        <img class="wave-header" src="{{ asset('images/header-bg.png') }}" alt="Header Background">
+        <img class="wave-header" src="{{ public_path('images/header-bg.png') }}" alt="Header Background">
     </div>
 
     <!-- Content Section -->
@@ -215,7 +215,7 @@
             </div>
             <div class="info-row">
                 <span class="info-label">Tanggal Tes</span>: 
-                <span class="info-value">{{ isset($testResults->created_at) ? $testResults->created_at->format('d-m-Y') : '.................................' }}</span>
+                <span class="info-value">{{ isset($testResults->created_at) ? \Carbon\Carbon::parse($testResults->created_at)->translatedFormat('d F Y') : '.................................' }}</span>
             </div>
         </div>
 
@@ -264,8 +264,8 @@
         <!-- Signature Section -->
         <div class="signature-section">
             <div class="signature-text">Hormat kami,</div>
-            <img class="signature-img" src="{{ asset('images/signature.png') }}" alt="Tanda Tangan">
-            <img class="stamp-img" src="{{ asset('images/stamp.png') }}" alt="Stempel QQ Nuansa">
+            <img class="signature-img" src="{{ public_path('images/signature.png') }}" alt="Tanda Tangan">
+            <img class="stamp-img" src="{{ public_path('images/stamp.png') }}" alt="Stempel QQ Nuansa">
             <div style="margin-top: 36px;"> <!-- Kurangi margin top -->
                 <div class="signature-name">Rizki Nuansa Hadyan, MM, Psikolog</div>
                 <div>SIPP: 20140976-2025-03-0663</div>
@@ -275,8 +275,8 @@
 
     <!-- Footer Section with Wave Background -->
     <div class="footer-container">
-        <img class="wa-img" src="{{ asset('images/wa.png') }}" alt="WhatsApp Logo">
-        <img class="wave-footer" src="{{ asset('images/footer-bg.png') }}" alt="Footer Background">
+        <img class="wa-img" src="{{ public_path('images/wa.png') }}" alt="WhatsApp Logo">
+        <img class="wave-footer" src="{{ public_path('images/footer-bg.png') }}" alt="Footer Background">
     </div>
 </body>
 </html>
