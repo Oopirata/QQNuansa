@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('raw_score')->nullable();
             $table->integer('iq')->nullable();
+            $table->string('level', 10)->nullable(); // Level (I, II+, III)
             $table->string('category')->nullable();
             $table->unsignedBigInteger('participant_id'); // ID peserta
             $table->string('pdf_path')->nullable(); // Path ke file PDF
