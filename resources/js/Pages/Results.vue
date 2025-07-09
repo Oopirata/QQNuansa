@@ -9,6 +9,7 @@
                 </h1>
 
                 <div class="result-cards-container">
+                    <!-- Kartu Informasi Peserta -->
                     <div class="result-card info-card">
                         <div class="card-header">
                             <svg
@@ -74,6 +75,7 @@
                         </div>
                     </div>
 
+                    <!-- Kartu Hasil Tes -->
                     <div class="result-card test-card">
                         <div class="card-header">
                             <svg
@@ -97,7 +99,7 @@
                         </div>
                         <div class="info-grid">
                             <div class="info-row">
-                                <p class="info-label">Skor Mentah</p>
+                                <p class="info-label">Skor Benar (Raw Score)</p>
                                 <p class="info-value score">
                                     {{
                                         participant?.test_results?.raw_score ??
@@ -106,13 +108,15 @@
                                 </p>
                             </div>
                             <div class="info-row">
-                                <p class="info-label">IQ (Estimasi)</p>
+                                <p class="info-label">Level Intelektualitas</p>
                                 <p class="info-value score">
-                                    {{ participant?.test_results?.iq ?? "-" }}
+                                    {{
+                                        participant?.test_results?.level ?? "-"
+                                    }}
                                 </p>
                             </div>
                             <div class="info-row">
-                                <p class="info-label">Kategori</p>
+                                <p class="info-label">Klasifikasi</p>
                                 <p class="info-value category-badge">
                                     {{
                                         participant?.test_results?.category ??
@@ -123,86 +127,71 @@
                         </div>
 
                         <div
-                            class="result-chart"
-                            v-if="participant?.test_results?.iq"
+                            class="additional-stats"
+                            v-if="participant?.test_results"
                         >
-                            <div class="chart-container">
-                                <div class="chart-scale">
-                                    <div
-                                        class="scale-marker"
-                                        v-for="val in [
-                                            70, 80, 90, 100, 110, 120, 130,
-                                        ]"
-                                        :key="val"
-                                        :style="{
-                                            left: ((val - 70) / 60) * 100 + '%',
-                                        }"
-                                    >
-                                        <div class="marker-line"></div>
-                                        <div class="marker-label">
-                                            {{ val }}
-                                        </div>
+                            <h4 class="stats-title">Statistik Tambahan</h4>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path
+                                                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                                            ></path>
+                                            <rect
+                                                x="8"
+                                                y="2"
+                                                width="8"
+                                                height="4"
+                                                rx="1"
+                                                ry="1"
+                                            ></rect>
+                                        </svg>
+                                    </div>
+                                    <div class="stat-content">
+                                        <span class="stat-label"
+                                            >Persentil</span
+                                        >
+                                        <span class="stat-value">{{
+                                            calculatePercentile()
+                                        }}</span>
                                     </div>
                                 </div>
-                                <div class="chart-categories">
-                                    <div
-                                        class="category-bar very-low"
-                                        title="Rendah Sekali"
-                                    >
-                                        <span>Rendah Sekali</span>
+
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                            ></circle>
+                                            <polyline
+                                                points="12 6 12 12 16 14"
+                                            ></polyline>
+                                        </svg>
                                     </div>
-                                    <div
-                                        class="category-bar low"
-                                        title="Rendah"
-                                    >
-                                        <span>Rendah</span>
-                                    </div>
-                                    <div
-                                        class="category-bar low-avg"
-                                        title="Di bawah rata-rata"
-                                    >
-                                        <span>Di bawah rata-rata</span>
-                                    </div>
-                                    <div
-                                        class="category-bar average"
-                                        title="Rata-rata"
-                                    >
-                                        <span>Rata-rata</span>
-                                    </div>
-                                    <div
-                                        class="category-bar high-avg"
-                                        title="Di atas rata-rata"
-                                    >
-                                        <span>Di atas rata-rata</span>
-                                    </div>
-                                    <div
-                                        class="category-bar superior"
-                                        title="Superior"
-                                    >
-                                        <span>Superior</span>
-                                    </div>
-                                    <div
-                                        class="category-bar very-superior"
-                                        title="Very Superior"
-                                    >
-                                        <span>Very Superior</span>
-                                    </div>
-                                </div>
-                                <div class="pointer-container">
-                                    <div
-                                        class="score-pointer"
-                                        :style="{
-                                            left:
-                                                calculatePointerPosition(
-                                                    participant?.test_results
-                                                        ?.iq
-                                                ) + '%',
-                                        }"
-                                    >
-                                        <div class="pointer-triangle"></div>
-                                        <div class="pointer-score">
-                                            {{ participant?.test_results?.iq }}
-                                        </div>
+                                    <div class="stat-content">
+                                        <span class="stat-label"
+                                            >Durasi Tes</span
+                                        >
+                                        <span class="stat-value">{{
+                                            formatDuration(
+                                                participant?.test_duration
+                                            )
+                                        }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -210,6 +199,7 @@
                     </div>
                 </div>
 
+                <!-- Tombol Aksi -->
                 <div class="form-actions">
                     <button @click="goBack" class="btn secondary-btn">
                         <svg
@@ -235,6 +225,7 @@
                         "
                         target="_blank"
                         class="btn download-btn"
+                        :class="{ 'disabled-btn': !participant?.id }"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -262,48 +253,81 @@
 
 <script>
 import { Head } from "@inertiajs/vue3";
-import Sidebar from "@/Components/Sidebar/Sidebar.vue";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 
-dayjs.locale("id"); // Bahasa Indonesia
+dayjs.locale("id"); // Set locale ke Bahasa Indonesia
 
 export default {
-    components: { Head, Sidebar },
+    components: { Head },
     props: {
         participant: Object,
         userRole: String,
     },
     methods: {
         formatDate(date) {
+            if (!date) return "-";
             return dayjs(date).format("D MMMM YYYY");
         },
         normalizeCity(raw) {
             if (!raw) return "";
             return raw
                 .toLowerCase()
-                .replace(/^kota\s+/i, "")
-                .replace(/^kabupaten\s+/i, "")
+                .replace(/^(kota|kabupaten)\s+/i, "")
                 .split(" ")
                 .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
                 .join(" ");
         },
-        calculatePointerPosition(iq) {
-            // Konversi IQ ke posisi pada skala 70-130
-            if (!iq) return 50; // Default di tengah
-            const clamped = Math.max(70, Math.min(130, parseInt(iq)));
-            return ((clamped - 70) / 60) * 100;
-        },
         goBack() {
             if (this.userRole === "admin") {
+                // Untuk admin, kembali ke halaman sebelumnya
                 window.history.back();
             } else {
-                this.$inertia.visit("/servicepsikotest"); // Ganti dengan route yang sesuai
+                // Untuk user biasa, arahkan ke halaman utama layanan
+                this.$inertia.visit("/servicepsikotest");
             }
+        },
+        /**
+         * Menghitung persentil berdasarkan level intelektualitas
+         */
+        calculatePercentile() {
+            if (!this.participant?.test_results?.level) return "-";
+
+            const level = this.participant.test_results.level;
+            const percentileMap = {
+                V: "5%",
+                IV: "20%",
+                "III-": "35%",
+                III: "50%",
+                "III+": "65%",
+                II: "80%",
+                "II+": "90%",
+                I: "95%",
+            };
+
+            return percentileMap[level] || "-";
+        },
+
+        /**
+         * Format durasi tes
+         */
+        formatDuration(duration) {
+            if (!duration || duration === null) return "-";
+
+            // Pastikan duration adalah angka positif
+            const minutes = Math.abs(parseInt(duration));
+
+            if (minutes >= 60) {
+                const hours = Math.floor(minutes / 60);
+                const remainingMinutes = minutes % 60;
+                return `${hours}j ${remainingMinutes}m`;
+            }
+
+            return `${minutes} menit`;
         },
     },
     mounted() {
-        console.log("Isi participant:", this.participant);
+        console.log("Data Peserta yang Diterima Komponen:", this.participant);
     },
 };
 </script>
@@ -312,15 +336,14 @@ export default {
 :deep(*) {
     font-family: "Kaisei Opti", sans-serif;
 }
-/* Container utama yang berisi sidebar dan konten */
+/* Container utama */
 .app-container {
     display: flex;
     min-height: 100vh;
     background-color: #f3f4f6;
 }
 
-/* Sidebar sudah fixed di komponen Sidebar.vue
-   Jadi kita beri margin-left pada main-content supaya tidak tertindih */
+/* Konten utama */
 .main-content {
     flex: 1;
     padding: 2.5rem;
@@ -390,7 +413,7 @@ export default {
     gap: 1rem;
 }
 
-.info-row {
+.info-row:not(:last-child) {
     display: flex;
     flex-direction: column;
     border-bottom: 1px solid #f3f4f6;
@@ -420,134 +443,90 @@ export default {
     display: inline-block;
     padding: 6px 12px;
     background-color: #f3e8ff;
-    color: #9b5de5;
+    color: #9a5de5;
     border-radius: 8px;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px; /* Disesuaikan agar tidak terlalu besar */
+    text-transform: capitalize; /* Membuatnya lebih rapi */
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
-.result-chart {
-    margin-top: 2rem;
-    padding-top: 1rem;
+.additional-stats {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
     border-top: 1px solid #f3f4f6;
 }
 
-.chart-container {
-    position: relative;
-    height: 120px;
-    width: 100%;
-    padding-top: 2rem;
-}
-
-.chart-scale {
-    position: relative;
-    height: 20px;
-    width: 100%;
-    margin-bottom: 0.5rem;
-}
-
-.scale-marker {
-    position: absolute;
-    transform: translateX(-50%);
-}
-
-.marker-line {
-    height: 10px;
-    width: 1px;
-    background-color: #d1d5db;
-    margin: 0 auto;
-}
-
-.marker-label {
-    text-align: center;
-    font-size: 12px;
-    color: #6b7280;
-    margin-top: 4px;
-}
-
-.chart-categories {
+.stats-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
     display: flex;
-    width: 100%;
-    height: 30px;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.category-bar {
-    flex: 1;
-    text-align: center;
-    font-size: 10px;
-    color: white;
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    white-space: nowrap;
+    background-color: #f3e8ff;
+    border-radius: 8px;
+    flex-shrink: 0;
 }
 
-.category-bar span {
-    opacity: 0;
-    transition: opacity 0.3s;
+.stat-icon svg {
+    width: 20px;
+    height: 20px;
+    color: #9b5de5;
 }
 
-.category-bar:hover span {
-    opacity: 1;
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
 }
 
-.very-low {
-    background-color: #ef4444;
+.stat-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.low {
-    background-color: #f97316;
-}
-
-.low-avg {
-    background-color: #f59e0b;
-}
-
-.average {
-    background-color: #10b981;
-}
-
-.high-avg {
-    background-color: #3b82f6;
-}
-
-.superior {
-    background-color: #6366f1;
-}
-
-.very-superior {
-    background-color: #8b5cf6;
-}
-
-.pointer-container {
-    position: relative;
-    height: 50px;
-    margin-top: 0.5rem;
-}
-
-.score-pointer {
-    position: absolute;
-    transform: translateX(-50%);
-}
-
-.pointer-triangle {
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 12px solid #1f2937;
-    margin: 0 auto;
-}
-
-.pointer-score {
-    margin-top: 4px;
-    background-color: #1f2937;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
+.stat-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
 }
 
 .form-actions {
@@ -582,13 +561,19 @@ export default {
 .download-btn {
     background-color: #9b5de5;
 }
-
 .secondary-btn {
     background-color: #6b7280;
 }
-
 .secondary-btn:hover {
     background-color: #4b5563;
+}
+.disabled-btn {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+}
+.disabled-btn:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .btn-icon {
@@ -596,35 +581,39 @@ export default {
     height: 18px;
 }
 
-/* Responsive untuk berbagai ukuran layar */
+/* Responsive */
 @media (min-width: 768px) {
     .info-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
 @media (max-width: 768px) {
     .main-content {
         margin-left: 0;
         padding: 1.5rem;
     }
-
     .page-title {
         font-size: 24px;
     }
-
     .form-actions {
         flex-direction: column;
     }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .stat-item {
+        padding: 0.75rem;
+    }
 }
-
 @media (min-width: 1024px) {
     .result-cards-container {
         grid-template-columns: 1fr 1fr;
     }
-
     .info-grid {
         grid-template-columns: 1fr;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 </style>
