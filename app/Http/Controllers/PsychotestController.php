@@ -539,7 +539,7 @@ class PsychotestController extends Controller
         $participant->accessCode->update(['status' => 'completed']);
 
         // 🧾 Cetak PDF hasil tes
-        app(\App\Http\Controllers\TestResultController::class)->generateTestResult($participant->id);
+        app(\App\Http\Controllers\TestResultController::class)->generateAndSaveTestResult($participant->id);
 
         return response()->json([
             'success' => true,

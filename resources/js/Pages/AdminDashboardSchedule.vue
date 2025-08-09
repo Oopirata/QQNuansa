@@ -50,19 +50,19 @@ onMounted(async () => {
         try {
             const eventsResponse = await axios.get("/schedules");
             // Check the actual response structure with console.log
-            console.log('Raw event data:', eventsResponse.data);
-            
+            console.log("Raw event data:", eventsResponse.data);
+
             // Map the events to the format expected by the frontend
-            events.value = eventsResponse.data.map(event => ({
+            events.value = eventsResponse.data.map((event) => ({
                 id: event.id,
                 title: event.judul,
-                date: event.tanggal.split('T')[0],
+                date: event.tanggal.split("T")[0],
                 time: formatTimeRange(event.jam_mulai, event.jam_selesai),
                 description: event.deskripsi,
             }));
-            
+
             // Debug the transformed events
-            console.log('Transformed events:', events.value);
+            console.log("Transformed events:", events.value);
         } catch (error) {
             console.error("Failed to load events:", error);
         }
@@ -93,8 +93,12 @@ onMounted(async () => {
 // Helper function to format time range
 const formatTimeRange = (start, end) => {
     // Extract just the time part (HH:MM) from datetime strings
-    const startTime = start.split('T')[1]?.substring(0, 5) || start.split(' ')[1]?.substring(0, 5);
-    const endTime = end.split('T')[1]?.substring(0, 5) || end.split(' ')[1]?.substring(0, 5);
+    const startTime =
+        start.split("T")[1]?.substring(0, 5) ||
+        start.split(" ")[1]?.substring(0, 5);
+    const endTime =
+        end.split("T")[1]?.substring(0, 5) ||
+        end.split(" ")[1]?.substring(0, 5);
     return `${startTime} - ${endTime}`;
 };
 
@@ -177,13 +181,18 @@ const calendarDays = computed(() => {
 
 const getEventsForDate = (date) => {
     if (!date) return [];
-    
-    console.log('Checking events for date:', date.toDateString());
-    console.log('Available events:', events.value);
-    
+
+    console.log("Checking events for date:", date.toDateString());
+    console.log("Available events:", events.value);
+
     return events.value.filter((event) => {
         const eventDate = new Date(event.date);
-        console.log('Event date:', eventDate.toDateString(), 'Comparing with:', date.toDateString());
+        console.log(
+            "Event date:",
+            eventDate.toDateString(),
+            "Comparing with:",
+            date.toDateString()
+        );
         return eventDate.toDateString() === date.toDateString();
     });
 };
@@ -293,10 +302,16 @@ const addEvent = async () => {
         events.value.push(formattedEvent);
 
         // If the event is for the selected date, update the selectedDate.events array
-        if (selectedDate.value && 
-            new Date(newEvent.value.date).toDateString() === selectedDate.value.date.toDateString()) {
+        if (
+            selectedDate.value &&
+            new Date(newEvent.value.date).toDateString() ===
+                selectedDate.value.date.toDateString()
+        ) {
             // Create a new array with the existing events plus the new one
-            selectedDate.value.events = [...selectedDate.value.events, formattedEvent];
+            selectedDate.value.events = [
+                ...selectedDate.value.events,
+                formattedEvent,
+            ];
         }
 
         closeEventModal();
@@ -310,29 +325,33 @@ const deleteEvent = async (eventId) => {
     try {
         // Send delete request to the server
         await axios.delete(`/schedules/${eventId}`);
-        
+
         // Find the event to be deleted
-        const eventToDelete = events.value.find(event => event.id === eventId);
-        
+        const eventToDelete = events.value.find(
+            (event) => event.id === eventId
+        );
+
         // Remove from global events array
         events.value = events.value.filter((event) => event.id !== eventId);
-        
+
         // If there's a selected date and the event belongs to that date, remove it from selectedDate.events
         if (selectedDate.value && eventToDelete) {
             const eventDate = new Date(eventToDelete.date);
             const selectedDateObj = new Date(selectedDate.value.date);
-            
+
             if (eventDate.toDateString() === selectedDateObj.toDateString()) {
                 // Create a new array excluding the deleted event
-                selectedDate.value.events = selectedDate.value.events.filter(event => event.id !== eventId);
+                selectedDate.value.events = selectedDate.value.events.filter(
+                    (event) => event.id !== eventId
+                );
             }
         }
-        
+
         // Optional: Add a success notification or toast
         // For example: toast.success('Event deleted successfully');
     } catch (error) {
         console.error("Failed to delete event:", error);
-        
+
         // Optional: Show error message to user
         // For example: toast.error('Failed to delete event');
     }
@@ -635,6 +654,7 @@ const deleteEvent = async (eventId) => {
                                         v-model="newEvent.description"
                                         class="w-full border rounded p-2"
                                         rows="3"
+                                        required
                                     ></textarea>
                                 </div>
                                 <div class="flex justify-end gap-2">
