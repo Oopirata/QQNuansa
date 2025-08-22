@@ -70,7 +70,7 @@ const menuItems = [
                 data-aos-duration="1500"
             >
                 <img
-                    src="/images/asik.jpg"
+                    src="/images/asik.jpeg"
                     alt="Background"
                     class="w-full h-full object-cover opacity-30 rounded-2xl shadow-lg"
                 />
