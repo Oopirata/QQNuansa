@@ -344,7 +344,7 @@ const serviceCategories = [
                             data-aos-delay="200"
                         >
                             <img
-                                src="/images/asik.jpg"
+                                src="/images/asik.jpeg"
                                 alt="Gallery Image 2"
                                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
                             />
@@ -426,7 +426,7 @@ const serviceCategories = [
                 <div class="max-w-6xl mx-auto mt-16" data-aos="fade-up">
                     <div class="relative overflow-hidden rounded-xl shadow-xl">
                         <img
-                            src="/images/seminar.jpg"
+                            src="/images/seminar.jpeg"
                             alt="seminar"
                             class="w-full object-cover h-96"
                         />
