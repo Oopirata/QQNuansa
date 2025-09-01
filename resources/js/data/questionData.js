@@ -14,14 +14,14 @@ function generateQuestionSet(series, count, optionCount, startIndex = 1) {
 
         const question = {
             id: questionId,
-            imageUrl: `/images/gambar soal form/${series}${i + 1}.png`,
+            imageUrl: `/images/gambarsoalform/${series}${i + 1}.png`,
             options: [],
         };
 
         for (let j = 1; j <= optionCount; j++) {
             question.options.push({
                 id: j,
-                imageUrl: `/images/gambar soal form/${series}${i + 1}-${j}.png`,
+                imageUrl: `/images/gambarsoalform/${series}${i + 1}-${j}.png`,
             });
         }
 
