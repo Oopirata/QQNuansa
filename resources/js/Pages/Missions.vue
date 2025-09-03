@@ -209,7 +209,7 @@ const menuItems = [
                     <img
                         alt="Missions Icon"
                         class="h-auto w-full max-w-3xl rounded-xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-300 object-cover"
-                        src="/images/seminar.JPG"
+                        src="/images/seminar.jpeg"
                     />
                 </div>
 
